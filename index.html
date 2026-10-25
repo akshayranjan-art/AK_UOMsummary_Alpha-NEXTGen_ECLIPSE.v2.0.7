@@ -1,0 +1,1218 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>UOM Summary DBM · Alpha NextGen Eclipse</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600;1,700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.4.0/exceljs.min.js"></script>
+<style>
+:root{
+  --bg:#faf5f7;--bg2:#f4ecf0;--card:#ffffff;--ink:#2a1a2d;--muted:#806b7d;--line:#eedde5;--line2:#e4cfd9;
+  --rose:#d24f7a;--rose2:#ef9db6;--blush:#fde9ef;--gold:#c08a5b;--rg1:#e8a990;--rg2:#c26d86;
+  --plum:#2a1230;--plum2:#1a0b1f;--side-ink:#f5e6ee;--side-mut:#bba0b4;
+  --em:#22995f;--emBg:#d5f4e2;--pink:#ffd3de;--danger:#dc4a64;--warn:#e08a1c;
+  --blue:#1f6fd6;--violet:#7048c8;--orange:#ee8a12;--green:#1f9d57;--maroon:#94354a;
+  --shadow:0 10px 30px -12px rgba(90,30,70,.22);--r:14px;
+  --mono:"JetBrains Mono",ui-monospace,monospace;--sans:"Plus Jakarta Sans",system-ui,sans-serif;--serif:"Cormorant Garamond",Georgia,serif;
+}
+:root[data-theme="dark"]{
+  --bg:#140a17;--bg2:#1b0f1f;--card:#211326;--ink:#f7e9f0;--muted:#b49aae;--line:#3a2540;--line2:#4a2f51;
+  --blush:#3a1a30;--pink:#5a2236;--emBg:#173d2a;--shadow:0 10px 30px -12px rgba(0,0,0,.6);--plum:#1d0c22;--plum2:#12071a;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{font-family:var(--sans);background:var(--bg);color:var(--ink);font-size:13px;-webkit-font-smoothing:antialiased;overflow:hidden}
+button,input,select,textarea{font:inherit;color:inherit}
+[hidden]{display:none!important}
+.muted{color:var(--muted)}
+.mono{font-family:var(--mono)}
+
+/* ================= capsule buttons ================= */
+.cap{display:inline-flex;align-items:center;justify-content:center;gap:7px;border:1px solid var(--line2);background:var(--card);color:var(--ink);
+  border-radius:999px;padding:7px 14px;font-weight:700;font-size:12.5px;cursor:pointer;transition:transform .15s,box-shadow .2s,background .2s;white-space:nowrap;text-decoration:none}
+.cap:hover{transform:translateY(-1px);box-shadow:0 6px 16px -8px rgba(120,40,80,.45)}
+.cap:active{transform:translateY(0)}
+.cap:disabled{opacity:.45;cursor:not-allowed;transform:none;box-shadow:none}
+.cap.xs{padding:4px 10px;font-size:11.5px}
+.cap.rose{background:linear-gradient(135deg,#e2668e,#b8436c);color:#fff;border-color:transparent}
+.cap.gold{background:linear-gradient(135deg,var(--rg1),var(--rg2));color:#fff;border-color:transparent}
+.cap.danger{background:var(--danger);color:#fff;border-color:transparent}
+.cap.ghost{background:transparent}
+.cap.c-run{background:linear-gradient(135deg,#2f86ee,#1659bf);color:#fff;border-color:transparent}
+.cap.c-dt{background:#343a40;color:#ffd700;border-color:transparent}
+.cap.c-res{background:linear-gradient(135deg,#8460d6,#5f39b3);color:#fff;border-color:transparent}
+.cap.c-undo{background:linear-gradient(135deg,#ffa133,#e57c00);color:#fff;border-color:transparent}
+.cap.c-clr{background:linear-gradient(135deg,#e85a70,#c8334c);color:#fff;border-color:transparent}
+.cap.c-mail{background:linear-gradient(135deg,#21b866,#0f8c48);color:#fff;border-color:transparent}
+.cap.c-sup{background:#91354a;color:#8ef7f7;border-color:transparent}
+
+/* ================= LOGIN (romantic + professional) ================= */
+#gate{position:fixed;inset:0;display:grid;place-items:center;overflow:hidden;
+  background:radial-gradient(1200px 700px at 15% 10%,#4a1745 0%,transparent 60%),radial-gradient(900px 600px at 90% 90%,#3a1a52 0%,transparent 60%),linear-gradient(160deg,#1d0a22,#0f0614 70%);color:#f7e8f0}
+#hearts{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.aur{position:absolute;border-radius:50%;filter:blur(70px);opacity:.55;animation:float 18s ease-in-out infinite}
+.aur.a1{width:420px;height:420px;background:#c2456f;left:-80px;top:-60px}
+.aur.a2{width:360px;height:360px;background:#7b3fb8;right:-60px;bottom:-40px;animation-delay:-6s}
+.aur.a3{width:260px;height:260px;background:#e0a27c;right:22%;top:12%;opacity:.28;animation-delay:-11s}
+@keyframes float{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(40px,30px) scale(1.08)}}
+.gcard{position:relative;width:min(440px,calc(100vw - 32px));padding:34px 34px 24px;border-radius:26px;
+  background:linear-gradient(160deg,rgba(255,255,255,.10),rgba(255,255,255,.04));border:1px solid rgba(255,220,235,.18);
+  backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);box-shadow:0 30px 80px -20px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.12);text-align:center}
+.ecl{width:58px;height:58px;margin:0 auto 10px;display:block;filter:drop-shadow(0 0 14px rgba(240,160,180,.55))}
+.kick{letter-spacing:.38em;font-size:10.5px;font-weight:700;color:#e9b6a3;text-transform:uppercase}
+.gtitle{font-family:var(--serif);font-style:italic;font-weight:700;font-size:50px;line-height:1;margin:8px 0 4px;
+  background:linear-gradient(100deg,#ffd6c7,#f19bb5 45%,#e1a6ff);-webkit-background-clip:text;background-clip:text;color:transparent}
+.gsub{font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:#d9bccd;font-weight:600}
+.gsub b{color:#fff}
+.greet{margin:22px 0 4px;font-family:var(--serif);font-size:22px;font-style:italic;color:#ffe2ec}
+.ghint{font-size:12px;color:#bfa2b6;margin:0 0 14px}
+.nbox{position:relative;margin-top:6px}
+.nbox input{width:100%;padding:14px 48px 14px 18px;border-radius:999px;border:1px solid rgba(255,210,228,.28);background:rgba(10,3,14,.35);color:#fff;
+  font-size:15px;font-weight:600;outline:none;transition:border .2s,box-shadow .2s;text-align:center;letter-spacing:.02em}
+.nbox input::placeholder{color:#a88aa0;font-weight:500}
+.nbox input:focus{border-color:#f19bb5;box-shadow:0 0 0 4px rgba(241,155,181,.18)}
+.nbox.ok input{border-color:#7ee2a8;box-shadow:0 0 0 4px rgba(126,226,168,.16)}
+.nbox .hrt{position:absolute;right:16px;top:50%;transform:translateY(-50%);font-size:18px;transition:transform .3s;opacity:.55}
+.nbox.ok .hrt{opacity:1;animation:beat 1s ease-in-out infinite}
+@keyframes beat{0%,100%{transform:translateY(-50%) scale(1)}30%{transform:translateY(-50%) scale(1.28)}60%{transform:translateY(-50%) scale(.95)}}
+#gPw{margin-top:10px}
+.gbtn{width:100%;margin-top:14px;padding:13px;border:0;border-radius:999px;cursor:pointer;font-weight:800;font-size:14.5px;letter-spacing:.04em;color:#fff;
+  background:linear-gradient(110deg,#e8678f,#b8436c 55%,#8f3fb0);box-shadow:0 14px 30px -12px rgba(232,103,143,.8);transition:transform .15s,filter .2s}
+.gbtn:hover{transform:translateY(-1px);filter:brightness(1.07)}
+.gerr{min-height:20px;margin-top:12px;font-size:12.5px;color:#ffb3c4;line-height:1.5}
+.gerr b{color:#fff}
+.gfoot{margin-top:16px;display:flex;justify-content:space-between;font-size:11px;color:#a88aa0;gap:8px;flex-wrap:wrap}
+.gconn{width:100%;margin-top:4px;padding:10px;border-radius:14px;border:1px dashed rgba(255,210,228,.35);background:rgba(255,255,255,.05);color:#ffe2ec;font-weight:700;cursor:pointer}
+.gconn.ok{border-style:solid;border-color:rgba(126,226,168,.4);color:#a9f0c6;cursor:default}
+.cguide{font-size:11.5px;text-align:left;margin-top:8px;line-height:1.55}
+.cguide ol{margin:6px 0 0;padding-left:18px}
+.cpath{display:flex;gap:6px;align-items:center}
+.cpath code{flex:1;font-family:var(--mono);font-size:10.5px;padding:6px 8px;border-radius:8px;background:rgba(0,0,0,.25);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cont{display:flex;align-items:center;gap:12px;padding:10px 14px;border-radius:18px;background:rgba(255,255,255,.07);border:1px solid rgba(255,210,228,.2);cursor:pointer;margin-top:4px;text-align:left;transition:background .2s}
+.cont:hover{background:rgba(255,255,255,.12)}
+.cont .av{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;font-weight:800;background:linear-gradient(135deg,#f3a3bb,#a35bd0);color:#fff}
+.cont small{display:block;color:#c7a9bd;font-size:11px}
+.lnk{background:none;border:0;color:#d7b8cb;font-size:11.5px;cursor:pointer;text-decoration:underline;text-underline-offset:3px;margin-top:10px}
+/* welcome splash */
+#welcome{position:fixed;inset:0;z-index:60;display:grid;place-items:center;background:radial-gradient(circle at 50% 45%,#4b1a48,#13071a 70%);color:#fff;text-align:center;animation:wfade 2.2s ease forwards}
+#welcome .bh{font-size:64px;animation:beat2 1s ease-in-out infinite}
+#welcome h2{font-family:var(--serif);font-style:italic;font-size:40px;margin:10px 0 4px;background:linear-gradient(100deg,#ffd6c7,#f19bb5,#e1a6ff);-webkit-background-clip:text;background-clip:text;color:transparent}
+#welcome p{color:#e5c6d7;margin:0;font-size:14px}
+@keyframes beat2{0%,100%{transform:scale(1)}30%{transform:scale(1.2)}60%{transform:scale(.95)}}
+@keyframes wfade{0%{opacity:0}12%{opacity:1}80%{opacity:1}100%{opacity:0;visibility:hidden}}
+
+/* lock (expired) */
+#lock{position:fixed;inset:0;display:grid;place-items:center;background:#12071a;color:#fff;z-index:70}
+#lock .gcard input{width:100%;margin-top:10px;padding:11px 14px;border-radius:12px;border:1px solid rgba(255,210,228,.28);background:rgba(0,0,0,.3);color:#fff}
+
+/* ================= APP ================= */
+#app{display:grid;grid-template-columns:250px 1fr;height:100vh}
+.side{background:linear-gradient(180deg,var(--plum),var(--plum2));color:var(--side-ink);display:flex;flex-direction:column;min-height:0;position:relative;overflow:hidden}
+.side::before{content:"";position:absolute;width:260px;height:260px;border-radius:50%;background:radial-gradient(circle,rgba(226,102,142,.35),transparent 70%);top:-90px;right:-110px;pointer-events:none}
+.sscroll{flex:1;overflow:auto;padding:16px 14px 10px;position:relative}
+.sscroll::-webkit-scrollbar{width:6px}.sscroll::-webkit-scrollbar-thumb{background:rgba(255,255,255,.15);border-radius:6px}
+.brand{display:flex;gap:10px;align-items:center;padding:2px 2px 14px;border-bottom:1px solid rgba(255,255,255,.08);cursor:default;user-select:none}
+.brand svg{width:40px;height:40px;flex:none;filter:drop-shadow(0 0 10px rgba(240,160,180,.5))}
+.brand .k{font-size:9px;letter-spacing:.3em;color:#e9b6a3;font-weight:700}
+.brand .t{font-family:var(--serif);font-style:italic;font-weight:700;font-size:23px;line-height:1;background:linear-gradient(100deg,#ffd6c7,#f19bb5);-webkit-background-clip:text;background-clip:text;color:transparent}
+.brand .s{font-size:9.5px;letter-spacing:.14em;color:var(--side-mut);font-weight:600;margin-top:2px}
+.sh{font-size:9.5px;letter-spacing:.24em;color:#d9a7b8;font-weight:800;margin:16px 4px 8px;display:flex;justify-content:space-between;align-items:center}
+.sh i{font-style:normal;letter-spacing:0;color:var(--side-mut);font-weight:600}
+.sgrid{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.sgrid .full{grid-column:1/-1}
+.sb{display:flex;align-items:center;gap:7px;justify-content:center;padding:8px 8px;border-radius:999px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.06);color:#fff;font-weight:700;font-size:12px;cursor:pointer;transition:transform .15s,background .2s,box-shadow .2s}
+.sb:hover{background:rgba(255,255,255,.12);transform:translateY(-1px)}
+.sb:disabled{opacity:.35;cursor:not-allowed;transform:none}
+.sb.run{background:linear-gradient(135deg,#2f86ee,#1659bf);border:0;padding:11px;font-size:13.5px;letter-spacing:.08em;box-shadow:0 10px 22px -10px rgba(47,134,238,.9)}
+.sb.dt{background:#343a40;color:#ffd700;border-color:#4b5259}
+.sb.save{background:linear-gradient(135deg,#e2668e,#b8436c);border:0;box-shadow:0 10px 22px -10px rgba(226,102,142,.9)}
+.sb.mail{background:linear-gradient(135deg,#21b866,#0f8c48);border:0}
+.sb.clr{background:rgba(232,90,112,.18);border-color:rgba(232,90,112,.45);color:#ffc4cf}
+.nums{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.num{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:8px 10px}
+.num b{display:block;font-family:var(--mono);font-size:15px;color:#fff}
+.num span{font-size:10px;color:var(--side-mut);letter-spacing:.04em}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.dchip{border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.05);color:#f5dce7;border-radius:999px;padding:4px 9px;font-size:11px;font-family:var(--mono);cursor:pointer}
+.dchip:hover{background:rgba(255,255,255,.12)}
+.dchip.on{background:linear-gradient(135deg,#e2668e,#b8436c);border-color:transparent;color:#fff}
+.dchip .g{display:inline-block;width:6px;height:6px;border-radius:50%;background:#61e39b;margin-right:5px;vertical-align:1px}
+.sfoot{padding:10px 12px 12px;border-top:1px solid rgba(255,255,255,.08);position:relative}
+.ticons{display:flex;gap:6px;margin-bottom:10px}
+.ti{flex:1;height:32px;border-radius:10px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.05);color:#fff;cursor:pointer;display:grid;place-items:center;font-size:14px;position:relative}
+.ti:hover{background:rgba(255,255,255,.12)}
+.ti.warn{border-color:#f0a43c;box-shadow:0 0 0 2px rgba(240,164,60,.25)}
+.sdot{position:absolute;top:5px;right:6px;width:7px;height:7px;border-radius:50%;background:#888}
+.sdot.ok{background:#61e39b}.sdot.warn{background:#f0a43c}.sdot.bad{background:#ff5c7a}
+.ucard{display:flex;align-items:center;gap:10px;padding:8px;border-radius:14px;background:rgba(255,255,255,.06)}
+.ucard .av{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-weight:800;font-size:12px;background:linear-gradient(135deg,#f3a3bb,#a35bd0);color:#fff;flex:none}
+.ucard .nm{font-weight:700;font-size:12.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ucard .rl{font-size:10.5px;color:var(--side-mut)}
+.ucard .out{margin-left:auto;background:none;border:0;color:#f3b9cb;cursor:pointer;font-size:16px}
+
+/* main */
+.main{display:flex;flex-direction:column;min-width:0;min-height:0}
+.top{display:flex;align-items:center;gap:10px;padding:12px 18px;border-bottom:1px solid var(--line);background:var(--card);flex-wrap:nowrap}.top>*{flex-shrink:0}.top>.fld{flex-shrink:1}
+.dpill{display:flex;align-items:center;gap:8px;padding:6px 12px;border-radius:999px;background:var(--blush);color:var(--rose);font-weight:800;font-size:12.5px}
+.dpill input{border:0;background:transparent;font-weight:800;color:var(--rose);font-family:var(--mono);font-size:12px;width:118px;outline:none}
+.fld{position:relative;flex:0 1 200px;min-width:120px}.fld.p{flex:0 1 270px}
+.fld input{width:100%;padding:8px 14px;border-radius:999px;border:1px solid var(--line2);background:var(--pink);font-weight:600;font-size:12px;outline:none;transition:background .25s}
+.fld input.full{background:var(--emBg);border-color:#8fd6ac}
+.fld input:focus{box-shadow:0 0 0 3px rgba(210,79,122,.15)}
+
+.spacer{flex:1}
+.tabs{display:flex;background:var(--bg2);border-radius:999px;padding:3px}
+.tabs button{border:0;background:none;padding:6px 14px;border-radius:999px;font-weight:700;font-size:12px;cursor:pointer;color:var(--muted)}
+.tabs button.on{background:var(--card);color:var(--rose);box-shadow:0 2px 8px -3px rgba(120,40,80,.3)}
+.chip{padding:4px 10px;border-radius:999px;background:var(--bg2);font-size:11px;font-weight:700;color:var(--muted)}
+.chip.red{background:#ffe1e6;color:var(--danger)}
+.chip.unsaved{background:#fff1dc;color:#b86a00}
+
+.kpis{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px;padding:12px 18px 0}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:10px 14px;position:relative;overflow:hidden}
+.kpi::after{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:linear-gradient(180deg,var(--rose2),var(--rose))}
+.kpi span{font-size:10.5px;color:var(--muted);font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+.kpi b{display:block;font-family:var(--mono);font-size:19px;margin-top:2px}
+.kpi.bad b{color:var(--danger)}
+
+.gridbox{flex:1;min-height:0;margin:12px 18px 0;background:var(--card);border:1px solid var(--line);border-radius:var(--r);display:flex;flex-direction:column;overflow:hidden;box-shadow:var(--shadow)}
+.gwrap{flex:1;overflow:auto;min-height:0}
+table.g{border-collapse:separate;border-spacing:0;width:100%;font-size:12.3px}
+table.g th{position:sticky;top:0;z-index:2;background:#f4b183;color:#3b1e0f;font-weight:800;font-size:11.8px;padding:0 7px;height:34px;text-align:center;border-right:1px solid #e09a6a;border-bottom:1px solid #d98b57;white-space:nowrap;cursor:pointer;user-select:none}
+:root[data-theme="dark"] table.g th{background:#8a4f2c;color:#ffe9da;border-color:#6d3c20}
+table.g th .ar{opacity:.55;font-size:10px;margin-left:4px}
+table.g td{height:30px;padding:0 7px;border-bottom:1px solid #d6ecf5;border-right:1px solid #d6ecf5;text-align:center;white-space:nowrap}
+:root[data-theme="dark"] table.g td{border-color:#33253a}
+table.g td.l{text-align:left}
+table.g td.n{font-family:var(--mono)}
+table.g td.rn{color:var(--muted);font-family:var(--mono);font-size:11px;background:var(--bg2);width:46px}
+table.g tr.f td{border-top:1.5px solid var(--rose2)}
+table.g tr.alt td:not(.rn){background:rgba(239,157,182,.06)}
+table.g tr:hover td:not(.rn){background:var(--blush)}
+table.g td.noid{background:#ffe1e6!important;color:var(--danger);font-weight:700}
+table.g td.h{font-weight:700;color:var(--rose)}
+table.g input.dt{width:62px;border:1px solid transparent;background:transparent;text-align:center;font-family:var(--mono);font-size:12px;padding:3px 4px;border-radius:7px;outline:none}
+table.g input.dt:hover{border-color:var(--line2);background:var(--card)}
+table.g input.dt:focus{border-color:var(--rose);background:var(--card);box-shadow:0 0 0 3px rgba(210,79,122,.12)}
+.empty{display:grid;place-items:center;height:100%;text-align:center;color:var(--muted);padding:30px}
+.empty .bigh{font-family:var(--serif);font-style:italic;font-size:34px;color:var(--rose);margin:6px 0}
+.empty .steps{display:flex;gap:10px;justify-content:center;margin-top:16px;flex-wrap:wrap}
+.empty .st{background:var(--bg2);border-radius:14px;padding:10px 14px;font-size:12px;max-width:190px;text-align:left}
+.empty .st b{display:block;color:var(--ink);margin-bottom:2px}
+.gbar{display:flex;align-items:center;gap:10px;padding:8px 12px;border-top:1px solid var(--line);background:var(--bg2);flex-wrap:wrap}
+.gbar input{padding:6px 12px;border-radius:999px;border:1px solid var(--line2);background:var(--card);width:220px;outline:none;font-size:12px}
+.foot{padding:8px 18px 10px;font-size:11px;color:var(--muted);display:flex;justify-content:space-between}
+.mtable td{font-family:var(--mono);font-size:11.5px}
+
+/* modal */
+#modal{position:fixed;inset:0;background:rgba(30,10,30,.45);backdrop-filter:blur(4px);display:grid;place-items:center;z-index:50;padding:16px}
+.mcard{background:var(--card);border-radius:20px;padding:22px 24px;width:min(480px,100%);max-height:90vh;overflow:auto;box-shadow:0 30px 70px -20px rgba(40,0,30,.5);border:1px solid var(--line)}
+.mcard.wide{width:min(820px,100%)}
+.mcard h3{margin:0 0 8px;font-family:var(--serif);font-style:italic;font-size:26px;color:var(--rose)}
+.mrow{display:flex;gap:8px;justify-content:flex-end;margin-top:18px;flex-wrap:wrap}
+.mcard textarea{width:100%;min-height:200px;border:1px solid var(--line2);border-radius:12px;padding:10px;font-family:var(--mono);font-size:11.5px;background:var(--bg);resize:vertical;outline:none}
+.mcard input[type=text],.mcard input[type=date],.mcard input[type=email],.mcard input[type=number],.mcard input[type=password],.mcard select{padding:8px 12px;border-radius:10px;border:1px solid var(--line2);background:var(--bg);outline:none}
+.tick{display:flex;align-items:center;gap:10px;padding:9px 12px;border:1px solid var(--line);border-radius:12px;margin-top:6px;cursor:pointer}
+.tick:hover{background:var(--blush)}
+.tick input{accent-color:var(--rose);width:16px;height:16px}
+.tick .grow{flex:1}
+.helpgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.helpgrid div{background:var(--bg2);border-radius:14px;padding:12px;line-height:1.5;font-size:12.3px}
+.helpgrid b{display:block;color:var(--rose);margin-bottom:3px}
+#toasts{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;gap:8px;z-index:90;align-items:center}
+.toast{background:#2a1230;color:#fff;padding:10px 18px;border-radius:999px;font-weight:600;font-size:12.5px;box-shadow:0 12px 30px -10px rgba(0,0,0,.5);animation:tin .25s ease}
+@keyframes tin{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+/* admin */
+#adminPg{position:fixed;inset:0;z-index:40;background:var(--bg);display:flex;flex-direction:column}
+.ahead{display:flex;align-items:center;gap:12px;padding:14px 20px;background:linear-gradient(110deg,var(--plum),#4a1a4a);color:#fff}
+.ahead h2{margin:0;font-family:var(--serif);font-style:italic;font-size:28px;background:linear-gradient(100deg,#ffd6c7,#f19bb5);-webkit-background-clip:text;background-clip:text;color:transparent}
+.ahead .tabs{background:rgba(255,255,255,.1)}
+.ahead .tabs button{color:#f0d3e0}
+.ahead .tabs button.on{background:#fff;color:var(--rose)}
+.abody{flex:1;overflow:auto;padding:18px 20px 40px}
+.acard{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:16px 18px;margin-bottom:14px;box-shadow:var(--shadow)}
+.acard h4{margin:0 0 10px;font-size:14px;display:flex;align-items:center;gap:8px}
+.acard h4 small{font-weight:500;color:var(--muted);font-size:11.5px}
+table.at{width:100%;border-collapse:collapse;font-size:12px}
+table.at th{text-align:left;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding:6px 8px;border-bottom:1px solid var(--line);position:sticky;top:0;background:var(--card)}
+table.at td{padding:5px 8px;border-bottom:1px solid var(--line);vertical-align:middle}
+table.at input,table.at select{padding:5px 8px;border-radius:8px;border:1px solid var(--line2);background:var(--bg);font-size:12px;outline:none;width:100%}
+table.at td.c{text-align:center}
+table.at input[type=checkbox]{width:16px;height:16px;accent-color:var(--rose)}
+.sw{position:relative;width:38px;height:22px;display:inline-block}
+.sw input{opacity:0;width:0;height:0}
+.sw span{position:absolute;inset:0;border-radius:999px;background:#d9c5cf;transition:.2s;cursor:pointer}
+.sw span::after{content:"";position:absolute;width:16px;height:16px;border-radius:50%;background:#fff;left:3px;top:3px;transition:.2s;box-shadow:0 1px 3px rgba(0,0,0,.3)}
+.sw input:checked+span{background:var(--em)}
+.sw input:checked+span::after{left:19px}
+.frow{display:grid;grid-template-columns:220px 1fr;gap:10px 14px;align-items:center}
+.frow label{font-weight:600;font-size:12.3px}
+.frow input,.frow select{padding:8px 12px;border-radius:10px;border:1px solid var(--line2);background:var(--bg);outline:none;width:100%;max-width:420px}
+.acard textarea{width:100%;min-height:220px;border:1px solid var(--line2);border-radius:12px;padding:10px;font-family:var(--mono);font-size:11.5px;background:var(--bg);outline:none;resize:vertical}
+.cols2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.tag{display:inline-block;padding:2px 8px;border-radius:999px;font-size:10.5px;font-weight:700;background:var(--bg2);color:var(--muted)}
+.tag.ok{background:var(--emBg);color:var(--em)}
+.tag.bad{background:#ffe1e6;color:var(--danger)}
+@media (max-width:1100px){.kpis{grid-template-columns:repeat(3,1fr)}.top{flex-wrap:wrap}}
+@media (max-width:760px){#app{grid-template-columns:1fr}.side{display:none}.cols2,.helpgrid{grid-template-columns:1fr}.frow{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><radialGradient id="cg" cx="50%" cy="50%" r="50%"><stop offset="60%" stop-color="#f6a9be" stop-opacity="0"/><stop offset="78%" stop-color="#f6a9be" stop-opacity=".9"/><stop offset="100%" stop-color="#e1a6ff" stop-opacity="0"/></radialGradient><linearGradient id="rg" x1="0" x2="1"><stop offset="0" stop-color="#ffd6c7"/><stop offset="1" stop-color="#e1a6ff"/></linearGradient></defs></svg>
+
+<!-- ============ LOGIN ============ -->
+<div id="gate" hidden>
+  <div class="aur a1"></div><div class="aur a2"></div><div class="aur a3"></div>
+  <canvas id="hearts"></canvas>
+  <div class="gcard">
+    <svg class="ecl" viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="30" fill="url(#cg)"/><circle cx="32" cy="32" r="19" fill="none" stroke="url(#rg)" stroke-width="2.2"/><circle cx="36" cy="29" r="17" fill="#1a0a20"/></svg>
+    <div class="kick">Alpha NextGen</div>
+    <div class="gtitle">UOM Summary</div>
+    <div class="gsub">Consolidation · <b>DBM</b> · Eclipse</div>
+    <div class="greet" id="gGreet">Good evening ✨</div>
+    <div id="gateBody"></div>
+    <div class="gfoot"><span id="verGate">V6.0.7 · Build 1</span><span id="expGate"></span></div>
+  </div>
+</div>
+
+<div id="lock" hidden>
+  <div class="gcard">
+    <div class="kick">Alpha NextGen · Eclipse</div>
+    <div class="gtitle" style="font-size:38px">Tool expired</div>
+    <p id="lockMsg" style="color:#d9bccd;font-size:13px"></p>
+    <input id="lockPw" type="password" placeholder="Master password">
+    <input id="lockDate" type="date">
+    <button class="gbtn" id="lockGo">Extend</button>
+    <div class="gerr" id="lockErr"></div>
+  </div>
+</div>
+
+<!-- ============ APP ============ -->
+<div id="app" hidden>
+  <aside class="side">
+    <div class="sscroll">
+      <div class="brand" id="brand">
+        <svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="30" fill="url(#cg)"/><circle cx="32" cy="32" r="19" fill="none" stroke="url(#rg)" stroke-width="2.4"/><circle cx="36" cy="29" r="17" fill="#1f0b25"/></svg>
+        <div><div class="k">ALPHA NEXTGEN</div><div class="t">UOM Summary</div><div class="s">CONSOLIDATION · DBM</div></div>
+      </div>
+
+      <div class="sh">DUMP <i>Master File</i></div>
+      <div class="sgrid">
+        <button class="sb" id="bPaste" title="Paste the MASTER FILE (Ctrl+V anywhere also works)">📋 Paste</button>
+        <button class="sb" id="bUpload" title="Upload the NICE ALL-UOM Volume Summary .xls / .xlsx">⬆ Upload</button>
+        <input type="file" id="fileIn" accept=".xls,.xlsx,.xlsm,.csv" hidden>
+        <button class="sb run full" id="bRun">▶ RUN</button>
+      </div>
+
+      <div class="sh">ACTIONS</div>
+      <div class="sgrid">
+        <button class="sb dt full" id="bDown" title="Hours = 8 − downtime minutes ÷ 60">⏱ Downtime - 8</button>
+        <button class="sb save" id="bSave">💾 Save</button>
+        <button class="sb" id="bDates">📅 Saved</button>
+        <button class="sb mail" id="bMail">✉ MAIL</button>
+        <button class="sb" id="bExcel">📗 Excel</button>
+        <button class="sb clr full" id="bClear">✕ CLEAR ALL</button>
+      </div>
+
+      <div class="sh">TODAY <i id="todayTxt"></i></div>
+      <div class="nums" id="nums"></div>
+
+      <div class="sh">SAVED DATES <i id="keepTxt">30 days</i></div>
+      <div class="chips" id="chips"></div>
+    </div>
+    <div class="sfoot">
+      <div class="ticons">
+        <button class="ti" id="btnFolder" title="Data folder">🔌<span class="sdot" id="syncDot"></span></button>
+        <button class="ti" id="btnAdmin" title="Admin" hidden>🛡</button>
+        <button class="ti" id="btnSupport" title="Support">💬</button>
+        <button class="ti" id="btnHelp" title="Help">?</button>
+        <button class="ti" id="btnTheme" title="Light / dark">◐</button>
+      </div>
+      <div class="ucard"><div class="av" id="ava">U</div><div style="min-width:0"><div class="nm" id="uName">User</div><div class="rl" id="uRole">Employee</div></div><button class="out" id="btnOut" title="Log out">⏻</button></div>
+    </div>
+  </aside>
+
+  <main class="main">
+    <div class="top">
+      <div class="dpill" title="Date from A1 of the Master File (you can change it)">📅 <input id="mDate" type="text" placeholder="MM/DD/YYYY"></div>
+      <div class="fld"><input id="fEmp" list="dlEmp" placeholder="Employee name" autocomplete="off"></div>
+      <div class="fld p"><input id="fProc" list="dlProc" placeholder="Process / Work Queue" autocomplete="off"></div>
+      <datalist id="dlEmp"></datalist><datalist id="dlProc"></datalist>
+      <button class="cap c-res" id="bRes">🔍 RESEARCH</button>
+      <button class="cap c-undo" id="bUndo">↺ UNDO</button>
+      <div class="spacer"></div>
+      <span class="chip unsaved" id="unsaved" hidden>● Not saved</span>
+      <div class="tabs"><button class="on" data-tab="res">Result</button><button data-tab="mf">Master File</button></div>
+    </div>
+    <div class="kpis" id="kpis"></div>
+    <div class="gridbox">
+      <div class="gwrap" id="gwrap"></div>
+      <div class="gbar">
+        <input id="q" placeholder="🔎 Search any value…" autocomplete="off">
+        <span class="muted" id="gInfo"></span>
+        <div class="spacer"></div>
+        <span class="muted" id="gSrc"></span>
+      </div>
+    </div>
+    <div class="foot"><span><span id="verTop">V6.0.7 · Build 1</span> · <span id="expTxt"></span></span><span>® Alpha NextGen · Eclipse · UHG-Optum</span></div>
+  </main>
+</div>
+
+<div id="adminPg" hidden></div>
+<div id="modal" hidden><div class="mcard" id="mcard"></div></div>
+<div id="toasts"></div>
+
+<script>
+/* =====================================================================
+   Alpha NextGen · UOM SUMMARY CONSOLIDATION · DBM · Eclipse
+   ===================================================================== */
+/* ======================= ADMIN SETTINGS (edit here) ======================= */
+const APP_NAME   = "UOM Summary Consolidation DBM";
+const APP_VER    = "V6.0.7";
+const BUILD      = "1";
+const APP_EXPIRY = "2027-03-31";
+const ADMIN_KEYS = ["akshayranjan","aranja14","admin"];      // typing any of these opens the Admin password box
+const ADMIN_NAME = "Akshay Ranjan";
+const PW_MASTER  = 5662684247018612;                          // hash of the master password (caps and spaces ignored)
+const FILE_KEY   = "AK-UOM-Eclipse-607-lock";                 // locks the files in the data folder
+const DEF_FOLDER = "UOM Summary DBM Data";
+const DEF_PATH   = "%USERPROFILE%\\OneDrive - UnitedHealth Group\\UOM Summary DBM Data";
+const LOCK_ON    = true;
+/* ========================================================================= */
+
+/* light protection: right-click, F12, view-source, save, print */
+(function(){
+  const stop=e=>{e.preventDefault();e.stopPropagation();return false};
+  document.addEventListener("contextmenu",e=>{if(!/INPUT|TEXTAREA/.test(e.target.tagName))stop(e)});
+  document.addEventListener("keydown",e=>{const k=(e.key||"").toLowerCase(),c=e.ctrlKey||e.metaKey;
+    if(e.key==="F12"||(c&&e.shiftKey&&["i","j","c","k"].includes(k))||(c&&["u","s","p"].includes(k)))return stop(e)},true);
+})();
+
+/* ---------- built-in Employee ID list (from the UOM VBA) · NAME | other spelling = ID ---------- */
+const EMP0=`AMAR = 1182207
+ANIL G = 1323710
+ASHWINI PYATI | ASHWINI PYATHI = 2304272
+B PAVITHRA = 2122651
+BASHKAR T = 2187968
+CHANDANA D M | CHANDANA DM = 2063674
+CHARAN J K = 1489665
+DEEKSHITH J C = 2187973
+DEEPA N = 1074413
+DHANALAKSHMI N = 898479
+GANESH R = 2122663
+HUSSAIN BAILWAD = 791253
+JOSHUA HENTINLAL = 2194000
+JYOTHI DATTA = 898496
+KAUSHIK M = 2317363
+KAVYA S B = 2294518
+LISA C = 2326829
+LISA PRADHAN = 1264333
+MANCHALA HEMALATHA = 1420665
+MANIKANDAN DHANAKOTTI = 791171
+MOAMEREN LONGKUMER = 2005100
+NARESH KUMAR = 1420669
+NAVEEN KUMAR G R = 1252783
+NITHYA S C | NITHYA SC = 2134173
+NUKSHIMENLA PONGENER = 1248112
+ORUGANTI DIVYA = 2127047
+P VANITHA = 2170621
+P RACHANA = 1484309
+PERIANAYAGAM S = 900001110
+POORVIKA S = 2294528
+PRADEEP PATIL = 1489705
+PRADEEP KUMAR = 1189014
+PRAVEEN S = 2127020
+PUSHPALATHA N = 2193534
+RAGHAVAN R | R RAGHAVAN = 1437417
+RAHUL S = 2146372
+RAHUL M S = 2051844
+RAMYA S = 1334296
+RITHESH K B = 1276016
+RUDRESH RAMAPPA = 967088
+SADDA MAMATHA = 1483772
+SHAIK ZABIULLA = 791252
+SHASHI S = 1983519
+SIRISATI KARTHIK = 2147032
+SOWMYA B H = 1183787
+SRIKANTH SHASTRY C = 1420681
+SUBRAMANYA SHARMA M S = 2005127
+SUPRIYA P = 1884983
+VINODH P = 2170968
+SUNITHA M = 2053193`;
+const PROC0=`DBM_Encounters_Not_In_Router,DBM_XC_Not_In_Router,EWD_PRV_Pick_DBM_50128_NY,EWD_PRV_Pick_DBM_Adjustment_Exchange,EWD_PRV_Pick_DBM_Adjustments_HI,EWD_PRV_Pick_DBM_Adjustments_NC,EWD_PRV_Pick_DBM_Adjustments_NE,EWD_PRV_Pick_DBM_Adjustments_NY,EWD_PRV_Pick_DBM_Adjustments_RI,EWD_PRV_Pick_DBM_Adjustments_WA,EWD_PRV_Pick_DBM_Adjustments_WI,EWD_PRV_Pick_DBM_Appeals,EWD_PRV_Pick_DBM_DBMF_MA,EWD_PRV_Pick_DBM_DBMF_MD,EWD_PRV_Pick_DBM_DBMF_NC,EWD_PRV_Pick_DBM_DBMF_NE,EWD_PRV_Pick_DBM_DBMF_NY,EWD_PRV_Pick_DBM_DBMF_WA,EWD_PRV_Pick_DBM_DBMF_WI,EWD_PRV_Pick_DBM_DBMP_Exchange,EWD_PRV_Pick_DBM_DBMP_HI,EWD_PRV_Pick_DBM_DBMP_IA,EWD_PRV_Pick_DBM_DBMP_MA,EWD_PRV_Pick_DBM_DBMP_MD,EWD_PRV_Pick_DBM_DBMP_NC,EWD_PRV_Pick_DBM_DBMP_NE,EWD_PRV_Pick_DBM_DBMP_NY,EWD_PRV_Pick_DBM_DBMP_OK,EWD_PRV_Pick_DBM_DBMP_RI,EWD_PRV_Pick_DBM_DBMP_WA,EWD_PRV_Pick_DBM_DNBH_HI,EWD_PRV_Pick_DBM_DNBH_NC,EWD_PRV_Pick_DBM_DNBH_NE,EWD_PRV_Pick_DBM_DNBH_NY,EWD_PRV_Pick_DBM_DNBH_RI,EWD_PRV_Pick_DBM_DNBH_WA,EWD_PRV_Pick_DBM_DNBH_WI,EWD_PRV_Pick_DBM_DNRS_NE,EWD_PRV_Pick_DBM_DNRS_NY,EWD_PRV_Pick_DBM_DNRS_WI,EWD_PRV_Pick_DBM_UNPR,EWD_PRV_Pick_DBM_XC_Exchange,EWD_PRV_Pick_DBM_XC_HI,EWD_PRV_Pick_DBM_XC_IA,EWD_PRV_Pick_DBM_XC_MA,EWD_PRV_Pick_DBM_XC_MD,EWD_PRV_Pick_DBM_XC_NC,EWD_PRV_Pick_DBM_XC_NE,EWD_PRV_Pick_DBM_XC_NY,EWD_PRV_Pick_DBM_XC_OK,EWD_PRV_Pick_DBM_XC_RI,EWD_PRV_Pick_DBM_XC_WA,EWD_PRV_Pick_DBM_XC_WI`.split(",");
+
+/* ---------- roles and features ---------- */
+const ROLES=[["admin","Admin"],["mgr","Manager"],["sme","SME"],["entry","Data Entry"],["employee","Employee"]];
+const ROLE4=["mgr","sme","entry","employee"];
+const ROLEN=r=>(ROLES.find(x=>x[0]===r)||[0,"Employee"])[1];
+const FEAT=[ // key, name, [Manager, SME, Data Entry, Employee]
+ ["dump","Paste / Upload the Master File",[1,1,1,1]],
+ ["run","RUN (build the Result)",[1,1,1,1]],
+ ["downtime","Downtime - 8 button",[1,1,1,1]],
+ ["edit","Type downtime minutes in the grid",[1,1,1,1]],
+ ["research","Research / Undo (filters)",[1,1,1,1]],
+ ["clear","CLEAR ALL (screen only)",[1,1,1,1]],
+ ["mail","MAIL (Excel + Outlook draft)",[1,1,1,1]],
+ ["excel","Excel download",[1,1,1,1]],
+ ["save","Save date-wise to the data folder",[1,1,1,0]],
+ ["replace","Replace a date that is already saved",[1,1,0,0]],
+ ["dates","Saved dates window (show / Excel)",[1,1,1,1]],
+ ["deldate","Delete a saved date",[1,1,0,0]],
+ ["master","Master File tab",[1,1,1,1]],
+ ["kpis","Summary cards",[1,1,1,1]],
+ ["folder","Data folder button",[1,1,1,1]],
+ ["theme","Light / dark button",[1,1,1,1]],
+];
+const DEFPERM=Object.fromEntries(ROLE4.map((r,i)=>[r,Object.fromEntries(FEAT.map(f=>[f[0],f[2][i]]))]));
+
+/* ---------- helpers ---------- */
+const $=s=>document.querySelector(s);
+const $$=s=>[...document.querySelectorAll(s)];
+const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const norm=s=>String(s??"").toLowerCase().replace(/[^a-z0-9]/g,"");
+const up=s=>String(s??"").replace(/\s+/g," ").trim().toUpperCase();
+const clone=o=>JSON.parse(JSON.stringify(o));
+const toast=t=>{const d=document.createElement("div");d.className="toast";d.textContent=t;$("#toasts").appendChild(d);setTimeout(()=>d.remove(),3200)};
+const MONS=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+const todayISO=()=>{const d=new Date();return new Date(d-d.getTimezoneOffset()*6e4).toISOString().slice(0,10)};
+const addDays=(iso,n)=>{const d=new Date(iso+"T12:00:00");d.setDate(d.getDate()+n);return new Date(d-d.getTimezoneOffset()*6e4).toISOString().slice(0,10)};
+const daysLeft=d=>Math.ceil((new Date(d+"T23:59:59")-new Date())/864e5);
+const us=iso=>iso&&/^\d{4}-\d{2}-\d{2}$/.test(iso)?iso.slice(5,7)+"/"+iso.slice(8,10)+"/"+iso.slice(0,4):iso||"";
+const dmy=iso=>{const d=iso||todayISO();return d.slice(8,10)+"-"+MONS[+d.slice(5,7)-1]+"-"+d.slice(0,4)};
+const nf=n=>Number(n||0).toLocaleString("en-IN");
+const f2=v=>v===""||v==null?"":Number(v).toFixed(2);
+const title=s=>String(s||"").toLowerCase().replace(/\b[a-z]/g,c=>c.toUpperCase());
+const LS={get(k,d){try{const v=localStorage.getItem("uom_"+k);return v==null?d:JSON.parse(v)}catch(e){return d}},set(k,v){try{localStorage.setItem("uom_"+k,JSON.stringify(v))}catch(e){}}};
+const num=v=>{if(v===""||v==null)return "";const n=parseFloat(String(v).replace(/,/g,""));return isNaN(n)?"":n};
+
+function toISO(v){
+  if(v==null)return "";let s=String(v).trim();if(!s)return "";
+  let m=s.match(/(\d{4})-(\d{1,2})-(\d{1,2})/);if(m)return mk(+m[1],+m[2],+m[3]);
+  m=s.match(/(\d{1,2})[\/.\-](\d{1,2})[\/.\-](\d{2,4})/);if(m){let y=+m[3];if(y<100)y+=2000;return mk(y,+m[1],+m[2])}
+  m=s.match(/(\d{1,2})[\s\-]([A-Za-z]{3})[A-Za-z]*[\s\-,]+(\d{2,4})/);if(m){let y=+m[3];if(y<100)y+=2000;const mo=MONS.findIndex(x=>x.toLowerCase()===m[2].toLowerCase());if(mo>=0)return mk(y,mo+1,+m[1])}
+  m=s.match(/([A-Za-z]{3})[A-Za-z]*\s+(\d{1,2}),?\s+(\d{4})/);if(m){const mo=MONS.findIndex(x=>x.toLowerCase()===m[1].slice(0,3).toLowerCase());if(mo>=0)return mk(+m[3],mo+1,+m[2])}
+  if(/^\d{5}(\.\d+)?$/.test(s)){const n=+s;if(n>20000&&n<80000){const d=new Date(Math.round((n-25569)*864e5));return mk(d.getUTCFullYear(),d.getUTCMonth()+1,d.getUTCDate())}}
+  return "";
+  function mk(y,mo,d){if(mo<1||mo>12||d<1||d>31||y<1990||y>2100)return "";return y+"-"+String(mo).padStart(2,"0")+"-"+String(d).padStart(2,"0")}
+}
+
+/* ---------- hashing and file lock ---------- */
+const H=(str,seed=161)=>{let h1=0xdeadbeef^seed,h2=0x41c6ce57^seed;for(let i=0,ch;i<str.length;i++){ch=str.charCodeAt(i);h1=Math.imul(h1^ch,2654435761);h2=Math.imul(h2^ch,1597334677);}h1=Math.imul(h1^(h1>>>16),2246822507);h1^=Math.imul(h2^(h2>>>13),3266489909);h2=Math.imul(h2^(h2>>>16),2246822507);h2^=Math.imul(h1^(h1>>>13),3266489909);return 4294967296*(2097151&h2)+(h1>>>0)};
+const b64=u=>{let s="";for(const x of new Uint8Array(u))s+=String.fromCharCode(x);return btoa(s)},unb=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
+let _fk=null;
+async function fkey(){if(_fk)return _fk;const m=await crypto.subtle.importKey("raw",new TextEncoder().encode(FILE_KEY),"PBKDF2",false,["deriveKey"]);return _fk=await crypto.subtle.deriveKey({name:"PBKDF2",salt:new TextEncoder().encode("uom-v1"),iterations:60000,hash:"SHA-256"},m,{name:"AES-GCM",length:256},false,["encrypt","decrypt"])}
+async function encT(t){const iv=crypto.getRandomValues(new Uint8Array(12));return "UOM1:"+b64(iv)+":"+b64(await crypto.subtle.encrypt({name:"AES-GCM",iv},await fkey(),new TextEncoder().encode(t)))}
+async function decT(s){const p=String(s).trim().split(":");return new TextDecoder().decode(await crypto.subtle.decrypt({name:"AES-GCM",iv:unb(p[1])},await fkey(),unb(p[2])))}
+const unlock=async t=>/^UOM1:/.test(String(t).trim())?decT(t):t;
+async function sha(t){try{return b64(await crypto.subtle.digest("SHA-256",new TextEncoder().encode(t)))}catch(e){return "h"+H(t)}}
+const isMaster=async p=>{const q=String(p||"");if(S.cfg.mph)return(await sha("master|"+q))===S.cfg.mph;return H(q.replace(/\s+/g,"").toLowerCase())===PW_MASTER};
+
+/* ---------- this PC's store (IndexedDB, falls back to memory) ---------- */
+const MEM={};
+const IDB={db:null,
+  open(){return new Promise(res=>{try{const r=indexedDB.open("uom_summary_dbm",1);r.onupgradeneeded=()=>r.result.createObjectStore("kv");r.onsuccess=()=>{this.db=r.result;res(true)};r.onerror=()=>res(false);setTimeout(()=>res(false),3000)}catch(e){res(false)}})},
+  get(k){return new Promise(res=>{if(!this.db)return res(MEM[k]);try{const q=this.db.transaction("kv").objectStore("kv").get(k);q.onsuccess=()=>res(q.result);q.onerror=()=>res(MEM[k])}catch(e){res(MEM[k])}})},
+  put(k,v){MEM[k]=v;if(!this.db)return Promise.resolve(false);return new Promise(res=>{try{const t=this.db.transaction("kv","readwrite");t.objectStore("kv").put(v,k);t.oncomplete=()=>res(true);t.onerror=()=>res(false)}catch(e){res(false)}})}
+};
+
+/* ---------- state ---------- */
+function seedUsers(){return parseEmp(EMP0).map(e=>({k:norm(e.names[0]),name:e.names[0],id:e.id,role:"employee",on:true,until:"",mc:"",team:"Bangalore DBM"}))}
+const fresh=()=>({v:1,cfg:{users:seedUsers(),perms:clone(DEFPERM),emp:EMP0,procs:PROC0.slice(),hours:8,keep:30,exp:null,folder:DEF_FOLDER,folderPath:"",
+  mailTo:"",mailCc:"",mailSubj:"Bangalore MASTERFILE Team - UOM Volume Summary - {date}",mailBody:"Hi Team,\n\nPlease find attached UOM Volume Summary for your review.\n\nThank you.",
+  fileName:"Bangalore DBM team_UOM-Volume Summary_{date}.xlsx",supportMail:"akshay.ranjan@uhc.com",
+  maxTry:5,alertMails:["akshay.ranjan@uhc.com","akshay.ranjan@optum.com",""],alertAuto:true,helpPop:true,needFolder:true,askDevice:false,remember:true},days:{},auth:{},log:[]});
+const SHARED=["users","perms","emp","procs","hours","keep","exp","mph","folder","folderPath","mailTo","mailCc","mailSubj","mailBody","fileName","supportMail","maxTry","alertMails","alertAuto","helpPop","needFolder","askDevice","remember"];
+let S=null,saveT=null;
+function save(now){clearTimeout(saveT);const go=()=>IDB.put("state",S);if(now)return go();saveT=setTimeout(go,400);return Promise.resolve()}
+function fixCfg(){const f=fresh().cfg;for(const k of Object.keys(f))if(S.cfg[k]===undefined)S.cfg[k]=clone(f[k]);
+  for(const r of ROLE4){S.cfg.perms[r]=S.cfg.perms[r]||{};for(const ft of FEAT)if(S.cfg.perms[r][ft[0]]===undefined)S.cfg.perms[r][ft[0]]=DEFPERM[r][ft[0]]}}
+
+/* Employee ID map */
+function parseEmp(txt){return String(txt||"").split(/\n/).map(l=>l.trim()).filter(l=>l&&l.includes("=")).map(l=>{const i=l.lastIndexOf("=");return{names:l.slice(0,i).split("|").map(up).filter(Boolean),id:l.slice(i+1).trim()}}).filter(e=>e.names.length)}
+let EMPIDX=null;
+function empIdx(){if(EMPIDX)return EMPIDX;EMPIDX={};parseEmp(S.cfg.emp).forEach(e=>e.names.forEach(n=>EMPIDX[n]=e.id));(S.cfg.users||[]).forEach(u=>{if(u.id&&!EMPIDX[up(u.name)])EMPIDX[up(u.name)]=u.id});return EMPIDX}
+const getEmpID=name=>empIdx()[up(name)]||"";
+
+/* ---------- who am I ---------- */
+let me={k:"",name:"",role:"employee",id:""};
+const userOf=k=>(S.cfg.users||[]).find(u=>u.k===k);
+const isAdmin=()=>me.role==="admin";
+function can(f){if(isAdmin())return true;return !!((S.cfg.perms[me.role]||{})[f])}
+function resolveMe(){
+  if(!LOCK_ON){me={k:"admin",name:"Tester",role:"admin",id:""};return}
+  const k=LS.get("who","");
+  if(k==="admin"){me={k,name:ADMIN_NAME,role:"admin",id:""};return}
+  const u=userOf(k);me=u?{k,name:u.name,role:u.role||"employee",id:u.id||""}:{k:"",name:"",role:"employee",id:""};
+}
+
+/* ---------- data folder (OneDrive / SharePoint synced folder) ---------- */
+const FS={handle:null,dir:null,index:{},cfgLM:0,err:false};
+const fsSupported=()=>"showDirectoryPicker" in window;
+const monthDir=d=>d.slice(5,7)+"-"+MONS[+d.slice(5,7)-1];
+const folderPath=()=>S.cfg.folderPath||LS.get("fpath","")||DEF_PATH;
+async function fsInit(){
+  if(!fsSupported())return;
+  try{FS.handle=await IDB.get("dirHandle")}catch(e){FS.handle=null}
+  if(!FS.handle)return;
+  try{if(await FS.handle.queryPermission({mode:"readwrite"})==="granted"){FS.dir=FS.handle;await fsReadConfig(true);await fsScan()}}catch(e){}
+}
+function connectGuide(dark){return `<div class="cguide" style="color:${dark?"#cdb2c4":"var(--muted)"}">
+  <div class="cpath"><code id="cpTxt">${esc(folderPath())}</code><button class="cap xs" id="cpCopy" type="button">📋 Copy</button></div>
+  <ol><li>Click <b>📋 Copy</b>, then <b>Connect</b>.</li><li>In the folder window click the address bar, press <b>Ctrl+V</b> and <b>Enter</b>, then <b>Select folder</b>.</li><li>Choose <b>Allow on every visit</b>. It stays connected.</li></ol></div>`}
+function wireCopy(){const b=$("#cpCopy");if(b)b.onclick=async e=>{e.stopPropagation();try{await navigator.clipboard.writeText(folderPath());toast("📋 Path copied · click Connect and press Ctrl+V")}catch(x){toast("Select the path and press Ctrl+C")}}}
+async function autoAllow(){
+  if(FS.dir||!FS.handle||autoAllow.busy)return;autoAllow.busy=true;
+  try{if(await FS.handle.requestPermission({mode:"readwrite"})==="granted"){FS.dir=FS.handle;await fsReadConfig(true);await fsScan();toast("✓ Data folder connected");
+    if(!$("#gate").hidden){const v=$("#gN")&&$("#gN").value;gate();if(v&&$("#gN")){$("#gN").value=v;nameCheck()}}else{renderSide();cleanup()}}}catch(e){}
+  autoAllow.busy=false;paintSync();
+}
+document.addEventListener("pointerdown",e=>{if(e.target.closest&&e.target.closest("#gConn,#btnFolder,#cpCopy,#fcGo"))return;autoAllow()},true);
+async function folderOK(h,adm){
+  const want=String(S.cfg.folder||DEF_FOLDER).trim(),nameOk=h.name.trim().toLowerCase()===want.toLowerCase();let has=false;
+  try{await h.getFileHandle("_uom.eclipse");has=true}catch(e){}
+  if(has)return "";
+  if(adm&&nameOk){try{const fh=await h.getFileHandle("_uom.eclipse",{create:true});const w=await fh.createWritable();await w.write(await encT(JSON.stringify({t:"uom",at:Date.now()})));await w.close();return ""}catch(e){return "Couldn't prepare the folder. Allow write access."}}
+  return nameOk?"This folder is not set up yet. Ask Admin to connect it first.":"Wrong folder. Please pick the folder “"+want+"”.";
+}
+async function fsConnect(){
+  if(!fsSupported()){toast("Use Chrome or Edge to connect a folder.");return false}
+  try{const h=await window.showDirectoryPicker({id:"uom-data",mode:"readwrite",startIn:"documents"});const bad=await folderOK(h,isAdmin());if(bad){toast(bad);return false}
+    FS.handle=h;FS.dir=h;await IDB.put("dirHandle",h);await fsReadConfig(true);await fsScan();if(isAdmin()&&!FS.cfgLM)await fsWriteConfig();toast("Connected to “"+h.name+"”");paintSync();return true}
+  catch(e){if(e&&e.name!=="AbortError")toast("Couldn't connect the folder");return false}
+}
+async function fsScan(){
+  if(!FS.dir)return;const idx={};
+  try{let dh;try{dh=await FS.dir.getDirectoryHandle("Days")}catch(e){dh=null}
+    if(dh)for await(const [yn,yh] of dh.entries()){if(yh.kind!=="directory"||!/^\d{4}$/.test(yn))continue;
+      for await(const [mn,mh] of yh.entries()){if(mh.kind!=="directory")continue;
+        for await(const [fn,fh] of mh.entries()){const m=fn.match(/^(\d{4}-\d{2}-\d{2})\.json$/);if(fh.kind==="file"&&m)idx[m[1]]={h:fh}}}}
+    FS.index=idx;FS.err=false;
+    let gone=0;for(const d of Object.keys(S.days)){if(!idx[d]&&S.days[d]&&S.days[d]._lm){delete S.days[d];gone++}}if(gone)save();
+    await fsReadConfig();
+  }catch(e){FS.err=true;toast("Couldn't read the data folder")}
+  paintSync();
+}
+async function fsReadConfig(force){
+  if(!FS.dir)return;
+  try{const fh=await FS.dir.getFileHandle("config.eclipse");const f=await fh.getFile();if(!force&&f.lastModified===FS.cfgLM)return;FS.cfgLM=f.lastModified;
+    const c=JSON.parse(await decT(await f.text()));SHARED.forEach(k=>{if(c[k]!==undefined)S.cfg[k]=c[k]});if(c.folderPath)LS.set("fpath",c.folderPath);EMPIDX=null;fixCfg();save();resolveMe()}catch(e){}
+}
+async function fsWriteConfig(){
+  if(!FS.dir)return false;const c={};SHARED.forEach(k=>c[k]=S.cfg[k]);c.savedAt=new Date().toISOString();c.savedBy=me.name;
+  try{const fh=await FS.dir.getFileHandle("config.eclipse",{create:true});const w=await fh.createWritable();await w.write(await encT(JSON.stringify(c)));await w.close();FS.cfgLM=(await fh.getFile()).lastModified;FS.err=false;paintSync();return true}
+  catch(e){FS.err=true;paintSync();return false}
+}
+async function fsSub(path,create){let d=FS.dir;for(const part of path.split("/").filter(Boolean))d=await d.getDirectoryHandle(part,{create});return d}
+async function fsWriteText(dirPath,fname,text,plain){if(!FS.dir)return false;try{if(!plain&&!/^UOM1:/.test(text))text=await encT(text);const sd=await fsSub(dirPath,true);const fh=await sd.getFileHandle(fname,{create:true});const w=await fh.createWritable();await w.write(text);await w.close();return true}catch(e){return false}}
+async function fsReadText(dirPath,fname){if(!FS.dir)return null;try{const sd=await fsSub(dirPath,false);const fh=await sd.getFileHandle(fname);return await unlock(await (await fh.getFile()).text())}catch(e){return null}}
+async function fsList(dirPath){const out=[];if(!FS.dir)return out;try{const sd=await fsSub(dirPath,false);for await(const [n,h] of sd.entries())if(h.kind==="file")out.push(n)}catch(e){}return out}
+async function fsRemove(dirPath,fname){if(!FS.dir)return false;try{const sd=await fsSub(dirPath,false);await sd.removeEntry(fname);return true}catch(e){return false}}
+const dayDir=d=>"Days/"+d.slice(0,4)+"/"+monthDir(d);
+async function fsWriteDay(d,obj){
+  if(!FS.dir)return false;
+  try{const dir=await fsSub(dayDir(d),true);const fh=await dir.getFileHandle(d+".json",{create:true});const w=await fh.createWritable();
+    const o={...obj};delete o._lm;await w.write(await encT(JSON.stringify(o)));await w.close();FS.index[d]={h:fh};obj._lm=(await fh.getFile()).lastModified;FS.err=false;paintSync();return true}
+  catch(e){FS.err=true;paintSync();return false}
+}
+async function loadDay(d){
+  if(FS.dir&&FS.index[d]){try{const f=await FS.index[d].h.getFile();const c=S.days[d];if(c&&c._lm===f.lastModified)return c;
+    const o=JSON.parse(await unlock(await f.text()));o._lm=f.lastModified;S.days[d]=o;save();return o}catch(e){}}
+  return S.days[d]||null;
+}
+async function deleteDay(d){if(FS.dir){await fsRemove(dayDir(d),d+".json");delete FS.index[d]}delete S.days[d];save()}
+function savedDates(){const set=new Set([...Object.keys(S.days),...Object.keys(FS.index)]);return [...set].filter(d=>/^\d{4}-\d{2}-\d{2}$/.test(d)).sort().reverse()}
+/* keep only the last N days (default 30) */
+async function cleanup(force){
+  if(!force&&LS.get("clean","")===todayISO())return 0;
+  if(!(can("save")||isAdmin()))return 0;
+  const cut=addDays(todayISO(),-(+S.cfg.keep||30));let n=0;
+  for(const d of savedDates())if(d<cut){await deleteDay(d);n++}
+  LS.set("clean",todayISO());if(n){toast("🗑 "+n+" date"+(n>1?"s":"")+" older than "+S.cfg.keep+" days removed");logAct("cleanup",n+" old dates removed")}
+  renderSide();return n;
+}
+function paintSync(){
+  const d=$("#syncDot");if(!d)return;
+  d.className="sdot "+(FS.dir?(FS.err?"bad":"ok"):FS.handle?"warn":"");
+  const b=$("#btnFolder");b.title=FS.dir?"Data folder: "+FS.dir.name:"Connect the data folder";b.classList.toggle("warn",!FS.dir);
+}
+
+/* ---------- history log ---------- */
+async function logAct(a,n){
+  const e={at:Date.now(),who:me.name||"-",a,n:n||""};S.log=(S.log||[]).concat(e).slice(-600);save();
+  if(FS.dir){const f="log_"+todayISO().slice(0,7)+".json";let arr=[];try{arr=JSON.parse(await fsReadText("_system",f)||"[]")}catch(x){}arr.push(e);await fsWriteText("_system",f,JSON.stringify(arr))}
+}
+async function readLog(){
+  let arr=(S.log||[]).slice();
+  if(FS.dir){const fs=(await fsList("_system")).filter(n=>/^log_/.test(n)).sort().reverse().slice(0,3);for(const f of fs){try{arr=arr.concat(JSON.parse(await fsReadText("_system",f)||"[]"))}catch(e){}}}
+  const seen=new Set();return arr.filter(e=>{const k=e.at+e.who+e.a;if(seen.has(k))return false;seen.add(k);return true}).sort((a,b)=>b.at-a.at);
+}
+
+/* ---------- modal / confirm ---------- */
+function modal(html,wide){$("#mcard").className="mcard"+(wide?" wide":"");$("#mcard").innerHTML=html;$("#modal").hidden=false;$("#mcard").querySelectorAll("[data-close]").forEach(b=>b.onclick=closeModal)}
+function closeModal(){$("#modal").hidden=true;$("#mcard").innerHTML=""}
+$("#modal").addEventListener("mousedown",e=>{if(e.target.id==="modal")closeModal()});
+function ask(t,body,ok,fn,danger){modal(`<h3>${t}</h3><p style="margin:0;line-height:1.55;color:var(--muted)">${body}</p><div class="mrow"><button class="cap" data-close>Cancel</button><button class="cap ${danger?"danger":"rose"}" id="askGo">${ok}</button></div>`);$("#askGo").onclick=()=>{closeModal();fn()}}
+function saveBlob(blob,name){const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},800)}
+
+/* ================= LOGIN ================= */
+const expiry=()=>S.cfg.exp||APP_EXPIRY;
+function expired(){
+  if(daysLeft(expiry())>=0)return false;
+  $("#app").hidden=true;$("#gate").hidden=true;$("#lock").hidden=false;
+  $("#lockMsg").textContent="This tool was valid till "+us(expiry())+". Admin can extend it with the master password.";
+  $("#lockGo").onclick=async()=>{if(!(await isMaster($("#lockPw").value))){$("#lockErr").textContent="Master password is wrong.";return}
+    const d=$("#lockDate").value;if(!d||daysLeft(d)<0){$("#lockErr").textContent="Pick a future date.";return}
+    S.cfg.exp=d;await save(true);await fsWriteConfig();$("#lock").hidden=true;start()};
+  return true;
+}
+const DID=()=>{let d=LS.get("did","");if(!d){d=(crypto.randomUUID?crypto.randomUUID():String(Math.random()).slice(2)+Date.now());LS.set("did",d)}return d};
+async function authGet(k){let a=null;S.auth=S.auth||{};
+  if(FS.dir){const t=await fsReadText("_auth",k+".eclipse");if(t){try{a=JSON.parse(t)}catch(e){}}if(a){S.auth[k]=a;save()}else delete S.auth[k]}
+  else a=S.auth[k]||null;return a}
+async function authPut(k,a){S.auth=S.auth||{};S.auth[k]=a;await save(true);if(FS.dir)await fsWriteText("_auth",k+".eclipse",JSON.stringify(a))}
+async function authDel(k){delete (S.auth||{})[k];save();if(FS.dir)await fsRemove("_auth",k+".eclipse")}
+/* blocked tries → history + alert file; mail through the data folder mailbox (Power Automate) + "Need assistance?" */
+async function alertLog(who,t){const at=Date.now();S.log=(S.log||[]).concat({at,who,a:"blocked",n:t}).slice(-600);save();if(FS.dir)await fsWriteText("_system","alert_"+at+".json",JSON.stringify({at,who,t,did:DID().slice(0,8)}))}
+const mailsTo=()=>(S.cfg.alertMails||[]).map(x=>String(x||"").trim()).filter(x=>/@/.test(x));
+function helpMail(who,why){const at=new Date().toLocaleString("en-IN");
+  return{to:mailsTo().join(";"),subject:"[ALERT] UOM Summary DBM – sign-in blocked – "+who,
+  body:"Dear Administrator,\n\nThis is an automated message from "+APP_NAME+" "+APP_VER+".\n\nSign-in was blocked after repeated wrong attempts.\n\n• Name / ID typed : "+who+"\n• What happened  : "+why+"\n• Date / Time    : "+at+"\n• Browser ID     : "+DID().slice(0,8)+"\n• Browser        : "+navigator.userAgent.replace(/\).*/,")")+"\n\nPlease check with the user and the reporting manager.\n\nRegards,\n®® AK_UOM_Alpha NEXTGen_ECLIPSE "+APP_VER+"\nUHG-OPTUM"}}
+async function autoMail(who,why){if(S.cfg.alertAuto===false||!mailsTo().length||!FS.dir)return false;const o={...helpMail(who,why),at:new Date().toISOString(),app:APP_NAME};return fsWriteText("_mailbox","alert_"+Date.now()+".json",JSON.stringify(o,null,1),true)}
+function helpPopup(who,why){
+  if(S.cfg.helpPop===false)return;const h=helpMail(who,why),mt=mailsTo();
+  modal(`<div style="text-align:center"><div style="font-size:46px">🌸</div><h3>Need assistance?</h3>
+   <p class="muted" style="margin:0 auto;max-width:400px;line-height:1.6">Signing in didn't work a few times, so it's paused for 15 minutes. ${S.cfg.alertAuto!==false&&FS.dir&&mt.length?"The Admin team has been told and will help you.":"The Admin team can help you."}</p></div>
+   <div class="mrow" style="justify-content:center">${mt.length?`<a class="cap rose" id="hMail" href="mailto:${h.to}?subject=${encodeURIComponent(h.subject)}&body=${encodeURIComponent(h.body)}">✉ Mail Admin</a>`:""}<button class="cap" data-close>Okay</button></div>`);
+  const a=$("#hMail");if(a)a.onclick=()=>setTimeout(closeModal,300);
+}
+const TRY={get(){return LS.get("tries",{n:0,until:0})},set(v){LS.set("tries",v||{n:0,until:0})}};
+const SESS={get(){try{return S.cfg.remember!==false?LS.get("sess",false):sessionStorage.getItem("uom_sess")==="1"}catch(e){return false}},set(v){try{sessionStorage.setItem("uom_sess",v?"1":"0")}catch(e){}LS.set("sess",!!v)}};
+function greetTxt(){const h=new Date().getHours();return h<12?"Good morning ☀️":h<17?"Good afternoon 🌸":"Good evening ✨"}
+const isAdminName=v=>ADMIN_KEYS.includes(norm(v));
+function findUser(v){const n=norm(v);if(!n)return null;return (S.cfg.users||[]).find(u=>norm(u.name)===n||(u.id&&norm(u.id)===n))||null}
+
+function gate(msg){
+  $("#gate").hidden=false;$("#app").hidden=true;$("#adminPg").hidden=true;
+  $("#verGate").textContent=APP_VER+" · Build "+BUILD;$("#expGate").textContent="Valid till "+us(expiry());$("#gGreet").textContent=greetTxt();
+  const lastK=LS.get("lastwho",""),lu=lastK==="admin"?{name:ADMIN_NAME}:userOf(lastK);
+  $("#gateBody").innerHTML=`
+    ${FS.dir?`<div class="gconn ok">● Data folder connected</div>`:`<button class="gconn" id="gConn">🔌 ${FS.handle?"Allow the data folder (one click)":"Step 1 · Connect the data folder"}</button>${FS.handle?"":connectGuide(true)}`}
+    ${lu?`<div class="cont" id="gCont"><div class="av">${esc(initials(lu.name))}</div><div><b>Continue as ${esc(title(lu.name))}</b><small>Signed in on this PC before</small></div><span style="margin-left:auto">💗</span></div>`:""}
+    <p class="ghint" style="margin-top:14px">${FS.dir||!S.cfg.needFolder?"":"Step 2 · "}Type your name to come in</p>
+    <div class="nbox" id="nbox"><input id="gN" placeholder="Your name" autocomplete="off" spellcheck="false"><span class="hrt">🤍</span></div>
+    <input id="gPw" type="password" placeholder="Admin password" autocomplete="off" hidden style="width:100%;margin-top:10px;padding:13px 18px;border-radius:999px;border:1px solid rgba(255,210,228,.28);background:rgba(10,3,14,.35);color:#fff;text-align:center;outline:none">
+    <input id="gD" placeholder="This PC's device name (Settings → System → About)" autocomplete="off" hidden style="width:100%;margin-top:10px;padding:12px 18px;border-radius:999px;border:1px solid rgba(255,210,228,.28);background:rgba(10,3,14,.35);color:#fff;text-align:center;outline:none;text-transform:uppercase">
+    <button class="gbtn" id="gGo">Enter &nbsp;♥</button>
+    <div class="gerr" id="gErr">${msg||""}</div>`;
+  wireCopy();
+  const gc=$("#gConn");if(gc)gc.onclick=async()=>{const v=$("#gN").value;await gateConnect();gate(FS.dir?"":(gateMsg||"Data folder not connected."));gateMsg="";$("#gN").value=v;nameCheck()};
+  const ct=$("#gCont");if(ct)ct.onclick=()=>{$("#gN").value=lu.name;nameCheck();if(lastK!=="admin")gateGo();else $("#gPw").focus()};
+  $("#gN").oninput=nameCheck;$("#gGo").onclick=gateGo;$("#gateBody").onkeydown=e=>{if(e.key==="Enter")gateGo()};
+  $("#gN").focus();startHearts();
+}
+let gateMsg="";
+async function gateConnect(){
+  if(!fsSupported()){gateMsg="Use Chrome or Edge to connect the data folder.";return}
+  try{if(FS.handle&&!FS.dir){if(await FS.handle.requestPermission({mode:"readwrite"})==="granted"){FS.dir=FS.handle;await fsReadConfig(true);await fsScan();return}}
+    const h=await window.showDirectoryPicker({id:"uom-data",mode:"readwrite",startIn:"documents"});const bad=await folderOK(h,false);if(bad){gateMsg=bad;return}
+    FS.handle=h;FS.dir=h;await IDB.put("dirHandle",h);await fsReadConfig(true);await fsScan()}catch(e){}
+}
+function nameCheck(){
+  const v=$("#gN").value,adm=isAdminName(v),u=findUser(v),ok=adm||(u&&u.on!==false);
+  $("#nbox").classList.toggle("ok",!!ok);$("#nbox .hrt").textContent=ok?"💗":"🤍";
+  $("#gPw").hidden=!adm;$("#gD").hidden=true;
+}
+function initials(n){return String(n||"U").split(/\s+/).filter(Boolean).map(w=>w[0]).join("").slice(0,2).toUpperCase()}
+async function gateGo(){
+  const err=t=>{$("#gErr").innerHTML=t};const v=$("#gN").value.trim();
+  if(!v)return err("Please type your name 🌸");
+  const tr=TRY.get();if(tr.until>Date.now()){err("🌸 Paused for a little while. Try again after "+new Date(tr.until).toLocaleTimeString("en-IN",{hour:"2-digit",minute:"2-digit"})+".");return helpPopup(v,"Sign-in paused after several wrong tries")}
+  const bad=async(t,why)=>{const x=TRY.get();x.n=(x.n||0)+1;const max=+S.cfg.maxTry||5;
+    if(x.n>=max){x.until=Date.now()+15*6e4;x.n=0;TRY.set(x);const w=max+" wrong tries in a row ("+why+")";alertLog(v,"Paused 15 min after "+w);await autoMail(v,w);err("🌸 Paused for 15 minutes.");return helpPopup(v,w)}
+    TRY.set(x);alertLog(v,why);err(t+` <span style="color:#cdb2c4">· Warning ${x.n} of ${max}</span>`)};
+  if(isAdminName(v)){
+    if($("#gPw").hidden||!$("#gPw").value){$("#gPw").hidden=false;$("#gPw").focus();return err("Type the Admin password 🔐")}
+    if(!(await isMaster($("#gPw").value)))return bad("<b>Invalid password.</b>","Wrong Admin password");
+    return doneLogin("admin");
+  }
+  const u=findUser(v);
+  if(!u||u.on===false)return bad("<b>Access Denied.</b> “"+esc(v)+"” has no access. Please contact Administration.",u?"Name without access":"Unknown name");
+  if(u.until&&daysLeft(u.until)<0){alertLog(v,"Access expired");return err("<b>Access expired</b> on "+us(u.until)+". Please contact Administration.")}
+  if(S.cfg.needFolder!==false&&!FS.dir)return err("Connect the data folder first (Step 1), then type your name.");
+  const a=await authGet(u.k);
+  if(a&&a.did!==DID()){alertLog(v,"Name used on another PC (blocked)");return err("<b>This name is linked to another PC.</b> It can't be used here. Please contact Administration.")}
+  if(!a){
+    if(S.cfg.askDevice&&u.mc){const D=$("#gD");if(D.hidden){D.hidden=false;D.focus();return err("First time on this PC · type this PC's device name once.")}
+      if(D.value.trim().toUpperCase().replace(/\..*$/,"")!==String(u.mc).toUpperCase())return bad("Device name doesn't match.","Wrong device name")}
+    await authPut(u.k,{did:DID(),at:Date.now(),last:Date.now(),name:u.name});logAct("linked",u.name+" linked to this PC");
+  }else{a.last=Date.now();authPut(u.k,a)}
+  doneLogin(u.k);
+}
+function doneLogin(k){TRY.set(null);LS.set("lastwho",k);LS.set("who",k);SESS.set(true);resolveMe();logAct("login",ROLEN(me.role));welcome();enter()}
+function welcome(){
+  const lines=["Have a wonderful day at work 🌸","Your numbers are ready to shine ✨","Great work starts with you 💫","Wishing you a smooth & happy shift 🌷"];
+  const w=document.createElement("div");w.id="welcome";
+  w.innerHTML=`<div><div class="bh">💗</div><h2>Welcome, ${esc(title(me.name))}</h2><p>${lines[Math.floor(Math.random()*lines.length)]}</p></div>`;
+  document.body.appendChild(w);setTimeout(()=>w.remove(),2300);
+}
+function logout(){SESS.set(false);LS.set("who","");gate()}
+
+/* floating hearts & sparkles on the login screen */
+let heartsOn=false;
+function startHearts(){
+  if(heartsOn)return;heartsOn=true;const c=$("#hearts"),x=c.getContext("2d");let W,Hh;const P=[];
+  const rs=()=>{W=c.width=innerWidth*devicePixelRatio;Hh=c.height=innerHeight*devicePixelRatio};rs();addEventListener("resize",rs);
+  for(let i=0;i<30;i++)P.push(np(true));
+  function np(init){return{x:Math.random()*W,y:init?Math.random()*Hh:Hh+20,s:(Math.random()*8+5)*devicePixelRatio,v:(Math.random()*.35+.15)*devicePixelRatio,a:Math.random()*.32+.08,h:Math.random()<.55,ph:Math.random()*6.28,c:["#f19bb5","#ffd6c7","#e1a6ff","#ff8fb0"][Math.floor(Math.random()*4)]}}
+  function heart(p){x.save();x.translate(p.x,p.y);x.scale(p.s/16,p.s/16);x.beginPath();x.moveTo(0,4);x.bezierCurveTo(0,0,-8,-2,-8,4);x.bezierCurveTo(-8,9,0,12,0,16);x.bezierCurveTo(0,12,8,9,8,4);x.bezierCurveTo(8,-2,0,0,0,4);x.fill();x.restore()}
+  (function loop(){if($("#gate").hidden){heartsOn=false;return}x.clearRect(0,0,W,Hh);
+    for(const p of P){p.y-=p.v;p.ph+=.012;p.x+=Math.sin(p.ph)*.3;x.globalAlpha=p.a;x.fillStyle=p.c;
+      if(p.h)heart(p);else{x.beginPath();x.arc(p.x,p.y,p.s/5,0,6.28);x.fill()}
+      if(p.y<-30)Object.assign(p,np(false))}
+    requestAnimationFrame(loop)})();
+}
+
+/* ---------- start ---------- */
+async function start(){
+  if(expired())return;
+  if(!LOCK_ON){resolveMe();return enter()}
+  try{await fsInit()}catch(e){}
+  const k=LS.get("who","");
+  if(SESS.get()&&k){
+    if(k==="admin"){resolveMe();return enter()}
+    const u=userOf(k);
+    if(u&&u.on!==false&&!(u.until&&daysLeft(u.until)<0)){
+      if(FS.dir){const a=await authGet(k);if(!a||a.did!==DID()){SESS.set(false);return gate(a?"This name is now linked to another PC. Please contact Administration.":"Your sign-in was reset by Admin. Type your name again.")}}
+      resolveMe();return enter()}
+    SESS.set(false);return gate(u?"<b>Access Denied.</b> Please contact Administration.":"")
+  }
+  gate();
+}
+
+/* ================= APP ================= */
+const view={tab:"res",master:null,mdate:"",rows:[],src:"",dirty:false,emp:"",proc:"",q:"",sort:null,vis:[]};
+async function saveScreen(){await IDB.put("screen_"+me.k,{master:view.master,mdate:view.mdate,rows:view.rows,src:view.src,dirty:view.dirty})}
+async function loadScreen(){const o=await IDB.get("screen_"+me.k);if(o){view.master=o.master||null;view.mdate=o.mdate||"";view.rows=o.rows||[];view.src=o.src||"";view.dirty=!!o.dirty}else{view.master=null;view.mdate="";view.rows=[];view.src="";view.dirty=false}}
+
+async function enter(){
+  $("#gate").hidden=true;$("#lock").hidden=true;$("#app").hidden=false;
+  view.emp=view.proc=view.q="";view.sort=null;$("#fEmp").value="";$("#fProc").value="";$("#q").value="";
+  await loadScreen();setTop();applyPerms();renderAll();cleanup();
+}
+function setTop(){
+  $("#verTop").textContent=APP_NAME+" · "+APP_VER+" · Build "+BUILD;
+  $("#uName").textContent=title(me.name)||"User";$("#uRole").textContent=ROLEN(me.role)+(me.id?" · "+me.id:"");$("#ava").textContent=initials(me.name);
+  $("#btnAdmin").hidden=!isAdmin();
+  const left=daysLeft(expiry());$("#expTxt").textContent="Valid till "+us(expiry());$("#expTxt").style.color=left<15?"var(--danger)":"";
+  $("#keepTxt").textContent=(+S.cfg.keep||30)+" days";paintSync();
+}
+function applyPerms(){
+  const dis=(id,f)=>{const b=$(id);if(b){b.disabled=!can(f);b.title=can(f)?b.title.replace(/ · No access$/,""):(b.title||"")+" · No access"}};
+  dis("#bPaste","dump");dis("#bUpload","dump");dis("#bRun","run");dis("#bDown","downtime");dis("#bSave","save");dis("#bDates","dates");dis("#bMail","mail");dis("#bExcel","excel");dis("#bClear","clear");dis("#bRes","research");dis("#bUndo","research");
+  $("#btnFolder").hidden=!can("folder");$("#btnTheme").hidden=!can("theme");$("#kpis").hidden=!can("kpis");
+  $$(".tabs [data-tab=mf]").forEach(b=>b.hidden=!can("master"));if(!can("master"))view.tab="res";
+}
+function renderAll(){$("#mDate").value=us(view.mdate);fillLists();renderSide();renderKpis();renderGrid();paintTabs();$("#unsaved").hidden=!(view.dirty&&view.rows.length)}
+function paintTabs(){$$(".top .tabs button").forEach(b=>b.classList.toggle("on",b.dataset.tab===view.tab))}
+$$(".top .tabs button").forEach(b=>b.onclick=()=>{view.tab=b.dataset.tab;paintTabs();renderGrid()});
+
+/* --- sidebar --- */
+function renderSide(){
+  const rows=view.rows,emps=new Set(rows.map(r=>r.name)),cnt=rows.reduce((a,r)=>a+(+r.cnt||0),0);
+  $("#todayTxt").textContent=dmy(todayISO());
+  $("#nums").innerHTML=[[nf(rows.length),"Rows"],[nf(emps.size),"Employees"],[nf(cnt),"Total count"],[nf(savedDates().length),"Saved dates"]].map(x=>`<div class="num"><b>${x[0]}</b><span>${x[1]}</span></div>`).join("");
+  const ds=savedDates().slice(0,10),cur=new Set(rows.map(r=>r.d));
+  $("#chips").innerHTML=ds.length?ds.map(d=>`<button class="dchip ${view.src==="saved"&&cur.has(d)&&cur.size===1?"on":""}" data-d="${d}"><span class="g"></span>${us(d).slice(0,5)}</button>`).join(""):`<span style="font-size:11px;color:var(--side-mut)">No saved dates yet</span>`;
+  $$("#chips [data-d]").forEach(b=>b.onclick=()=>can("dates")?showSaved([b.dataset.d]):toast("No access"));
+}
+/* --- KPI cards --- */
+function renderKpis(){
+  const r=view.vis.length||view.emp||view.proc||view.q?view.vis:view.rows;
+  const emps=new Set(r.map(x=>x.name)),wq=new Set(r.map(x=>x.wq)),cnt=r.reduce((a,x)=>a+(+x.cnt||0),0),hrs=r.reduce((a,x)=>a+(+x.hrs||0),0);
+  const dt=r.reduce((a,x)=>a+(+x.wfi||0)+(+x.so||0)+(+x.tr||0)+(+x.pj||0),0),noid=new Set(r.filter(x=>!x.id).map(x=>x.name)).size;
+  const dates=[...new Set(r.map(x=>x.d))].sort();
+  $("#kpis").innerHTML=[["Date",dates.length>1?dates.length+" dates":us(dates[0]||view.mdate)||"—"],["Employees",nf(emps.size)],["Work queues",nf(wq.size)],["Total count",nf(cnt)],["Total hours",hrs.toFixed(2)],[noid?"Missing ID":"Downtime min",noid?noid+" name"+(noid>1?"s":""):nf(dt),noid?"bad":""]]
+    .map(k=>`<div class="kpi ${k[2]||""}"><span>${k[0]}</span><b>${k[1]}</b></div>`).join("");
+}
+/* --- dropdown lists (Employee / Process) --- */
+function fillLists(){
+  const emps=[...new Set(view.rows.map(r=>r.name))];
+  const procs=[...new Set([...(S.cfg.procs||[]),...view.rows.map(r=>r.wq)])];
+  $("#dlEmp").innerHTML=emps.map(n=>`<option value="${esc(n)}">`).join("");
+  $("#dlProc").innerHTML=procs.map(n=>`<option value="${esc(n)}">`).join("");
+}
+const paintFld=el=>el.classList.toggle("full",!!el.value.trim());
+$("#fEmp").oninput=e=>paintFld(e.target);$("#fProc").oninput=e=>paintFld(e.target);
+
+/* ================= DUMP: paste / upload ================= */
+function parseTSV(t){
+  t=String(t).replace(/\r\n?/g,"\n");const out=[];let row=[],cell="",q=false;
+  for(let i=0;i<t.length;i++){const ch=t[i];
+    if(q){if(ch==='"'){if(t[i+1]==='"'){cell+='"';i++}else q=false}else cell+=ch;continue}
+    if(ch==='"'&&cell===""){q=true;continue}
+    if(ch==="\t"){row.push(cell);cell="";continue}
+    if(ch==="\n"){row.push(cell);out.push(row);row=[];cell="";continue}
+    cell+=ch}
+  if(cell!==""||row.length){row.push(cell);out.push(row)}
+  while(out.length&&!out[out.length-1].some(c=>String(c).trim()))out.pop();
+  return out;
+}
+function cellText(c){
+  if(!c||c.v==null)return "";
+  if(c.t==="n"){const z=c.z||"General";
+    if(z!=="General"&&XLSX.SSF.is_date(z)){const d=XLSX.SSF.parse_date_code(c.v);if(d)return String(d.m).padStart(2,"0")+"/"+String(d.d).padStart(2,"0")+"/"+d.y}
+    if(z==="General"||z==="@")return Number.isInteger(c.v)?String(c.v):String(+c.v.toPrecision(15));
+    return c.w!=null?String(c.w).trim():String(c.v)}
+  if(c.t==="d"){const d=c.v;return String(d.getMonth()+1).padStart(2,"0")+"/"+String(d.getDate()).padStart(2,"0")+"/"+d.getFullYear()}
+  return String(c.w!=null&&c.t!=="s"?c.w:c.v).replace(/\s+$/,"");
+}
+function sheetAOA(ws){if(!ws||!ws["!ref"])return [];const r=XLSX.utils.decode_range(ws["!ref"]),out=[];
+  for(let R=0;R<=r.e.r;R++){const row=[];for(let C=0;C<=r.e.c;C++)row.push(cellText(ws[XLSX.utils.encode_cell({r:R,c:C})]));out.push(row)}
+  while(out.length&&!out[out.length-1].some(c=>String(c).trim()))out.pop();return out}
+$("#bPaste").onclick=()=>{
+  modal(`<h3>Paste the Master File</h3><p class="muted" style="margin:0 0 10px">Copy the whole MASTER FILE sheet in Excel (Ctrl+A, Ctrl+C) and paste here. Row 1 + Row 2 = names, Row 4 onwards = work queues, A1 = date.</p>
+    <textarea id="pTxt" placeholder="Ctrl+V here…"></textarea><div class="mrow"><button class="cap" data-close>Cancel</button><button class="cap rose" id="pGo">Load ▶</button></div>`,true);
+  $("#pTxt").focus();$("#pGo").onclick=()=>{const a=parseTSV($("#pTxt").value);closeModal();takeAOA(a,"Pasted")};
+};
+document.addEventListener("paste",e=>{
+  if($("#app").hidden||!$("#modal").hidden||!$("#adminPg").hidden||/INPUT|TEXTAREA/.test((e.target||{}).tagName||""))return;if(!can("dump"))return;
+  const t=(e.clipboardData||window.clipboardData).getData("text");if(!t||!t.includes("\t"))return;e.preventDefault();takeAOA(parseTSV(t),"Pasted");
+});
+$("#bUpload").onclick=()=>$("#fileIn").click();
+$("#fileIn").onchange=async e=>{const f=e.target.files[0];e.target.value="";if(!f)return;
+  if(typeof XLSX==="undefined")return toast("Excel reader didn't load (no internet?). Use Paste instead.");
+  try{const wb=XLSX.read(await f.arrayBuffer(),{type:"array",cellDates:false,cellNF:true,cellText:true});
+    const name=wb.SheetNames.find(n=>/master/i.test(n))||wb.SheetNames.find(n=>/result/i.test(n))||wb.SheetNames[0];
+    takeAOA(sheetAOA(wb.Sheets[name]),f.name)}catch(x){toast("Couldn't read this file")}
+};
+/* the dump can be a NICE Master File (names across) OR an old Result / mail Excel (Date · Employee ID · EMP name …) */
+function resultHead(a){for(let r=0;r<Math.min(6,a.length);r++){const h=a[r].map(norm);const iN=h.findIndex(x=>x==="empname"),iW=h.findIndex(x=>x==="workqueue");if(iN>=0&&iW>=0)return{r,h}}return null}
+function takeAOA(a,src){
+  if(!a||!a.length)return toast("Nothing to load");
+  const rh=resultHead(a);
+  if(rh){const h=rh.h,ix=k=>h.findIndex(x=>x===k);const I={d:ix("date"),id:ix("employeeid"),name:ix("empname"),wq:ix("workqueue"),cnt:ix("count"),hrs:ix("hours"),wfi:ix("waitingforinventory"),so:ix("systemoutage"),tr:ix("training"),pj:ix("project")};
+    const rows=[];let last="";for(let r=rh.r+1;r<a.length;r++){const v=a[r],g=k=>I[k]>=0?String(v[I[k]]??"").trim():"";if(!g("name")&&!g("wq"))continue;
+      const o={d:toISO(g("d"))||view.mdate||todayISO(),id:g("id"),name:up(g("name")),wq:g("wq"),cnt:num(g("cnt")),hrs:num(g("hrs")),wfi:num(g("wfi")),so:num(g("so")),tr:num(g("tr")),pj:num(g("pj"))};
+      o.first=o.hrs!==""||o.name!==last;last=o.name;if(!o.id)o.id=getEmpID(o.name);rows.push(o)}
+    const go=()=>{view.rows=rows;view.master=null;view.mdate=rows[0]?rows[0].d:"";view.src="import";view.dirty=true;resetFilters();saveScreen();renderAll();toast("✓ "+nf(rows.length)+" Result rows loaded from "+src);logAct("import",rows.length+" rows")};
+    return view.rows.length&&view.dirty?ask("Replace the screen?","The screen has rows that are not saved yet.","Replace",go):go();
+  }
+  view.master=a;view.mdate=findDate(a)||view.mdate||"";view.tab=can("master")?"mf":"res";saveScreen();renderAll();
+  toast("✓ Master File loaded ("+nf(a.length)+" rows) · now press RUN");
+}
+function findDate(a){const c=toISO(a[0]&&a[0][0]);if(c)return c;for(let r=0;r<Math.min(3,a.length);r++)for(let k=0;k<Math.min(4,(a[r]||[]).length);k++){const d=toISO(a[r][k]);if(d)return d}return ""}
+$("#mDate").onchange=e=>{const d=toISO(e.target.value);if(!d){toast("Use MM/DD/YYYY");e.target.value=us(view.mdate);return}view.mdate=d;e.target.value=us(d);saveScreen();renderKpis()};
+
+/* ================= RUN (same as the VBA btnRUN_Click) ================= */
+$("#bRun").onclick=()=>{
+  if(!can("run"))return;
+  const a=view.master;if(!a||!a.length)return toast("Paste or upload the Master File first");
+  const d=view.mdate||toISO($("#mDate").value);if(!d){$("#mDate").focus();return toast("A1 has no date · type the date (MM/DD/YYYY) first")}
+  const go=()=>{
+    const isTot=s=>/^totals?$/i.test(String(s||"").trim());
+    const r1=a[0]||[],r2=a[1]||[],lastCol=Math.max(r1.length,0),out=[];
+    for(let c=2;c<lastCol;c++){
+      const fn=String(r1[c]??"").trim(),ln=String(r2[c]??"").trim();
+      const name=up(ln==="-"?fn:fn+" "+ln);
+      if(!name||isTot(name))continue;
+      let first=true;
+      for(let r=3;r<a.length;r++){
+        const wq=String((a[r]||[])[0]??"").trim();if(isTot(wq))continue;
+        const v=String((a[r]||[])[c]??"").trim();if(v===""||v==="-")continue;
+        const H8=+S.cfg.hours||8;
+        out.push({d,id:getEmpID(name),name,wq,cnt:num(v)===""?v:num(v),hrs:first?H8:"",wfi:first?0:"",so:first?0:"",tr:first?0:"",pj:first?0:"",first});
+        first=false;
+      }
+    }
+    view.rows=out;view.src="run";view.dirty=true;view.tab="res";resetFilters();saveScreen();renderAll();
+    const miss=new Set(out.filter(x=>!x.id).map(x=>x.name)).size;
+    toast("✓ "+nf(out.length)+" rows · "+new Set(out.map(x=>x.name)).size+" employees"+(miss?" · "+miss+" without Employee ID (red)":""));logAct("run",us(d)+" · "+out.length+" rows");
+  };
+  if(view.rows.length&&view.dirty)ask("Run again?","The Result on screen is not saved yet. RUN will replace it.","RUN",go);else go();
+};
+/* Downtime - 8: Hours = 8 − (minutes ÷ 60), not below 0 */
+function dtCalc(r){if([r.wfi,r.so,r.tr,r.pj].some(x=>x!==""&&x!=null)){const m=(+r.wfi||0)+(+r.so||0)+(+r.tr||0)+(+r.pj||0);r.hrs=Math.max(0,Math.round(((+S.cfg.hours||8)-m/60)*100)/100)}}
+$("#bDown").onclick=()=>{if(!can("downtime"))return;if(!view.rows.length)return toast("Nothing on screen");view.rows.forEach(dtCalc);view.dirty=true;saveScreen();renderAll();toast("⏱ Hours updated (8 − downtime)")};
+
+/* ================= RESEARCH / UNDO / CLEAR ================= */
+function resetFilters(){view.emp=view.proc=view.q="";view.sort=null;["#fEmp","#fProc","#q"].forEach(s=>{$(s).value="";if(s!=="#q")paintFld($(s))})}
+$("#bRes").onclick=()=>{
+  if(!can("research"))return;const e=$("#fEmp").value.trim(),p=$("#fProc").value.trim();
+  if(!e&&!p)return toast("Choose an Employee and / or a Process");
+  const hit=view.rows.some(r=>(!e||norm(r.name)===norm(e))&&(!p||norm(r.wq)===norm(p)));
+  if(!hit){modal(`<div style="text-align:center"><div style="font-size:40px">🔍</div><h3>No Data Found</h3><p class="muted" style="margin:0">${e?"<b style='color:var(--ink)'>"+esc(e)+"</b> not worked on process:":"Nobody worked on:"}<br><span class="mono">${esc(p||"(any process)")}</span></p></div><div class="mrow" style="justify-content:center"><button class="cap rose" data-close>OK</button></div>`);view.emp=view.proc="";renderGrid();renderKpis();return}
+  view.emp=e;view.proc=p;view.tab="res";paintTabs();renderGrid();renderKpis();
+};
+$("#bUndo").onclick=()=>{if(!can("research"))return;resetFilters();renderGrid();renderKpis()};
+$("#q").oninput=e=>{view.q=e.target.value;renderGrid();renderKpis()};
+$("#bClear").onclick=()=>{if(!can("clear"))return;ask("Erase all data?","Are you sure you want to erase all data on the screen? Saved dates in the data folder stay safe.","Clear all",()=>{view.master=null;view.rows=[];view.mdate="";view.src="";view.dirty=false;resetFilters();saveScreen();renderAll();logAct("clear","screen cleared")},true)};
+
+/* ================= GRID (smooth list, any number of rows) ================= */
+const COLS=[["d","Date"],["id","Employee ID"],["name","EMP name"],["wq","Work Queue"],["cnt","Count"],["hrs","Hours"],["wfi","Waiting for inventory"],["so","System Outage"],["tr","Training"],["pj","Project"]];
+const DT=["wfi","so","tr","pj"];const RH=30;
+function visRows(){
+  const e=norm(view.emp),p=norm(view.proc),q=norm(view.q);
+  let out=view.rows.map((r,i)=>(r._i=i,r)).filter(r=>(!e||norm(r.name)===e)&&(!p||norm(r.wq)===p)&&(!q||norm([us(r.d),r.id,r.name,r.wq,r.cnt].join(" ")).includes(q)));
+  if(view.sort){const {k,dir}=view.sort;out=out.slice().sort((a,b)=>dir*String(a[k]??"").localeCompare(String(b[k]??""),undefined,{numeric:true}))}
+  let g=0,last=null;out.forEach(r=>{if(r.name!==last){g++;last=r.name}r._g=g});
+  return out;
+}
+function renderGrid(){
+  const W=$("#gwrap");
+  if(view.tab==="mf")return renderMaster();
+  view.vis=visRows();
+  if(!view.rows.length){W.innerHTML=`<div class="empty"><div><div style="font-size:40px">💐</div><div class="bigh">Ready when you are</div><div>Dump the MASTER FILE, press RUN, and the UOM summary builds itself.</div>
+    <div class="steps"><div class="st"><b>1 · Dump</b>Paste (or Ctrl+V anywhere) / Upload the NICE ALL-UOM .xls</div><div class="st"><b>2 · RUN</b>One line per employee × work queue with Employee ID</div><div class="st"><b>3 · Downtime</b>Type minutes, Hours = 8 − minutes ÷ 60</div><div class="st"><b>4 · Save / Mail</b>Date-wise for 30 days · Excel + Outlook draft</div></div></div></div>`;
+    $("#gInfo").textContent="";$("#gSrc").textContent="";return}
+  const sk=view.sort&&view.sort.k,sd=view.sort&&view.sort.dir;
+  W.innerHTML=`<table class="g"><thead><tr><th style="width:46px">#</th>${COLS.map(c=>`<th data-k="${c[0]}">${c[1]}<span class="ar">${sk===c[0]?(sd>0?"▲":"▼"):"↕"}</span></th>`).join("")}</tr></thead><tbody id="gb"></tbody></table>`;
+  W.querySelectorAll("th[data-k]").forEach(th=>th.onclick=()=>{const k=th.dataset.k;view.sort=view.sort&&view.sort.k===k?(view.sort.dir>0?{k,dir:-1}:null):{k,dir:1};renderGrid()});
+  W.onscroll=drawRows;drawRows();
+  const f=view.emp||view.proc||view.q;
+  $("#gInfo").textContent=f?`Showing ${nf(view.vis.length)} of ${nf(view.rows.length)} rows · filtered`:`${nf(view.rows.length)} rows`;
+  $("#gSrc").textContent={run:"Built by RUN",saved:"Loaded from saved dates",import:"Imported Result"}[view.src]||"";
+}
+function drawRows(){
+  const W=$("#gwrap"),B=$("#gb");if(!B)return;const rows=view.vis,top=W.scrollTop,h=W.clientHeight||600;
+  const s=Math.max(0,Math.floor(top/RH)-15),e=Math.min(rows.length,Math.ceil((top+h)/RH)+15);
+  if(drawRows.k===s+"/"+e+"/"+rows.length&&B.childElementCount)return;drawRows.k=s+"/"+e+"/"+rows.length;
+  const ed=can("edit");
+  let html=s?`<tr style="height:${s*RH}px"><td colspan="11" style="border:0;padding:0"></td></tr>`:"";
+  for(let i=s;i<e;i++){const r=rows[i];const alt=r._g%2?"":"alt";
+    html+=`<tr class="${r.first&&i?"f":""} ${alt}"><td class="rn">${i+1}</td><td class="n">${us(r.d)}</td><td class="n ${r.id?"":"noid"}" title="${r.id?"":"No Employee ID · add the name in Admin → Lists"}">${esc(r.id||"—")}</td><td>${esc(r.name)}</td><td>${esc(r.wq)}</td><td class="n">${esc(r.cnt)}</td><td class="n h">${f2(r.hrs)}</td>`+
+      DT.map(k=>`<td class="n">${ed?`<input class="dt" data-i="${r._i}" data-k="${k}" value="${r[k]===""||r[k]==null?"":f2(r[k])}" inputmode="decimal">`:f2(r[k])}</td>`).join("")+`</tr>`}
+  html+=rows.length-e>0?`<tr style="height:${(rows.length-e)*RH}px"><td colspan="11" style="border:0;padding:0"></td></tr>`:"";
+  B.innerHTML=html;
+  B.querySelectorAll("input.dt").forEach(inp=>{inp.onchange=()=>{const r=view.rows[+inp.dataset.i];const v=inp.value.trim();r[inp.dataset.k]=v===""?"":(num(v)===""?0:num(v));
+      dtCalc(r);view.dirty=true;saveScreen();inp.value=r[inp.dataset.k]===""?"":f2(r[inp.dataset.k]);inp.closest("tr").querySelector("td.h").textContent=f2(r.hrs);renderKpis();$("#unsaved").hidden=false};
+    inp.onkeydown=ev=>{if(ev.key==="Enter"||ev.key==="ArrowDown"||ev.key==="ArrowUp"){ev.preventDefault();inp.blur();const list=[...B.querySelectorAll(`input.dt[data-k="${inp.dataset.k}"]`)];const j=list.indexOf(inp)+(ev.key==="ArrowUp"?-1:1);if(list[j])list[j].focus()}}});
+}
+function renderMaster(){
+  const W=$("#gwrap"),a=view.master;W.onscroll=null;
+  if(!a){W.innerHTML=`<div class="empty"><div><div style="font-size:40px">📋</div><div class="bigh">No Master File yet</div><div>Paste or Upload the MASTER FILE. It shows here exactly as dumped.</div></div></div>`;$("#gInfo").textContent="";$("#gSrc").textContent="";return}
+  const nc=Math.min(Math.max(...a.slice(0,5).map(r=>r.length),1),300),nr=Math.min(a.length,1500);
+  const L=i=>{let s="";i++;while(i>0){const m=(i-1)%26;s=String.fromCharCode(65+m)+s;i=Math.floor((i-1)/26)}return s};
+  let h=`<table class="g mtable"><thead><tr><th style="width:46px">#</th>${Array.from({length:nc},(_,i)=>`<th style="cursor:default">${L(i)}</th>`).join("")}</tr></thead><tbody>`;
+  for(let r=0;r<nr;r++){h+=`<tr><td class="rn">${r+1}</td>${Array.from({length:nc},(_,c)=>`<td class="${c===0?"l":""}">${esc((a[r]||[])[c]??"")}</td>`).join("")}</tr>`}
+  W.innerHTML=h+"</tbody></table>";$("#gInfo").textContent=`${nf(a.length)} rows × ${nc} columns · date ${us(view.mdate)||"(not found in A1)"}`;$("#gSrc").textContent="Master File (as dumped)";
+}
+
+/* ================= SAVE (date-wise · 30 days) ================= */
+const rkey=r=>r.d+"|"+norm(r.name)+"|"+norm(r.wq);
+const strip=r=>({d:r.d,id:r.id,name:r.name,wq:r.wq,cnt:r.cnt,hrs:r.hrs,wfi:r.wfi,so:r.so,tr:r.tr,pj:r.pj,first:!!r.first});
+$("#bSave").onclick=async()=>{
+  if(!can("save"))return;if(!view.rows.length)return toast("Nothing to save · RUN first");
+  const by={};view.rows.forEach(r=>(by[r.d]=by[r.d]||[]).push(strip(r)));const dates=Object.keys(by).sort();
+  const cut=addDays(todayISO(),-(+S.cfg.keep||30));
+  if(dates.some(d=>d<cut))return toast("Dates older than "+S.cfg.keep+" days can't be saved");
+  const exist=[];for(const d of dates){const o=await loadDay(d);if(o&&o.rows&&o.rows.length)exist.push(d)}
+  const doIt=async mode=>{let add=0,rep=0;
+    for(const d of dates){let rows=by[d];const o=exist.includes(d)?await loadDay(d):null;
+      if(o&&mode==="add"){const have=new Set(o.rows.map(rkey));const nw=rows.filter(r=>!have.has(rkey(r)));rows=o.rows.concat(nw);add+=nw.length}else{if(o)rep++;add+=rows.length}
+      const obj={d,rows,savedBy:me.name,savedAt:new Date().toISOString()};S.days[d]=obj;await fsWriteDay(d,obj)}
+    save();view.dirty=false;view.src=view.src||"run";saveScreen();renderAll();
+    toast((FS.dir?"💾 Saved to the data folder":"💾 Saved on this PC only (connect the data folder to share)")+" · "+dates.map(us).join(", ")+" · "+(add?nf(add)+(mode==="add"?" new":"")+" rows":"nothing new (already saved)"));
+    logAct("save",dates.map(us).join(", ")+" · "+mode+" · "+add+" rows")};
+  if(!exist.length)return doIt("new");
+  modal(`<h3>Already saved</h3><p class="muted" style="margin:0;line-height:1.6"><b style="color:var(--ink)">${exist.map(us).join(", ")}</b> is already in the data folder. What should happen?</p>
+    <div class="tick" id="mAdd"><span style="font-size:20px">➕</span><div class="grow"><b>Add only new rows</b><br><span class="muted">Same employee + work queue is never doubled</span></div></div>
+    ${can("replace")?`<div class="tick" id="mRep"><span style="font-size:20px">♻</span><div class="grow"><b>Replace the date</b><br><span class="muted">The saved rows are overwritten with the screen</span></div></div>`:""}
+    <div class="mrow"><button class="cap" data-close>Cancel</button></div>`);
+  $("#mAdd").onclick=()=>{closeModal();doIt("add")};const rp=$("#mRep");if(rp)rp.onclick=()=>{closeModal();doIt("replace")};
+};
+/* saved dates window */
+$("#bDates").onclick=async()=>{
+  if(!can("dates"))return;if(FS.dir)await fsScan();const ds=savedDates();
+  if(!ds.length)return toast("No saved dates yet");
+  const info={};for(const d of ds){const o=await loadDay(d);info[d]=o?{n:o.rows.length,e:new Set(o.rows.map(r=>r.name)).size,c:o.rows.reduce((a,r)=>a+(+r.cnt||0),0),by:o.savedBy||""}:{n:0,e:0,c:0}}
+  modal(`<h3>Saved dates</h3><p class="muted" style="margin:0 0 8px">Last ${S.cfg.keep} days are kept · older dates are removed automatically. Tick and choose.</p>
+    <label class="tick" style="background:var(--bg2)"><input type="checkbox" id="sdAll"><b class="grow">Select all</b><span class="muted">${ds.length} dates</span></label>
+    <div style="max-height:46vh;overflow:auto">${ds.map(d=>`<label class="tick"><input type="checkbox" class="sdC" value="${d}"><div class="grow"><b class="mono">${us(d)}</b> <span class="muted">· ${dmy(d).slice(3)}</span><br><span class="muted">${nf(info[d].n)} rows · ${info[d].e} employees · count ${nf(info[d].c)}${info[d].by?" · by "+esc(title(info[d].by)):""}</span></div><span class="tag ok">saved</span></label>`).join("")}</div>
+    <div class="mrow">${can("deldate")?`<button class="cap danger" id="sdDel">🗑 Delete</button>`:""}<div class="spacer"></div><button class="cap" data-close>Close</button>${can("excel")?`<button class="cap c-mail" id="sdXl">📗 Excel</button>`:""}<button class="cap rose" id="sdShow">Show on screen</button></div>`,true);
+  const sel=()=>$$(".sdC").filter(x=>x.checked).map(x=>x.value);
+  $("#sdAll").onchange=e=>$$(".sdC").forEach(x=>x.checked=e.target.checked);
+  $("#sdShow").onclick=()=>{const s=sel();if(!s.length)return toast("Tick at least one date");closeModal();showSaved(s)};
+  const xl=$("#sdXl");if(xl)xl.onclick=async()=>{const s=sel();if(!s.length)return toast("Tick at least one date");let rows=[];for(const d of s.sort()){const o=await loadDay(d);if(o)rows=rows.concat(o.rows)}await exportXL(rows,fileName(s.length===1?s[0]:null),s.length>1);};
+  const dl=$("#sdDel");if(dl)dl.onclick=()=>{const s=sel();if(!s.length)return toast("Tick at least one date");ask("Delete "+s.length+" date"+(s.length>1?"s":"")+"?","<b>"+s.map(us).join(", ")+"</b> will be removed from the data folder for everyone. This can't be undone.","Delete",async()=>{for(const d of s)await deleteDay(d);logAct("delete",s.map(us).join(", "));renderSide();toast("🗑 Deleted")},true)};
+};
+async function showSaved(ds){
+  const go=async()=>{let rows=[];for(const d of ds.slice().sort()){const o=await loadDay(d);if(o)rows=rows.concat(o.rows.map(r=>({...r})))}
+    view.rows=rows;view.master=null;view.mdate=ds.length===1?ds[0]:"";view.src="saved";view.dirty=false;view.tab="res";resetFilters();saveScreen();renderAll();toast("📅 "+ds.map(us).join(", ")+" · "+nf(rows.length)+" rows")};
+  if(view.rows.length&&view.dirty)ask("Open saved date?","The screen has rows that are not saved yet. They will be replaced.","Open",go);else go();
+}
+
+/* ================= EXCEL + MAIL (same look as the team mail) ================= */
+const fileName=d=>String(S.cfg.fileName||"UOM-Volume Summary_{date}.xlsx").replace("{date}",dmy(todayISO())).replace(/(\.xlsx)?$/i,".xlsx");
+async function exportXL(rows,name,withSummary){
+  if(!rows.length){toast("No data to export");return false}
+  if(typeof ExcelJS==="undefined"){if(typeof XLSX==="undefined"){toast("Excel library didn't load (no internet?)");return false}
+    const aoa=[COLS.map(c=>c[1])].concat(rows.map(r=>[us(r.d),r.id,r.name,r.wq,r.cnt,r.hrs,r.wfi,r.so,r.tr,r.pj]));const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(aoa),"Sheet1");XLSX.writeFile(wb,name);return true}
+  const wb=new ExcelJS.Workbook();wb.creator="Alpha NextGen Eclipse";const ws=wb.addWorksheet("Sheet1",{views:[{zoomScale:70,state:"frozen",ySplit:1}]});
+  const thin=c=>({style:"thin",color:{argb:c}});const bAll=c=>({top:thin(c),left:thin(c),bottom:thin(c),right:thin(c)});
+  ws.addRow(COLS.map(c=>c[1]));
+  const hr=ws.getRow(1);hr.height=28;hr.eachCell(c=>{c.font={bold:true,name:"Calibri",size:11};c.alignment={horizontal:"center",vertical:"middle"};c.fill={type:"pattern",pattern:"solid",fgColor:{argb:"FFF4B183"}};c.border=bAll("FF000000")});
+  rows.forEach(r=>{const [y,m,d]=r.d.split("-").map(Number);
+    const row=ws.addRow([new Date(Date.UTC(y,m-1,d)),String(r.id||""),r.name,r.wq,r.cnt===""?null:r.cnt,r.hrs===""?null:+r.hrs,...DT.map(k=>r[k]===""||r[k]==null?null:+r[k])]);
+    row.eachCell({includeEmpty:true},(c,i)=>{c.alignment={horizontal:"center",vertical:"middle"};c.border=bAll("FFADD8E6");c.font={name:"Calibri",size:11}});
+    row.getCell(1).numFmt="mm/dd/yyyy";row.getCell(2).numFmt="@";[6,7,8,9,10].forEach(i=>row.getCell(i).numFmt="0.00")});
+  [12,13,26,40,8,8,20,15,10,9].forEach((w,i)=>ws.getColumn(i+1).width=w);
+  if(withSummary){const s=wb.addWorksheet("Summary");s.addRow(["Date","Employees","Rows","Total count","Total hours"]);
+    const by={};rows.forEach(r=>{const o=by[r.d]=by[r.d]||{e:new Set(),n:0,c:0,h:0};o.e.add(r.name);o.n++;o.c+=+r.cnt||0;o.h+=+r.hrs||0});
+    Object.keys(by).sort().forEach(d=>s.addRow([us(d),by[d].e.size,by[d].n,by[d].c,+by[d].h.toFixed(2)]));
+    s.getRow(1).eachCell(c=>{c.font={bold:true};c.fill={type:"pattern",pattern:"solid",fgColor:{argb:"FFF4B183"}}});[14,12,10,14,14].forEach((w,i)=>s.getColumn(i+1).width=w)}
+  saveBlob(new Blob([await wb.xlsx.writeBuffer()],{type:"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}),name);return true;
+}
+$("#bExcel").onclick=async()=>{if(!can("excel"))return;const r=view.vis.length||view.emp||view.proc||view.q?view.vis:view.rows;if(await exportXL(r,fileName(),new Set(r.map(x=>x.d)).size>1))logAct("excel",r.length+" rows")};
+$("#bMail").onclick=async()=>{
+  if(!can("mail"))return;if(!view.rows.length)return toast("No data available to send.");
+  resetFilters();renderGrid();renderKpis();                       // same as VBA: Undo first, then mail everything
+  const name=fileName();if(!(await exportXL(view.rows,name,new Set(view.rows.map(x=>x.d)).size>1)))return;
+  const subj=String(S.cfg.mailSubj||"").replace("{date}",dmy(todayISO())),body=String(S.cfg.mailBody||"");
+  const href="mailto:"+encodeURIComponent(S.cfg.mailTo||"").replace(/%40/g,"@").replace(/%3B/g,";")+"?"+(S.cfg.mailCc?"cc="+encodeURIComponent(S.cfg.mailCc).replace(/%40/g,"@").replace(/%3B/g,";")+"&":"")+"subject="+encodeURIComponent(subj)+"&body="+encodeURIComponent(body);
+  setTimeout(()=>{location.href=href},600);
+  modal(`<div style="text-align:center"><div style="font-size:42px">✉️</div><h3>Mail is ready</h3><p class="muted" style="margin:0 auto;max-width:420px;line-height:1.6">The Excel <b style="color:var(--ink)">${esc(name)}</b> is in your Downloads and the Outlook mail is opening.<br>Drag the file from Downloads into the mail, then Send.</p></div>
+    <div class="mrow" style="justify-content:center"><a class="cap c-mail" href="${href}">Open mail again</a><button class="cap" data-close>Done</button></div>`);
+  logAct("mail",view.rows.length+" rows");
+};
+
+/* ================= support / help / theme / folder ================= */
+$("#btnSupport").onclick=()=>modal(`<div style="text-align:center"><div style="font-size:40px">💬</div><h3>Need help?</h3><p class="muted" style="margin:0;line-height:1.6">Please contact <b style="color:var(--ink)">Akshay Ranjan</b> at the email below for any tool-related concerns.<br>Kindly include your Reporting Manager in CC while sending the email.</p>
+  <div class="cpath" style="margin-top:14px"><code style="background:var(--bg2);color:var(--ink);font-size:13px;padding:10px;text-align:center" id="supMail">${esc(S.cfg.supportMail)}</code><button class="cap xs" id="supCp">📋 Copy</button></div>
+  <p class="muted" style="font-size:11px;margin-top:12px">Regards, ®® AK_Alpha NEXTGen_ECLIPSE · UHG-OPTUM</p></div><div class="mrow" style="justify-content:center"><a class="cap c-sup" href="mailto:${esc(S.cfg.supportMail)}?subject=${encodeURIComponent("UOM Summary DBM – help")}">✉ Mail</a><button class="cap" data-close>Close</button></div>`);
+document.addEventListener("click",async e=>{if(e.target.id==="supCp"){try{await navigator.clipboard.writeText(S.cfg.supportMail);toast("📋 Copied")}catch(x){}}});
+$("#btnHelp").onclick=()=>modal(`<h3>How it works</h3><div class="helpgrid">
+  <div><b>1 · Dump</b>Paste the MASTER FILE (or press Ctrl+V anywhere) or Upload the NICE ALL-UOM .xls. A1 = date, Row 1 + Row 2 = employee name (Row 2 “-” = first name only), Row 4 onwards = work queues.</div>
+  <div><b>2 · RUN</b>One line per employee × work queue: Date · Employee ID · EMP name · Work Queue · Count. First line of every employee gets Hours 8 and 0 downtime. TOTAL rows / columns are skipped.</div>
+  <div><b>3 · Downtime - 8</b>Type minutes in Waiting for inventory / System Outage / Training / Project. Hours = 8 − total minutes ÷ 60 (never below 0). Press Enter or ↓ to move down.</div>
+  <div><b>4 · Research / Undo</b>Pick an Employee and / or a Process (pink = empty, green = filled) → RESEARCH. UNDO shows everything again.</div>
+  <div><b>5 · Save</b>Saved date-wise in the data folder for ${S.cfg.keep} days. Same date again → Add only new rows or Replace (never double).</div>
+  <div><b>6 · MAIL</b>Builds “${esc(fileName())}” in the team format and opens the Outlook mail. Drag the file into the mail and Send.</div>
+  <div><b>Red Employee ID</b>The name is not in the Employee ID list. Admin adds it in Admin → Lists.</div>
+  <div><b>Re-load an old Excel</b>Upload a Result / mail Excel (Date, Employee ID, EMP name…) and it loads straight into the grid.</div>
+ </div><div class="mrow"><button class="cap rose" data-close>Got it 💗</button></div>`,true);
+function applyTheme(){document.documentElement.dataset.theme=LS.get("theme","light")}
+$("#btnTheme").onclick=()=>{LS.set("theme",LS.get("theme","light")==="dark"?"light":"dark");applyTheme()};
+$("#btnOut").onclick=()=>ask("Log out?","You will type your name again next time.","Log out",logout);
+$("#btnFolder").onclick=async()=>{
+  if(FS.dir){modal(`<h3>Data folder</h3><p class="muted" style="margin:0">Connected to <b style="color:var(--ink)">${esc(FS.dir.name)}</b> · ${Object.keys(FS.index).length} saved dates.</p><div class="mrow"><button class="cap" data-close>Close</button><button class="cap" id="fRef">↻ Refresh</button><button class="cap" id="fChg">Change folder</button></div>`);
+    $("#fRef").onclick=async()=>{closeModal();await fsScan();renderSide();toast("↻ Updated")};$("#fChg").onclick=async()=>{closeModal();if(await fsConnect())renderSide()};return}
+  if(FS.handle){try{if(await FS.handle.requestPermission({mode:"readwrite"})==="granted"){FS.dir=FS.handle;await fsReadConfig(true);await fsScan();paintSync();renderSide();toast("✓ Connected");return}}catch(e){}}
+  modal(`<h3>Connect the data folder</h3><p class="muted" style="margin:0 0 6px">One time only. After this it stays connected.</p>${connectGuide(false)}<div class="mrow"><button class="cap" data-close>Cancel</button><button class="cap rose" id="fcGo">🔌 Connect</button></div>`);wireCopy();
+  $("#fcGo").onclick=async()=>{closeModal();if(await fsConnect()){renderSide();cleanup()}};
+};
+
+/* ================= ADMIN ================= */
+let AD=null,ADP=1;
+$("#btnAdmin").onclick=()=>openAdmin(1);
+function openAdmin(pg){if(!isAdmin())return;ADP=pg||ADP;AD=AD||clone(S.cfg);
+  const P=$("#adminPg");P.hidden=false;
+  P.innerHTML=`<div class="ahead"><h2>Admin</h2><div class="tabs">${[[1,"👥 Users & access"],[2,"📋 Lists & mail"],[3,"🛡 System & security"],[4,"📜 History"]].map(t=>`<button data-p="${t[0]}" class="${ADP===t[0]?"on":""}">${t[1]}</button>`).join("")}</div><div class="spacer"></div>
+    <button class="cap gold" id="adSave">💾 Save settings</button><button class="cap ghost" id="adClose" style="color:#fff;border-color:rgba(255,255,255,.3)">✕ Close</button></div><div class="abody" id="abody"></div>`;
+  P.querySelectorAll("[data-p]").forEach(b=>b.onclick=()=>{readAdmin();openAdmin(+b.dataset.p)});
+  $("#adClose").onclick=()=>{readAdmin();if(JSON.stringify(AD)!==JSON.stringify(S.cfg))ask("Close without saving?","Your changes are not saved yet.","Close",()=>{AD=null;P.hidden=true});else{AD=null;P.hidden=true}};
+  $("#adSave").onclick=async()=>{readAdmin();S.cfg=clone(AD);EMPIDX=null;fixCfg();await save(true);const ok=await fsWriteConfig();logAct("settings","Admin saved settings");resolveMe();setTop();applyPerms();renderAll();toast(ok?"✓ Saved for everyone (data folder)":"✓ Saved on this PC · connect the data folder to share")};
+  ({1:adUsers,2:adLists,3:adSystem,4:adHistory})[ADP]();
+}
+function readAdmin(){
+  const b=$("#abody");if(!b||!AD)return;
+  if(ADP===1){b.querySelectorAll("tr[data-u]").forEach(tr=>{const u=AD.users[+tr.dataset.u];if(!u)return;const g=n=>tr.querySelector(`[data-f="${n}"]`);
+      u.name=up(g("name").value);u.k=u.k||norm(u.name);u.id=g("id").value.trim();u.role=g("role").value;u.on=g("on").checked;u.until=g("until").value;u.mc=g("mc").value.trim().toUpperCase()});
+    AD.users=AD.users.filter(u=>u.name);
+    b.querySelectorAll("input[data-perm]").forEach(c=>{const [r,f]=c.dataset.perm.split("|");AD.perms[r][f]=c.checked?1:0})}
+  if(ADP===2){AD.emp=$("#aEmp").value;AD.procs=$("#aProc").value.split(/[\n,]/).map(s=>s.trim()).filter(Boolean);["mailTo","mailCc","mailSubj","fileName","supportMail"].forEach(k=>AD[k]=$("#a_"+k).value.trim());AD.mailBody=$("#a_mailBody").value;AD.hours=+$("#a_hours").value||8}
+  if(ADP===3){AD.folder=$("#a_folder").value.trim()||DEF_FOLDER;AD.folderPath=$("#a_folderPath").value.trim();AD.keep=Math.max(1,+$("#a_keep").value||30);AD.maxTry=Math.max(2,+$("#a_maxTry").value||5);
+    AD.alertMails=[0,1,2].map(i=>$("#a_am"+i).value.trim());["alertAuto","helpPop","needFolder","askDevice","remember"].forEach(k=>AD[k]=$("#a_"+k).checked)}
+}
+async function adUsers(){
+  const B=$("#abody");const linked={};
+  if(FS.dir){for(const n of await fsList("_auth")){const k=n.replace(/\.eclipse$/,"");try{linked[k]=JSON.parse(await fsReadText("_auth",n))}catch(e){}}}else Object.assign(linked,S.auth||{});
+  const q=adUsers.q||"";
+  B.innerHTML=`<div class="acard"><h4>👥 Who can sign in <small>· type-your-name login · one name works on one PC only · ${AD.users.length} users</small></h4>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px"><input id="uQ" placeholder="🔎 Search name / ID" value="${esc(q)}" style="padding:7px 12px;border-radius:999px;border:1px solid var(--line2);background:var(--bg);width:220px">
+      <button class="cap rose" id="uAdd">＋ Add user</button><button class="cap" id="uAllOn">All access ON</button><button class="cap" id="uAllOff">All access OFF</button><div class="spacer"></div>
+      <button class="cap" id="uImp">⬆ Import Excel</button><button class="cap c-mail" id="uExp">📗 Export Excel</button><input type="file" id="uFile" accept=".xlsx,.xls,.csv" hidden></div>
+    <div style="max-height:52vh;overflow:auto"><table class="at"><thead><tr><th style="width:34px">#</th><th>Name (as typed at login)</th><th style="width:120px">Employee ID</th><th style="width:130px">Role</th><th style="width:70px" class="c">Access</th><th style="width:140px">Valid till</th><th style="width:170px">Device name (optional)</th><th style="width:170px">PC link</th><th style="width:40px"></th></tr></thead><tbody>
+    ${AD.users.map((u,i)=>{const L=linked[u.k];const hide=q&&!norm(u.name+" "+u.id).includes(norm(q));return `<tr data-u="${i}" ${hide?"hidden":""}><td class="muted">${i+1}</td><td><input data-f="name" value="${esc(u.name)}" style="text-transform:uppercase"></td><td><input data-f="id" value="${esc(u.id||"")}" class="mono"></td>
+      <td><select data-f="role">${ROLES.filter(r=>r[0]!=="admin").map(r=>`<option value="${r[0]}" ${u.role===r[0]?"selected":""}>${r[1]}</option>`).join("")}</select></td>
+      <td class="c"><label class="sw"><input type="checkbox" data-f="on" ${u.on!==false?"checked":""}><span></span></label></td><td><input type="date" data-f="until" value="${esc(u.until||"")}"></td><td><input data-f="mc" value="${esc(u.mc||"")}" placeholder="LHTU05CG…" class="mono" style="text-transform:uppercase"></td>
+      <td>${L?`<span class="tag ok" title="Linked ${new Date(L.at).toLocaleString("en-IN")}">● Linked · ${new Date(L.last||L.at).toLocaleDateString("en-IN")}</span> <button class="cap xs" data-reset="${esc(u.k)}">Reset</button>`:`<span class="tag">Not linked yet</span>`}</td>
+      <td><button class="cap xs" data-del="${i}" title="Remove">✕</button></td></tr>`}).join("")}</tbody></table></div>
+    <p class="muted" style="font-size:11.5px;margin:10px 0 0">Access OFF = the name can't sign in. <b>Reset</b> frees the name so it can be used on a new PC. The first sign-in on a PC links the name to that PC; nobody can use it on another system.</p></div>
+  <div class="acard"><h4>🔐 What each role can do <small>· Admin always has everything</small></h4><table class="at"><thead><tr><th>Feature</th>${ROLE4.map(r=>`<th class="c" style="width:110px">${ROLEN(r)}</th>`).join("")}</tr></thead><tbody>
+    ${FEAT.map(f=>`<tr><td>${f[1]}</td>${ROLE4.map(r=>`<td class="c"><input type="checkbox" data-perm="${r}|${f[0]}" ${AD.perms[r][f[0]]?"checked":""}></td>`).join("")}</tr>`).join("")}</tbody></table></div>`;
+  $("#uQ").oninput=e=>{adUsers.q=e.target.value;B.querySelectorAll("tr[data-u]").forEach(tr=>{const u=AD.users[+tr.dataset.u];tr.hidden=!!e.target.value&&!norm(u.name+" "+u.id).includes(norm(e.target.value))})};
+  $("#uAdd").onclick=()=>{readAdmin();AD.users.unshift({k:"",name:"",id:"",role:"employee",on:true,until:"",mc:"",team:""});adUsers();setTimeout(()=>{const i=B.querySelector('tr[data-u="0"] input[data-f="name"]');if(i)i.focus()},50)};
+  $("#uAllOn").onclick=()=>B.querySelectorAll('input[data-f="on"]').forEach(c=>c.checked=true);$("#uAllOff").onclick=()=>B.querySelectorAll('input[data-f="on"]').forEach(c=>c.checked=false);
+  B.querySelectorAll("[data-del]").forEach(b=>b.onclick=()=>{readAdmin();AD.users.splice(+b.dataset.del,1);adUsers()});
+  B.querySelectorAll("[data-reset]").forEach(b=>b.onclick=()=>ask("Reset PC link?","The name can sign in again on a new PC (first PC that uses it).","Reset",async()=>{await authDel(b.dataset.reset);logAct("reset",b.dataset.reset);toast("✓ Reset");readAdmin();adUsers()}));
+  $("#uExp").onclick=async()=>{readAdmin();if(typeof ExcelJS==="undefined")return toast("Excel library didn't load");const wb=new ExcelJS.Workbook(),ws=wb.addWorksheet("Access");
+    ws.addRow(["Name","Employee ID","Role","Access","Valid till","Device name","Team","PC linked"]);ws.getRow(1).eachCell(c=>{c.font={bold:true};c.fill={type:"pattern",pattern:"solid",fgColor:{argb:"FFF4B183"}}});
+    AD.users.forEach(u=>ws.addRow([u.name,u.id,ROLEN(u.role),u.on!==false?"Yes":"No",u.until?us(u.until):"",u.mc||"",u.team||"",linked[u.k]?"Yes":"No"]));[28,14,12,9,12,20,16,10].forEach((w,i)=>ws.getColumn(i+1).width=w);
+    saveBlob(new Blob([await wb.xlsx.writeBuffer()]),"UOM_Summary_DBM_Users.xlsx")};
+  $("#uImp").onclick=()=>$("#uFile").click();
+  $("#uFile").onchange=async e=>{const f=e.target.files[0];e.target.value="";if(!f||typeof XLSX==="undefined")return;const wb=XLSX.read(await f.arrayBuffer(),{type:"array"});const a=XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]],{header:1,raw:false,defval:""});
+    const h=(a[0]||[]).map(norm),ix=(...ks)=>h.findIndex(x=>ks.includes(x));const I={n:ix("name","empname","employeename"),id:ix("employeeid","empid","id"),r:ix("role"),on:ix("access"),u:ix("validtill"),mc:ix("devicename","device","pc"),t:ix("team")};
+    if(I.n<0)return toast("Need a “Name” column");readAdmin();let add=0,upd=0;
+    for(const row of a.slice(1)){const name=up(row[I.n]);if(!name)continue;const k=norm(name);let u=AD.users.find(x=>norm(x.name)===k);if(!u){u={k,name,id:"",role:"employee",on:true,until:"",mc:"",team:""};AD.users.push(u);add++}else upd++;
+      if(I.id>=0&&row[I.id])u.id=String(row[I.id]).trim();if(I.r>=0&&row[I.r]){const r=ROLES.find(x=>norm(x[1])===norm(row[I.r])||x[0]===norm(row[I.r]));if(r&&r[0]!=="admin")u.role=r[0]}
+      if(I.on>=0&&row[I.on]!=="")u.on=!/^(no|n|off|0|false)$/i.test(String(row[I.on]).trim());if(I.u>=0)u.until=toISO(row[I.u])||"";if(I.mc>=0)u.mc=String(row[I.mc]||"").trim().toUpperCase();if(I.t>=0)u.team=String(row[I.t]||"").trim()}
+    adUsers();toast("✓ "+add+" added · "+upd+" updated · press Save settings")};
+}
+function adLists(){
+  $("#abody").innerHTML=`<div class="cols2"><div class="acard"><h4>🪪 Employee ID list <small>· NAME | other spelling = ID · one per line</small></h4><textarea id="aEmp" style="min-height:420px">${esc(AD.emp)}</textarea></div>
+    <div class="acard"><h4>📋 Process / Work Queue list <small>· for the Process box · one per line</small></h4><textarea id="aProc" style="min-height:420px">${esc((AD.procs||[]).join("\n"))}</textarea></div></div>
+   <div class="acard"><h4>✉ MAIL button</h4><div class="frow">
+     <label>To (use ; between mails)</label><input id="a_mailTo" value="${esc(AD.mailTo)}" placeholder="team@uhc.com; manager@uhc.com">
+     <label>CC</label><input id="a_mailCc" value="${esc(AD.mailCc)}">
+     <label>Subject ({date} = today)</label><input id="a_mailSubj" value="${esc(AD.mailSubj)}">
+     <label>Excel file name</label><input id="a_fileName" value="${esc(AD.fileName)}">
+     <label>Mail text</label><textarea id="a_mailBody" style="min-height:110px;max-width:420px">${esc(AD.mailBody)}</textarea>
+     <label>Support mail</label><input id="a_supportMail" value="${esc(AD.supportMail)}">
+     <label>Hours per day (first line)</label><input id="a_hours" type="number" step="0.25" value="${esc(AD.hours)}">
+   </div></div>`;
+}
+function adSystem(){
+  const sw=(k,t,d)=>`<label>${t}${d?`<br><span class="muted" style="font-weight:400;font-size:11px">${d}</span>`:""}</label><label class="sw"><input type="checkbox" id="a_${k}" ${AD[k]!==false&&AD[k]?"checked":""}><span></span></label>`;
+  $("#abody").innerHTML=`<div class="cols2"><div><div class="acard"><h4>🔌 Data folder</h4><div class="frow">
+      <label>Folder name</label><input id="a_folder" value="${esc(AD.folder)}">
+      <label>Folder path (shown at login)</label><input id="a_folderPath" value="${esc(AD.folderPath||DEF_PATH)}">
+      <label>Keep saved dates (days)</label><input id="a_keep" type="number" min="1" value="${esc(AD.keep)}">
+      <label>Status</label><div>${FS.dir?`<span class="tag ok">● Connected · ${esc(FS.dir.name)}</span>`:`<span class="tag bad">Not connected</span>`} · ${savedDates().length} saved dates <button class="cap xs" id="aClean">🗑 Clean old dates now</button></div>
+    </div></div>
+    <div class="acard"><h4>⏳ Tool expiry</h4><div class="frow"><label>Valid till</label><div><b class="mono">${us(expiry())}</b> <span class="muted">(${daysLeft(expiry())} days left)</span></div>
+      <label>New date</label><input type="date" id="a_exp"><label>Master password</label><input type="password" id="a_expPw" placeholder="needed to change expiry or password"><label>New master password (optional)</label><input type="password" id="a_newPw" placeholder="leave empty to keep">
+      <label></label><button class="cap rose" id="aExpGo" style="width:max-content">Apply</button></div></div></div>
+   <div><div class="acard"><h4>🛡 Login & security</h4><div class="frow">
+      ${sw("needFolder","Users must connect the data folder","Needed so one name works on one PC only")}
+      ${sw("remember","Remember sign-in on the PC","Until Log out or browser cache clear")}
+      ${sw("askDevice","Ask device name on first sign-in","Only for users that have a device name in the list")}
+      <label>Wrong tries before 15-min pause</label><input id="a_maxTry" type="number" min="2" value="${esc(AD.maxTry)}">
+      ${sw("alertAuto","Automatic alert mail","Written to the data folder _mailbox for Power Automate")}
+      ${sw("helpPop","“Need assistance?” box with Mail Admin button","")}
+      <label>Alert mail 1</label><input id="a_am0" type="email" value="${esc(AD.alertMails[0]||"")}"><label>Alert mail 2</label><input id="a_am1" type="email" value="${esc(AD.alertMails[1]||"")}"><label>Alert mail 3</label><input id="a_am2" type="email" value="${esc(AD.alertMails[2]||"")}">
+    </div></div>
+    <div class="acard"><h4>💾 Backup</h4><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="cap" id="aBak">⬇ Download settings backup</button><button class="cap" id="aRes">⬆ Restore backup</button><input type="file" id="aResF" accept=".json" hidden></div></div></div></div>`;
+  $("#aClean").onclick=async()=>{const n=await cleanup(true);toast(n?"🗑 "+n+" removed":"Nothing older than "+S.cfg.keep+" days")};
+  $("#aExpGo").onclick=async()=>{if(!(await isMaster($("#a_expPw").value)))return toast("Master password is wrong");const d=$("#a_exp").value;if(d)AD.exp=d;const np=$("#a_newPw").value;if(np){if(np.length<6)return toast("New password: at least 6 characters");AD.mph=await sha("master|"+np)}toast("✓ Applied · press Save settings");readAdmin();adSystem()};
+  $("#aBak").onclick=()=>{readAdmin();saveBlob(new Blob([JSON.stringify({app:APP_NAME,at:new Date().toISOString(),cfg:AD},null,1)],{type:"application/json"}),"UOM_Summary_DBM_settings_"+todayISO()+".json")};
+  $("#aRes").onclick=()=>$("#aResF").click();$("#aResF").onchange=async e=>{const f=e.target.files[0];if(!f)return;try{const o=JSON.parse(await f.text());if(o.cfg){AD=o.cfg;adSystem();toast("✓ Restored · press Save settings")}}catch(x){toast("Not a backup file")}};
+}
+async function adHistory(){
+  const L=await readLog(),ic={login:"🔑",blocked:"⛔",run:"▶",save:"💾",mail:"✉",excel:"📗",delete:"🗑",cleanup:"🧹",settings:"⚙",reset:"♻",linked:"🔗",clear:"✕",import:"⬆"};
+  $("#abody").innerHTML=`<div class="acard"><h4>📜 History <small>· last 3 months · ${L.length} entries · ⛔ = blocked sign-in</small></h4><div style="max-height:68vh;overflow:auto"><table class="at"><thead><tr><th style="width:170px">When</th><th style="width:200px">Who</th><th style="width:120px">What</th><th>Details</th></tr></thead><tbody>
+   ${L.slice(0,800).map(e=>`<tr ${e.a==="blocked"?'style="background:#ffe9ed;color:#a3243c"':""}><td class="mono">${new Date(e.at).toLocaleString("en-IN")}</td><td>${esc(title(e.who||e.pc||""))}</td><td>${ic[e.a]||"•"} ${esc(e.a)}</td><td>${esc(e.n||"")}</td></tr>`).join("")||`<tr><td colspan="4" class="muted">Nothing yet</td></tr>`}</tbody></table></div></div>`;
+}
+
+/* ================= boot ================= */
+(async()=>{
+  applyTheme();await IDB.open();
+  S=(await IDB.get("state"))||fresh();if(!S.cfg)S=fresh();fixCfg();S.days=S.days||{};S.log=S.log||[];await save(true);resolveMe();
+  start();
+})();
+</script>
+</body>
+</html>
