@@ -351,10 +351,10 @@ table.g input.dt{padding:2px 4px}
     <svg class="ecl" viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="30" fill="url(#cg)"/><circle cx="32" cy="32" r="19" fill="none" stroke="url(#rg)" stroke-width="2.2"/><circle cx="36" cy="29" r="17" fill="#1a0a20"/></svg>
     <div class="kick">Alpha NextGen</div>
     <div class="gtitle">UOM Summary</div>
-    <div class="gsub">Consolidation · <b>DBM</b> · Eclipse</div><div class="gver" id="verGate2">V2.0.7 · Build 2</div>
+    <div class="gsub">Consolidation · <b>DBM</b> · Eclipse</div><div class="gver" id="verGate2">V2.0.7 · Build 3</div>
     <div class="greet" id="gGreet">Good evening ✨</div>
     <div id="gateBody"></div>
-    <div class="gfoot"><span id="verGate">V2.0.7 · Build 2</span><span id="expGate"></span></div>
+    <div class="gfoot"><span id="verGate">V2.0.7 · Build 3</span><span id="expGate"></span></div>
   </div>
 </div>
 
@@ -376,7 +376,7 @@ table.g input.dt{padding:2px 4px}
     <div class="sscroll">
       <div class="brand" id="brand">
         <svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="30" fill="url(#cg)"/><circle cx="32" cy="32" r="19" fill="none" stroke="url(#rg)" stroke-width="2.4"/><circle cx="36" cy="29" r="17" fill="#1f0b25"/></svg>
-        <div><div class="k">ALPHA NEXTGEN</div><div class="t">UOM Summary</div><div class="s">CONSOLIDATION · DBM</div><div class="v" id="verSide">V2.0.7 · Build 2</div></div>
+        <div><div class="k">ALPHA NEXTGEN</div><div class="t">UOM Summary</div><div class="s">CONSOLIDATION · DBM</div><div class="v" id="verSide">V2.0.7 · Build 3</div></div>
       </div>
 
       <div class="sh">DUMP <i>Result builds itself</i></div>
@@ -435,7 +435,7 @@ table.g input.dt{padding:2px 4px}
         <span class="muted" id="gSrc"></span>
       </div>
     </div>
-    <div class="foot"><span><span id="verTop">V2.0.7 · Build 2</span> · <span id="expTxt"></span></span><span>®® Alpha NextGen · Eclipse · UHG-Optum</span></div>
+    <div class="foot"><span><span id="verTop">V2.0.7 · Build 3</span> · <span id="expTxt"></span></span><span>®® Alpha NextGen · Eclipse · UHG-Optum</span></div>
   </main>
 </div>
 
@@ -450,14 +450,15 @@ table.g input.dt{padding:2px 4px}
 /* ======================= ADMIN SETTINGS (edit here) ======================= */
 const APP_NAME   = "UOM Summary Consolidation DBM";
 const APP_VER    = "V2.0.7";
-const BUILD      = "2";
+const BUILD      = "3";
 const APP_EXPIRY = "2027-03-31";
 const ADMIN_KEYS = ["akshayranjan","aranja14","admin"];      // typing any of these opens the Admin password box
 const ADMIN_NAME = "Akshay Ranjan";
-const PW_MASTER  = 5662684247018612;                          // hash of the master password (caps and spaces ignored)
+const PW_MASTER  = 2349399753747566;                          // hash of the master password (caps and spaces ignored)
 const FILE_KEY   = "AK-UOM-Eclipse-607-lock";                 // locks the files in the data folder
-const DEF_FOLDER = "UOM Summary DBM Data";
-const DEF_PATH   = "%USERPROFILE%\\OneDrive - UnitedHealth Group\\UOM Summary DBM Data";
+const DEF_FOLDER = "UOM_Summary_DBM";
+const DEF_PATH   = "%USERPROFILE%\\OneDrive - UnitedHealth Group\\UOM_Summary_DBM";
+const DEF_LINK   = "https://uhgazure-my.sharepoint.com/:f:/r/personal/akshay_ranjan_uhc_com/Documents/Alpha_NextGen_Eclipse_Tools/BLR/DBM/UOM_Summary_DBM?d=w2c53144ff8674013a614e45ed2b3c0fb&csf=1&web=1&e=MMBGW3";
 const LOCK_ON    = true;
 /* ========================================================================= */
 
@@ -600,11 +601,15 @@ function seedUsers(){return parseEmp(EMP0).map(e=>({k:norm(e.names[0]),name:e.na
 const fresh=()=>({v:1,cfg:{users:seedUsers(),perms:clone(DEFPERM),emp:EMP0,procs:PROC0.slice(),hours:8,keep:30,exp:null,folder:DEF_FOLDER,folderPath:"",
   mailTo:"",mailCc:"",mailSubj:"Bangalore MASTERFILE Team - UOM Volume Summary - {date}",mailBody:"Hi Team,\n\nPlease find attached UOM Volume Summary for your review.\n\nThank you.",
   fileName:"Bangalore DBM team_UOM-Volume Summary_{date}.xlsx",supportMail:"akshay.ranjan@uhc.com",
-  maxTry:5,alertMails:["akshay.ranjan@uhc.com","akshay.ranjan@optum.com",""],alertAuto:true,helpPop:true,needFolder:true,askDevice:false,remember:true,dtUnit:"smart"},days:{},auth:{},log:[]});
-const SHARED=["users","perms","emp","procs","hours","keep","exp","mph","folder","folderPath","mailTo","mailCc","mailSubj","mailBody","fileName","supportMail","maxTry","alertMails","alertAuto","helpPop","needFolder","askDevice","remember","dtUnit"];
+  maxTry:5,alertMails:["akshay.ranjan@uhc.com","akshay.ranjan@optum.com",""],alertAuto:true,helpPop:true,needFolder:true,askDevice:false,remember:true,dtUnit:"clock",logKeep:30,pcLock:true,folderLink:DEF_LINK},days:{},auth:{},log:[]});
+const SHARED=["users","perms","emp","procs","hours","keep","exp","mph","folder","folderPath","mailTo","mailCc","mailSubj","mailBody","fileName","supportMail","maxTry","alertMails","alertAuto","helpPop","needFolder","askDevice","remember","dtUnit","logKeep","pcLock","folderLink","pw3"];
 let S=null,saveT=null;
 function save(now){clearTimeout(saveT);const go=()=>IDB.put("state",S);if(now)return go();saveT=setTimeout(go,400);return Promise.resolve()}
 function fixCfg(){const f=fresh().cfg;for(const k of Object.keys(f))if(S.cfg[k]===undefined)S.cfg[k]=clone(f[k]);
+  if(!S.cfg.pw3){delete S.cfg.mph;S.cfg.pw3=1}
+  if(S.cfg.dtUnit==="smart"||S.cfg.dtUnit==="hours")S.cfg.dtUnit="clock";
+  if(/^https?:/i.test(S.cfg.folderPath||"")){S.cfg.folderLink=S.cfg.folderPath;S.cfg.folderPath=""}
+  if(!S.cfg.folderLink)S.cfg.folderLink=DEF_LINK;
   for(const r of ROLE4){S.cfg.perms[r]=S.cfg.perms[r]||{};for(const ft of FEAT)if(S.cfg.perms[r][ft[0]]===undefined)S.cfg.perms[r][ft[0]]=DEFPERM[r][ft[0]]}}
 
 /* Employee ID map */
@@ -638,12 +643,12 @@ async function fsInit(){
 }
 function connectGuide(dark){return `<div class="cguide" style="color:${dark?"#cdb2c4":"var(--muted)"}">
   <div class="cpath"><code id="cpTxt">${esc(folderPath())}</code><button class="cap xs" id="cpCopy" type="button">📋 Copy</button></div>
-  <ol><li>Click <b>📋 Copy</b>, then <b>Connect</b>.</li><li>In the folder window click the address bar, press <b>Ctrl+V</b> and <b>Enter</b>, then <b>Select folder</b>.</li><li>Choose <b>Allow on every visit</b>. It stays connected.</li></ol></div>`}
+  <ol><li><b>First time only:</b> <a href="${esc(S.cfg.folderLink||DEF_LINK)}" target="_blank" rel="noopener" style="color:#ffb3c9;font-weight:700">open the SharePoint folder</a> → <b>Add shortcut to My files</b>.</li><li>Click <b>📋 Copy</b>, then <b>Connect</b> → Ctrl+V in the address bar → Enter → <b>Select folder</b>.</li><li>Choose <b>Allow on every visit</b>. Next time it connects by itself.</li></ol></div>`}
 function wireCopy(){const b=$("#cpCopy");if(b)b.onclick=async e=>{e.stopPropagation();try{await navigator.clipboard.writeText(folderPath());toast("📋 Path copied · click Connect and press Ctrl+V")}catch(x){toast("Select the path and press Ctrl+C")}}}
 async function autoAllow(){
   if(FS.dir||!FS.handle||autoAllow.busy)return;autoAllow.busy=true;
   try{if(await FS.handle.requestPermission({mode:"readwrite"})==="granted"){FS.dir=FS.handle;await fsReadConfig(true);await fsScan();toast("✓ Data folder connected");
-    if(!$("#gate").hidden){const v=$("#gN")&&$("#gN").value;gate();if(v&&$("#gN")){$("#gN").value=v;nameCheck()}}else{renderSide();cleanup()}}}catch(e){}
+    if(!$("#gate").hidden){const c=$("#gConnBox");if(c){c.innerHTML=`<div class="gconn ok">● Data folder connected</div>`}}else{renderSide();cleanup()}}}catch(e){}
   autoAllow.busy=false;paintSync();
 }
 document.addEventListener("pointerdown",e=>{if(e.target.closest&&e.target.closest("#gConn,#btnFolder,#cpCopy,#fcGo"))return;autoAllow()},true);
@@ -705,10 +710,10 @@ function savedDates(){const set=new Set([...Object.keys(S.days),...Object.keys(F
 async function cleanup(force,quiet){
   if(!force&&LS.get("clean","")===todayISO())return 0;
   if(!(can("save")||isAdmin()))return 0;
-  const all=savedDates();if(!all.length)return 0;
+  const all=savedDates();if(!all.length){await cleanLog();LS.set("clean",todayISO());return 0}
   const cut=addDays(all[0],-(+S.cfg.keep||30));let n=0;
   for(const d of savedDates())if(d<cut){await deleteDay(d);n++}
-  LS.set("clean",todayISO());if(n){if(!quiet)toast("🗑 "+n+" date"+(n>1?"s":"")+" older than "+S.cfg.keep+" days removed");logAct("cleanup",n+" old dates removed")}
+  await cleanLog();LS.set("clean",todayISO());if(n){if(!quiet)toast("🗑 "+n+" date"+(n>1?"s":"")+" older than "+S.cfg.keep+" days removed");logAct("cleanup",n+" old dates removed")}
   renderSide();return n;
 }
 function paintSync(){
@@ -722,6 +727,13 @@ function paintSync(){
 async function logAct(a,n){
   const e={at:Date.now(),who:me.name||"-",a,n:n||""};S.log=(S.log||[]).concat(e).slice(-600);save();
   if(FS.dir){const f="log_"+todayISO().slice(0,7)+".json";let arr=[];try{arr=JSON.parse(await fsReadText("_system",f)||"[]")}catch(x){}arr.push(e);await fsWriteText("_system",f,JSON.stringify(arr))}
+}
+async function cleanLog(){
+  const days=+S.cfg.logKeep;if(!days)return;const cut=Date.now()-days*864e5;
+  S.log=(S.log||[]).filter(e=>e.at>=cut);save();if(!FS.dir)return;
+  for(const f of await fsList("_system")){
+    if(/^log_\d{4}-\d{2}\.json$/.test(f)){try{const arr=JSON.parse(await fsReadText("_system",f)||"[]"),keep=arr.filter(e=>e.at>=cut);if(!keep.length)await fsRemove("_system",f);else if(keep.length<arr.length)await fsWriteText("_system",f,JSON.stringify(keep))}catch(e){}}
+    else{const m=f.match(/^alert_(\d+)/);if(m&&+m[1]<cut)await fsRemove("_system",f)}}
 }
 async function readLog(){
   let arr=(S.log||[]).slice();
@@ -771,6 +783,8 @@ const TRY={get(){return LS.get("tries",{n:0,until:0})},set(v){LS.set("tries",v||
 const SESS={get(){try{return S.cfg.remember!==false?LS.get("sess",false):sessionStorage.getItem("uom_sess")==="1"}catch(e){return false}},set(v){try{sessionStorage.setItem("uom_sess",v?"1":"0")}catch(e){}LS.set("sess",!!v)}};
 function greetTxt(){const h=new Date().getHours();return h<12?"Good morning ☀️":h<17?"Good afternoon 👋":"Good evening ✨"}
 const isAdminName=v=>ADMIN_KEYS.includes(norm(v));
+const admTok=()=>"t"+H(DID()+"|adm|"+(S.cfg.mph||PW_MASTER));
+const admRemembered=()=>LS.get("admtok","")===admTok();
 function findUser(v){const n=norm(v);if(!n)return null;return (S.cfg.users||[]).find(u=>norm(u.name)===n||(u.id&&norm(u.id)===n))||null}
 
 function gate(msg){
@@ -778,7 +792,7 @@ function gate(msg){
   $("#verGate").textContent=APP_VER+" · Build "+BUILD;$("#expGate").textContent="Valid till "+us(expiry());$("#gGreet").textContent=greetTxt();
   const lastK=LS.get("lastwho",""),lu=lastK==="admin"?{name:ADMIN_NAME}:userOf(lastK);
   $("#gateBody").innerHTML=`
-    ${FS.dir?`<div class="gconn ok">● Data folder connected</div>`:`<button class="gconn" id="gConn">🔌 ${FS.handle?"Allow the data folder (one click)":"Step 1 · Connect the data folder"}</button>${FS.handle?"":connectGuide(true)}`}
+<div id="gConnBox">${FS.dir?`<div class="gconn ok">● Data folder connected</div>`:`<button class="gconn" id="gConn">🔌 ${FS.handle?"Connect (one click)":"Step 1 · Connect the data folder"}</button>${FS.handle?"":connectGuide(true)}`}</div>
     ${lu?`<div class="cont" id="gCont"><div class="av">${esc(initials(lu.name))}</div><div><b>Continue as ${esc(title(lu.name))}</b><small>Signed in on this PC before</small></div><span style="margin-left:auto;font-size:20px">😊</span></div>`:""}
     <p class="ghint" style="margin-top:14px">${FS.dir||!S.cfg.needFolder?"":"Step 2 · "}Type your name to come in</p>
     <div class="nbox" id="nbox"><input id="gN" placeholder="Your name" autocomplete="off" spellcheck="false"><span class="hrt">🙂</span></div>
@@ -787,8 +801,8 @@ function gate(msg){
     <button class="gbtn" id="gGo">Enter &nbsp;⚡</button>
     <div class="gerr" id="gErr">${msg||""}</div>`;
   wireCopy();
-  const gc=$("#gConn");if(gc)gc.onclick=async()=>{const v=$("#gN").value;await gateConnect();gate(FS.dir?"":(gateMsg||"Data folder not connected."));gateMsg="";$("#gN").value=v;nameCheck()};
-  const ct=$("#gCont");if(ct)ct.onclick=()=>{$("#gN").value=lu.name;nameCheck();if(lastK!=="admin")gateGo();else $("#gPw").focus()};
+  const gc=$("#gConn");if(gc)gc.onclick=async()=>{await gateConnect();if(FS.dir){$("#gConnBox").innerHTML=`<div class="gconn ok">● Data folder connected</div>`;$("#gErr").innerHTML="";nameCheck()}else{$("#gErr").innerHTML=gateMsg||"Data folder not connected.";gateMsg=""}};
+  const ct=$("#gCont");if(ct)ct.onclick=()=>{$("#gN").value=lu.name;nameCheck();if(lastK!=="admin"||admRemembered())gateGo();else{$("#gErr").innerHTML="Type the Admin password 🔐";$("#gPw").focus()}};
   $("#gN").oninput=nameCheck;$("#gGo").onclick=gateGo;$("#gateBody").onkeydown=e=>{if(e.key==="Enter")gateGo()};
   $("#gN").focus();
 }
@@ -802,7 +816,7 @@ async function gateConnect(){
 function nameCheck(){
   const v=$("#gN").value,adm=isAdminName(v),u=findUser(v),ok=adm||(u&&u.on!==false);
   $("#nbox").classList.toggle("ok",!!ok);$("#nbox .hrt").textContent=ok?"😊":"🙂";
-  $("#gPw").hidden=!adm;$("#gD").hidden=true;
+  $("#gPw").hidden=!adm||admRemembered();$("#gD").hidden=true;
 }
 function initials(n){return String(n||"U").split(/\s+/).filter(Boolean).map(w=>w[0]).join("").slice(0,2).toUpperCase()}
 async function gateGo(){
@@ -813,21 +827,22 @@ async function gateGo(){
     if(x.n>=max){x.until=Date.now()+15*6e4;x.n=0;TRY.set(x);const w=max+" wrong tries in a row ("+why+")";alertLog(v,"Paused 15 min after "+w);await autoMail(v,w);err("🙂 Paused for 15 minutes.");return helpPopup(v,w)}
     TRY.set(x);alertLog(v,why);err(t+` <span style="color:#cdb2c4">· Warning ${x.n} of ${max}</span>`)};
   if(isAdminName(v)){
+    if(admRemembered())return doneLogin("admin");
     if($("#gPw").hidden||!$("#gPw").value){$("#gPw").hidden=false;$("#gPw").focus();return err("Type the Admin password 🔐")}
     if(!(await isMaster($("#gPw").value)))return bad("<b>Invalid password.</b>","Wrong Admin password");
-    return doneLogin("admin");
+    LS.set("admtok",admTok());return doneLogin("admin");
   }
   const u=findUser(v);
   if(!u||u.on===false)return bad("<b>Access Denied.</b> “"+esc(v)+"” has no access. Please contact Administration.",u?"Name without access":"Unknown name");
   if(u.until&&daysLeft(u.until)<0){alertLog(v,"Access expired");return err("<b>Access expired</b> on "+us(u.until)+". Please contact Administration.")}
   if(S.cfg.needFolder!==false&&!FS.dir)return err("Connect the data folder first (Step 1), then type your name.");
-  const a=await authGet(u.k);
-  if(a&&a.did!==DID()){alertLog(v,"Name used on another PC (blocked)");return err("<b>This name is linked to another PC.</b> It can't be used here. Please contact Administration.")}
+  const a=await authGet(u.k),lock=u.pclock!==false&&S.cfg.pcLock!==false;
+  if(lock&&a&&a.did!==DID()){alertLog(v,"Name used on another PC (blocked)");return err("<b>This name is linked to another PC.</b> It can't be used here. Please contact Administration.")}
   if(!a){
     if(S.cfg.askDevice&&u.mc){const D=$("#gD");if(D.hidden){D.hidden=false;D.focus();return err("First time on this PC · type this PC's device name once.")}
       if(D.value.trim().toUpperCase().replace(/\..*$/,"")!==String(u.mc).toUpperCase())return bad("Device name doesn't match.","Wrong device name")}
     await authPut(u.k,{did:DID(),at:Date.now(),last:Date.now(),name:u.name});logAct("linked",u.name+" linked to this PC");
-  }else{a.last=Date.now();authPut(u.k,a)}
+  }else if(a.did===DID()){a.last=Date.now();authPut(u.k,a)}
   doneLogin(u.k);
 }
 function doneLogin(k){TRY.set(null);LS.set("lastwho",k);LS.set("who",k);SESS.set(true);resolveMe();logAct("login",ROLEN(me.role));welcome();enter()}
@@ -849,7 +864,7 @@ async function start(){
     if(k==="admin"){resolveMe();return enter()}
     const u=userOf(k);
     if(u&&u.on!==false&&!(u.until&&daysLeft(u.until)<0)){
-      if(FS.dir){const a=await authGet(k);if(!a||a.did!==DID()){SESS.set(false);return gate(a?"This name is now linked to another PC. Please contact Administration.":"Your sign-in was reset by Admin. Type your name again.")}}
+      if(FS.dir&&u.pclock!==false&&S.cfg.pcLock!==false){const a=await authGet(k);if(!a||a.did!==DID()){SESS.set(false);return gate(a?"This name is now linked to another PC. Please contact Administration.":"Your sign-in was reset by Admin. Type your name again.")}}
       resolveMe();return enter()}
     SESS.set(false);return gate(u?"<b>Access Denied.</b> Please contact Administration.":"")
   }
@@ -939,12 +954,12 @@ $("#bDel").onclick=()=>{if(can("deldate"))openCal(true)};
 const isFiltered=()=>!!(view.emp||view.proc||view.q||Object.keys(view.hf||{}).length);
 function renderKpis(){
   const r=isFiltered()?view.vis:view.rows;
-  const emps=new Set(r.map(x=>x.name)),wq=new Set(r.map(x=>x.wq)),cnt=r.reduce((a,x)=>a+(+x.cnt||0),0),hrs=r.reduce((a,x)=>a+(+x.hrs||0),0);
+  const emps=new Set(r.map(x=>x.name)),wq=new Set(r.map(x=>x.wq)),cnt=r.reduce((a,x)=>a+(+x.cnt||0),0),hrs=r.reduce((a,x)=>a+hmMin(x.hrs),0);
   const dt=r.reduce((a,x)=>a+(+x.wfi||0)+(+x.so||0)+(+x.tr||0)+(+x.pj||0),0),noid=new Set(r.filter(x=>!x.id).map(x=>x.name)).size;
   const dates=[...new Set(r.map(x=>x.d))].sort(),ck=!isFiltered()&&view.src==="run"&&view.check?view.check:null;
   $("#kpis").innerHTML=[["Date",dates.length>1?dates.length+" dates":us(dates[0]||view.mdate)||"—"],["Employees",nf(emps.size)],["Work queues",nf(wq.size)],
     ["Total count"+(ck?(ck.ok?" · matches TOTAL":" · check"):""),nf(cnt)+(ck?(ck.ok?' <i class="okk">✔</i>':' <i class="bad">≠ '+(Math.abs(ck.mf-ck.res)>1e-6?nf(ck.mf):ck.bad.length+" emp")+'</i>'):""),ck?(ck.ok?"good ck":"bad ck"):""],
-    ["Total hours",hrs.toFixed(2)],[noid?"Missing ID":"Downtime min",noid?noid+" name"+(noid>1?"s":""):nf(dt),noid?"bad":""]]
+    ["Total hours",hm(hrs)],[noid?"Missing ID":"Downtime (h.mm)",noid?noid+" name"+(noid>1?"s":""):hm(dt),noid?"bad":""]]
     .map(k=>`<div class="kpi ${k[2]||""}"><span>${k[0]}</span><b>${k[1]}</b></div>`).join("");
   const c=$("#kpis .ck");if(c)c.onclick=()=>{const k=view.check;modal(`<h3>Total count check</h3><p class="muted" style="margin:0 0 10px">Result total vs the Master File TOTAL row${k.ok?" — everything matches ✔":""}.</p>
     <div class="tick" style="cursor:default"><div class="grow"><b>Master File TOTAL</b></div><b class="mono">${nf(k.mf)}</b></div><div class="tick" style="cursor:default"><div class="grow"><b>Result total count</b></div><b class="mono">${nf(k.res)}</b></div>
@@ -1048,7 +1063,7 @@ function takeAOA(a,src){
   const rh=resultHead(a);
   if(rh){const h=rh.h,ix=k=>h.findIndex(x=>x===k);const I={d:ix("date"),id:ix("employeeid"),name:ix("empname"),wq:ix("workqueue"),cnt:ix("count"),hrs:ix("hours"),wfi:ix("waitingforinventory"),so:ix("systemoutage"),tr:ix("training"),pj:ix("project")};
     const rows=[];let last="";for(let r=rh.r+1;r<a.length;r++){const v=a[r],g=k=>I[k]>=0?String(v[I[k]]??"").trim():"";if(!g("name")&&!g("wq"))continue;
-      const o={d:toISO(g("d"))||view.mdate||todayISO(),id:g("id"),name:up(g("name")),wq:g("wq"),cnt:num(g("cnt")),hrs:num(g("hrs")),wfi:num(g("wfi")),so:num(g("so")),tr:num(g("tr")),pj:num(g("pj"))};
+      const o={d:toISO(g("d"))||view.mdate||todayISO(),id:g("id"),name:up(g("name")),wq:g("wq"),cnt:num(g("cnt")),hrs:num(g("hrs")),wfi:g("wfi")===""?"":toMin(g("wfi")),so:g("so")===""?"":toMin(g("so")),tr:g("tr")===""?"":toMin(g("tr")),pj:g("pj")===""?"":toMin(g("pj"))};
       o.first=o.hrs!==""||o.name!==last;last=o.name;if(!o.id)o.id=getEmpID(o.name);rows.push(o)}
     const go=()=>{view.rows=rows;view.master=null;view.check=null;view.mdate=rows[0]?rows[0].d:"";MINI=ymOf(view.mdate);view.src="import";view.dirty=true;resetFilters(true);saveScreen();renderAll();addProcs(rows);toast("✓ "+nf(rows.length)+" Result rows loaded from "+src);logAct("import",rows.length+" rows")};
     return view.rows.length&&view.dirty?ask("Replace the screen?","The screen has rows that are not saved yet.","Replace",go):go();
@@ -1103,14 +1118,18 @@ async function addProcs(rows){
   S.cfg.procs=(S.cfg.procs||[]).concat(add);save();if(FS.dir)await fsWriteConfig();toast("➕ "+add.length+" new work queue"+(add.length>1?"s":"")+" added to the Process list");logAct("procs","+"+add.join(", "));
 }
 /* downtime: type 1 = 1 hour (shown as 60 min) · 45 = 45 min · Hours = 8 − minutes ÷ 60 (never below 0) */
-function toMin(v){const n=+v;if(!isFinite(n))return 0;const u=S.cfg.dtUnit||"smart";return u==="hours"?n*60:u==="minutes"?n:(n<=(+S.cfg.hours||8)?n*60:n)}
-function dtCalc(r){if([r.wfi,r.so,r.tr,r.pj].some(x=>x!==""&&x!=null)){const m=(+r.wfi||0)+(+r.so||0)+(+r.tr||0)+(+r.pj||0);r.hrs=Math.max(0,Math.round(((+S.cfg.hours||8)-m/60)*100)/100)}}
+/* clock time: 1.45 = 1 hr 45 min · 45 = 45 min · 8 − 1.45 = 6.15 (minutes are stored, h.mm is shown) */
+function toMin(v){const n=+v;if(!isFinite(n)||n<0)return 0;if((S.cfg.dtUnit||"clock")==="minutes")return Math.round(n);
+  if(n>(+S.cfg.hours||8))return Math.round(n);const h=Math.floor(n+1e-9),mm=Math.round((n-h)*100);return h*60+mm}
+const hm=m=>{if(m===""||m==null)return "";m=Math.max(0,Math.round(+m||0));return Math.floor(m/60)+"."+String(m%60).padStart(2,"0")};
+const hmMin=v=>{if(v===""||v==null)return 0;const n=+v,h=Math.floor(n+1e-9);return h*60+Math.round((n-h)*100)};
+function dtCalc(r){if([r.wfi,r.so,r.tr,r.pj].some(x=>x!==""&&x!=null)){const m=(+r.wfi||0)+(+r.so||0)+(+r.tr||0)+(+r.pj||0);r.hrs=+hm(Math.max(0,(+S.cfg.hours||8)*60-m))}}
 $("#bClear").onclick=()=>{if(!can("clear"))return;ask("Clear the screen?","Only the screen is cleared. Saved dates in the data folder stay safe.","Clear screen",()=>{view.master=null;view.rows=[];view.check=null;view.mdate="";view.src="";view.dirty=false;resetFilters(true);saveScreen();renderAll();logAct("clear","screen cleared")},true)};
 
 /* ================= GRID (smooth list, any number of rows) ================= */
 const COLS=[["d","Date"],["id","Employee ID"],["name","EMP name"],["wq","Work Queue"],["cnt","Count"],["hrs","Hours"],["wfi","Waiting for inventory"],["so","System Outage"],["tr","Training"],["pj","Project"]];
 const DT=["wfi","so","tr","pj"];const RH=26;
-const fmtCell=(k,v)=>k==="d"?us(v):(k==="hrs"||DT.includes(k))?f2(v):String(v??"");
+const fmtCell=(k,v)=>k==="d"?us(v):k==="hrs"?f2(v):DT.includes(k)?hm(v):String(v??"");
 function visRows(skip){
   const e=norm(view.emp),p=norm(view.proc),q=norm(view.q),hf=Object.entries(view.hf||{}).filter(([k])=>k!==skip);
   let out=view.rows.map((r,i)=>(r._i=i,r)).filter(r=>(!e||norm(r.name)===e)&&(!p||norm(r.wq)===p)&&(!q||norm([us(r.d),r.id,r.name,r.wq,r.cnt].join(" ")).includes(q))&&hf.every(([k,st])=>st.has(fmtCell(k,r[k]))));
@@ -1125,7 +1144,7 @@ function renderGrid(){
   if(view.tab==="mf")return renderMaster();
   view.vis=visRows();
   if(!view.rows.length){W.innerHTML=`<div class="empty"><div><div style="font-size:40px">⚡</div><div class="bigh">Ready when you are</div><div>Dump the MASTER FILE and the UOM summary builds itself.</div>
-    <div class="steps"><div class="st"><b>1 · Dump</b>Drop / paste / upload the NICE ALL-UOM file (or Ctrl+V anywhere)</div><div class="st"><b>2 · Auto Result</b>One line per employee × work queue with Employee ID</div><div class="st"><b>3 · Downtime</b>Type 1 = 1 hour, 45 = 45 min · Hours update by itself</div><div class="st"><b>4 · Save / Mail</b>Date-wise for 30 days · Outlook mail with the Excel attached</div></div></div></div>`;
+    <div class="steps"><div class="st"><b>1 · Dump</b>Drop / paste / upload the NICE ALL-UOM file (or Ctrl+V anywhere)</div><div class="st"><b>2 · Auto Result</b>One line per employee × work queue with Employee ID</div><div class="st"><b>3 · Downtime</b>Clock time: 1.45 = 1 hr 45 min → Hours 6.15</div><div class="st"><b>4 · Save / Mail</b>Date-wise for 30 days · Outlook mail with the Excel attached</div></div></div></div>`;
     $("#gInfo").textContent="";$("#gSrc").textContent="";return}
   const sk=view.sort&&view.sort.k,sd=view.sort&&view.sort.dir;
   W.innerHTML=`<table class="g"><thead><tr><th style="width:42px">#</th>${COLS.map(c=>`<th data-k="${c[0]}" class="${view.hf[c[0]]?"fon":""}">${c[1]}<span class="ar">${sk===c[0]?(sd>0?" ▲":" ▼"):""} ▾</span></th>`).join("")}</tr></thead><tbody id="gb"></tbody></table>`;
@@ -1161,11 +1180,11 @@ function drawRows(){
   let html=s?`<tr style="height:${s*RH}px"><td colspan="11" style="border:0;padding:0"></td></tr>`:"";
   for(let i=s;i<e;i++){const r=rows[i];const alt=r._g%2?"":"alt";
     html+=`<tr class="${r.first&&i?"f":""} ${alt}"><td class="rn">${i+1}</td><td class="n">${us(r.d)}</td><td class="n ${r.id?"":"noid"}" title="${r.id?"":"No Employee ID · add the name in Admin → Lists"}">${esc(r.id||"—")}</td><td>${esc(r.name)}</td><td>${esc(r.wq)}</td><td class="n">${esc(r.cnt)}</td><td class="n h">${f2(r.hrs)}</td>`+
-      DT.map(k=>`<td class="n">${ed?`<input class="dt" data-i="${r._i}" data-k="${k}" value="${r[k]===""||r[k]==null?"":f2(r[k])}" inputmode="decimal" title="1 = 1 hour · 45 = 45 minutes">`:f2(r[k])}</td>`).join("")+`</tr>`}
+      DT.map(k=>`<td class="n">${ed&&r.first?`<input class="dt" data-i="${r._i}" data-k="${k}" value="${hm(r[k])}" inputmode="decimal" title="1.45 = 1 hr 45 min · 0.30 = 30 min · 45 = 45 min">`:hm(r[k])}</td>`).join("")+`</tr>`}
   html+=rows.length-e>0?`<tr style="height:${(rows.length-e)*RH}px"><td colspan="11" style="border:0;padding:0"></td></tr>`:"";
   B.innerHTML=html;
-  B.querySelectorAll("input.dt").forEach(inp=>{inp.onchange=()=>{const r=view.rows[+inp.dataset.i];const v=inp.value.trim();r[inp.dataset.k]=v===""?"":Math.round(toMin(num(v)===""?0:num(v))*100)/100;
-      dtCalc(r);view.dirty=true;saveScreen();inp.value=r[inp.dataset.k]===""?"":f2(r[inp.dataset.k]);inp.closest("tr").querySelector("td.h").textContent=f2(r.hrs);renderKpis();$("#unsaved").hidden=false};
+  B.querySelectorAll("input.dt").forEach(inp=>{inp.onchange=()=>{const r=view.rows[+inp.dataset.i];const v=inp.value.trim();r[inp.dataset.k]=v===""?"":toMin(String(v).replace(":","."));
+      dtCalc(r);view.dirty=true;saveScreen();inp.value=hm(r[inp.dataset.k]);inp.closest("tr").querySelector("td.h").textContent=f2(r.hrs);renderKpis();$("#unsaved").hidden=false};
     inp.onfocus=()=>inp.select();
     inp.onkeydown=ev=>{if(ev.key==="Enter"||ev.key==="ArrowDown"||ev.key==="ArrowUp"){ev.preventDefault();inp.blur();const list=[...B.querySelectorAll(`input.dt[data-k="${inp.dataset.k}"]`)];const j=list.indexOf(inp)+(ev.key==="ArrowUp"?-1:1);if(list[j])list[j].focus()}}});
 }
@@ -1216,7 +1235,7 @@ function groupsFor(rows,perDate){const ds=[...new Set(rows.map(r=>r.d))].sort();
 async function buildBook(groups,withSummary){
   const all=groups.flatMap(g=>g.rows);if(!all.length){toast("No data to export");return null}
   if(typeof ExcelJS==="undefined"){if(typeof XLSX==="undefined"){toast("Excel library didn't load (no internet?)");return null}
-    const wb=XLSX.utils.book_new();groups.forEach(g=>XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet([COLS.map(c=>c[1])].concat(g.rows.map(r=>[us(r.d),r.id,r.name,r.wq,r.cnt,r.hrs,r.wfi,r.so,r.tr,r.pj]))),g.name));
+    const wb=XLSX.utils.book_new();groups.forEach(g=>XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet([COLS.map(c=>c[1])].concat(g.rows.map(r=>[us(r.d),r.id,r.name,r.wq,r.cnt,r.hrs,hm(r.wfi),hm(r.so),hm(r.tr),hm(r.pj)]))),g.name));
     return new Blob([XLSX.write(wb,{type:"array",bookType:"xlsx"})],{type:XT})}
   const wb=new ExcelJS.Workbook();wb.creator="Alpha NextGen Eclipse";
   const thin=c=>({style:"thin",color:{argb:c}}),bAll=c=>({top:thin(c),left:thin(c),bottom:thin(c),right:thin(c)});
@@ -1224,13 +1243,13 @@ async function buildBook(groups,withSummary){
     ws.addRow(COLS.map(c=>c[1]));
     const hr=ws.getRow(1);hr.height=28;hr.eachCell(c=>{c.font={bold:true,name:"Calibri",size:11};c.alignment={horizontal:"center",vertical:"middle"};c.fill={type:"pattern",pattern:"solid",fgColor:{argb:"FFF4B183"}};c.border=bAll("FF000000")});
     g.rows.forEach(r=>{const [y,m,d]=r.d.split("-").map(Number);
-      const row=ws.addRow([new Date(Date.UTC(y,m-1,d)),String(r.id||""),r.name,r.wq,r.cnt===""?null:r.cnt,r.hrs===""?null:+r.hrs,...DT.map(k=>r[k]===""||r[k]==null?null:+r[k])]);
+      const row=ws.addRow([new Date(Date.UTC(y,m-1,d)),String(r.id||""),r.name,r.wq,r.cnt===""?null:r.cnt,r.hrs===""?null:+r.hrs,...DT.map(k=>r[k]===""||r[k]==null?null:+hm(r[k]))]);
       row.eachCell({includeEmpty:true},c=>{c.alignment={horizontal:"center",vertical:"middle"};c.border=bAll("FFADD8E6");c.font={name:"Calibri",size:11}});
       row.getCell(1).numFmt="mm/dd/yyyy";row.getCell(2).numFmt="@";[6,7,8,9,10].forEach(i=>row.getCell(i).numFmt="0.00")});
     [12,13,26,40,8,8,20,15,10,9].forEach((w,i)=>ws.getColumn(i+1).width=w)}
   if(withSummary){const s=wb.addWorksheet("Summary");s.addRow(["Date","Employees","Rows","Total count","Total hours"]);
-    const by={};all.forEach(r=>{const o=by[r.d]=by[r.d]||{e:new Set(),n:0,c:0,h:0};o.e.add(r.name);o.n++;o.c+=+r.cnt||0;o.h+=+r.hrs||0});
-    Object.keys(by).sort().forEach(d=>s.addRow([us(d),by[d].e.size,by[d].n,by[d].c,+by[d].h.toFixed(2)]));
+    const by={};all.forEach(r=>{const o=by[r.d]=by[r.d]||{e:new Set(),n:0,c:0,h:0};o.e.add(r.name);o.n++;o.c+=+r.cnt||0;o.h+=hmMin(r.hrs)});
+    Object.keys(by).sort().forEach(d=>s.addRow([us(d),by[d].e.size,by[d].n,by[d].c,+hm(by[d].h)]));
     s.getRow(1).eachCell(c=>{c.font={bold:true};c.fill={type:"pattern",pattern:"solid",fgColor:{argb:"FFF4B183"}}});[14,12,10,14,14].forEach((w,i)=>s.getColumn(i+1).width=w)}
   return new Blob([await wb.xlsx.writeBuffer()],{type:XT});
 }
@@ -1257,7 +1276,7 @@ document.addEventListener("click",async e=>{if(e.target.id==="supCp"){try{await 
 $("#btnHelp").onclick=()=>modal(`<h3>How it works</h3><div class="helpgrid">
   <div><b>1 · Dump ⚡</b>Drop the NICE ALL-UOM file, paste the MASTER FILE (or Ctrl+V anywhere), or Upload. The Result builds itself. A1 = date, Row 1 + Row 2 = name (Row 2 “-” = first name only), Row 4 onwards = work queues.</div>
   <div><b>2 · Result</b>One line per employee × work queue with Employee ID. First line of every employee gets Hours 8. TOTAL rows / columns are skipped, and the Total count is checked against the Master File TOTAL (✔ green / ≠ red).</div>
-  <div><b>3 · Downtime</b>Type in Waiting for inventory / System Outage / Training / Project: <b>1</b> = 1 hour (shows 60), <b>45</b> = 45 minutes. Hours = 8 − minutes ÷ 60, updated by itself.</div>
+  <div><b>3 · Downtime</b>Type in Waiting for inventory / System Outage / Training / Project: clock time: <b>1.45</b> = 1 hr 45 min, <b>0.30</b> = 30 min, <b>45</b> = 45 min. Hours = 8.00 − downtime, e.g. 8 − 1.45 = <b>6.15</b>, updated by itself.</div>
   <div><b>4 · Filters</b>Employee and Process drop lists filter at once (✕ clears). Click any heading for Excel-style filter and sort. “Clear filters” shows everything.</div>
   <div><b>5 · Calendar</b>Green = data saved, red = no data. Click a green date to open it. Tick dates → Download all dates (one workbook, one sheet per date), Mail or Delete.</div>
   <div><b>6 · Save / MAIL</b>Save keeps the last ${S.cfg.keep} days. MAIL downloads an Outlook mail with the Excel attached: open it, check, Send.</div>
@@ -1288,12 +1307,12 @@ function openAdmin(pg){if(!isAdmin())return;ADP=pg||ADP;AD=AD||clone(S.cfg);
 function readAdmin(){
   const b=$("#abody");if(!b||!AD)return;
   if(ADP===1){b.querySelectorAll("tr[data-u]").forEach(tr=>{const u=AD.users[+tr.dataset.u];if(!u)return;const g=n=>tr.querySelector(`[data-f="${n}"]`);
-      u.name=up(g("name").value);u.k=u.k||norm(u.name);u.id=g("id").value.trim();u.role=g("role").value;u.on=g("on").checked;u.until=g("until").value;u.mc=g("mc").value.trim().toUpperCase()});
+      u.name=up(g("name").value);u.k=u.k||norm(u.name);u.id=g("id").value.trim();u.role=g("role").value;u.on=g("on").checked;u.pclock=g("pclock").checked;u.until=g("until").value||expiry();u.mc=g("mc").value.trim().toUpperCase()});
     AD.users=AD.users.filter(u=>u.name);
     b.querySelectorAll("input[data-perm]").forEach(c=>{const [r,f]=c.dataset.perm.split("|");AD.perms[r][f]=c.checked?1:0})}
   if(ADP===2){AD.emp=$("#aEmp").value;AD.procs=$("#aProc").value.split(/[\n,]/).map(s=>s.trim()).filter(Boolean);["mailTo","mailCc","mailSubj","fileName","supportMail"].forEach(k=>AD[k]=$("#a_"+k).value.trim());AD.mailBody=$("#a_mailBody").value;AD.hours=+$("#a_hours").value||8;AD.dtUnit=$("#a_dtUnit").value}
-  if(ADP===3){AD.folder=$("#a_folder").value.trim()||DEF_FOLDER;AD.folderPath=$("#a_folderPath").value.trim();AD.keep=Math.max(1,+$("#a_keep").value||30);AD.maxTry=Math.max(2,+$("#a_maxTry").value||5);
-    AD.alertMails=[0,1,2].map(i=>$("#a_am"+i).value.trim());["alertAuto","helpPop","needFolder","askDevice","remember"].forEach(k=>AD[k]=$("#a_"+k).checked)}
+  if(ADP===3){AD.folder=$("#a_folder").value.trim()||DEF_FOLDER;AD.folderPath=$("#a_folderPath").value.trim();AD.folderLink=$("#a_folderLink").value.trim()||DEF_LINK;AD.logKeep=Math.max(0,+$("#a_logKeep").value||0);AD.keep=Math.max(1,+$("#a_keep").value||30);AD.maxTry=Math.max(2,+$("#a_maxTry").value||5);
+    AD.alertMails=[0,1,2].map(i=>$("#a_am"+i).value.trim());["alertAuto","helpPop","needFolder","askDevice","remember","pcLock"].forEach(k=>AD[k]=$("#a_"+k).checked)}
 }
 async function adUsers(){
   const B=$("#abody");const linked={};
@@ -1301,19 +1320,20 @@ async function adUsers(){
   const q=adUsers.q||"";
   B.innerHTML=`<div class="acard"><h4>👥 Who can sign in <small>· type-your-name login · one name works on one PC only · ${AD.users.length} users</small></h4>
     <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px"><input id="uQ" placeholder="🔎 Search name / ID" value="${esc(q)}" style="padding:7px 12px;border-radius:999px;border:1px solid var(--line2);background:var(--bg);width:220px">
-      <button class="cap rose" id="uAdd">＋ Add user</button><button class="cap" id="uAllOn">All access ON</button><button class="cap" id="uAllOff">All access OFF</button><div class="spacer"></div>
+      <button class="cap rose" id="uAdd">＋ Add user</button><button class="cap" id="uAllOn">All access ON</button><button class="cap" id="uAllOff">All access OFF</button><button class="cap" id="uLkOn">All PC lock ON</button><button class="cap" id="uLkOff">All PC lock OFF</button><div class="spacer"></div>
       <button class="cap" id="uImp">⬆ Import Excel</button><button class="cap c-mail" id="uExp">📗 Export Excel</button><input type="file" id="uFile" accept=".xlsx,.xls,.csv" hidden></div>
-    <div style="max-height:52vh;overflow:auto"><table class="at"><thead><tr><th style="width:34px">#</th><th>Name (as typed at login)</th><th style="width:120px">Employee ID</th><th style="width:130px">Role</th><th style="width:70px" class="c">Access</th><th style="width:140px">Valid till</th><th style="width:170px">Device name (optional)</th><th style="width:170px">PC link</th><th style="width:40px"></th></tr></thead><tbody>
+    <div style="max-height:52vh;overflow:auto"><table class="at"><thead><tr><th style="width:34px">#</th><th style="width:230px">Name (as typed at login)</th><th style="width:110px">Employee ID</th><th style="width:120px">Role</th><th style="width:64px" class="c">Access</th><th style="width:64px" class="c">PC lock</th><th style="width:140px">Valid till</th><th style="width:150px">Device name (optional)</th><th>PC link</th><th style="width:40px"></th></tr></thead><tbody>
     ${AD.users.map((u,i)=>{const L=linked[u.k];const hide=q&&!norm(u.name+" "+u.id).includes(norm(q));return `<tr data-u="${i}" ${hide?"hidden":""}><td class="muted">${i+1}</td><td><input data-f="name" value="${esc(u.name)}" style="text-transform:uppercase"></td><td><input data-f="id" value="${esc(u.id||"")}" class="mono"></td>
-      <td><select data-f="role">${ROLES.filter(r=>r[0]!=="admin").map(r=>`<option value="${r[0]}" ${u.role===r[0]?"selected":""}>${r[1]}</option>`).join("")}</select></td>
-      <td class="c"><label class="sw"><input type="checkbox" data-f="on" ${u.on!==false?"checked":""}><span></span></label></td><td><input type="date" data-f="until" value="${esc(u.until||"")}"></td><td><input data-f="mc" value="${esc(u.mc||"")}" placeholder="LHTU05CG…" class="mono" style="text-transform:uppercase"></td>
+      <td><select data-f="role">${ROLES.map(r=>`<option value="${r[0]}" ${u.role===r[0]?"selected":""}>${r[1]}</option>`).join("")}</select></td>
+      <td class="c"><label class="sw"><input type="checkbox" data-f="on" ${u.on!==false?"checked":""}><span></span></label></td><td class="c"><label class="sw"><input type="checkbox" data-f="pclock" ${u.pclock!==false?"checked":""}><span></span></label></td><td><input type="date" data-f="until" value="${esc(u.until||expiry())}"></td><td><input data-f="mc" value="${esc(u.mc||"")}" placeholder="LHTU05CG…" class="mono" style="text-transform:uppercase"></td>
       <td>${L?`<span class="tag ok" title="Linked ${new Date(L.at).toLocaleString("en-IN")}">● Linked · ${new Date(L.last||L.at).toLocaleDateString("en-IN")}</span> <button class="cap xs" data-reset="${esc(u.k)}">Reset</button>`:`<span class="tag">Not linked yet</span>`}</td>
       <td><button class="cap xs" data-del="${i}" title="Remove">✕</button></td></tr>`}).join("")}</tbody></table></div>
-    <p class="muted" style="font-size:11.5px;margin:10px 0 0">Access OFF = the name can't sign in. <b>Reset</b> frees the name so it can be used on a new PC. The first sign-in on a PC links the name to that PC; nobody can use it on another system.</p></div>
-  <div class="acard"><h4>🔐 What each role can do <small>· Admin always has everything</small></h4><table class="at"><thead><tr><th>Feature</th>${ROLE4.map(r=>`<th class="c" style="width:110px">${ROLEN(r)}</th>`).join("")}</tr></thead><tbody>
-    ${FEAT.map(f=>`<tr><td>${f[1]}</td>${ROLE4.map(r=>`<td class="c"><input type="checkbox" data-perm="${r}|${f[0]}" ${AD.perms[r][f[0]]?"checked":""}></td>`).join("")}</tr>`).join("")}</tbody></table></div>`;
+    <p class="muted" style="font-size:11.5px;margin:10px 0 0">Access OFF = the name can't sign in. PC lock ON = the first PC that signs in keeps the name; nobody can use it on another system (<b>Reset</b> frees it). PC lock OFF = the name works on any PC. Role <b>Admin</b> = every access including this page. Valid till = tool expiry unless you change it.</p></div>
+  <div class="acard"><h4>🔐 What each role can do <small>· Admin always has everything</small></h4><table class="at"><thead><tr><th>Feature</th><th class="c" style="width:110px">Admin</th>${ROLE4.map(r=>`<th class="c" style="width:110px">${ROLEN(r)}</th>`).join("")}</tr></thead><tbody>
+    ${FEAT.map(f=>`<tr><td>${f[1]}</td><td class="c"><input type="checkbox" checked disabled title="Admin always has every access"></td>${ROLE4.map(r=>`<td class="c"><input type="checkbox" data-perm="${r}|${f[0]}" ${AD.perms[r][f[0]]?"checked":""}></td>`).join("")}</tr>`).join("")}</tbody></table></div>`;
   $("#uQ").oninput=e=>{adUsers.q=e.target.value;B.querySelectorAll("tr[data-u]").forEach(tr=>{const u=AD.users[+tr.dataset.u];tr.hidden=!!e.target.value&&!norm(u.name+" "+u.id).includes(norm(e.target.value))})};
-  $("#uAdd").onclick=()=>{readAdmin();AD.users.unshift({k:"",name:"",id:"",role:"employee",on:true,until:"",mc:"",team:""});adUsers();setTimeout(()=>{const i=B.querySelector('tr[data-u="0"] input[data-f="name"]');if(i)i.focus()},50)};
+  $("#uAdd").onclick=()=>{readAdmin();AD.users.unshift({k:"",name:"",id:"",role:"employee",on:true,pclock:true,until:expiry(),mc:"",team:""});adUsers();setTimeout(()=>{const i=B.querySelector('tr[data-u="0"] input[data-f="name"]');if(i)i.focus()},50)};
+  $("#uLkOn").onclick=()=>B.querySelectorAll('input[data-f="pclock"]').forEach(c=>c.checked=true);$("#uLkOff").onclick=()=>B.querySelectorAll('input[data-f="pclock"]').forEach(c=>c.checked=false);
   $("#uAllOn").onclick=()=>B.querySelectorAll('input[data-f="on"]').forEach(c=>c.checked=true);$("#uAllOff").onclick=()=>B.querySelectorAll('input[data-f="on"]').forEach(c=>c.checked=false);
   B.querySelectorAll("[data-del]").forEach(b=>b.onclick=()=>{readAdmin();AD.users.splice(+b.dataset.del,1);adUsers()});
   B.querySelectorAll("[data-reset]").forEach(b=>b.onclick=()=>ask("Reset PC link?","The name can sign in again on a new PC (first PC that uses it).","Reset",async()=>{await authDel(b.dataset.reset);logAct("reset",b.dataset.reset);toast("✓ Reset");readAdmin();adUsers()}));
@@ -1326,7 +1346,7 @@ async function adUsers(){
     const h=(a[0]||[]).map(norm),ix=(...ks)=>h.findIndex(x=>ks.includes(x));const I={n:ix("name","empname","employeename"),id:ix("employeeid","empid","id"),r:ix("role"),on:ix("access"),u:ix("validtill"),mc:ix("devicename","device","pc"),t:ix("team")};
     if(I.n<0)return toast("Need a “Name” column");readAdmin();let add=0,upd=0;
     for(const row of a.slice(1)){const name=up(row[I.n]);if(!name)continue;const k=norm(name);let u=AD.users.find(x=>norm(x.name)===k);if(!u){u={k,name,id:"",role:"employee",on:true,until:"",mc:"",team:""};AD.users.push(u);add++}else upd++;
-      if(I.id>=0&&row[I.id])u.id=String(row[I.id]).trim();if(I.r>=0&&row[I.r]){const r=ROLES.find(x=>norm(x[1])===norm(row[I.r])||x[0]===norm(row[I.r]));if(r&&r[0]!=="admin")u.role=r[0]}
+      if(I.id>=0&&row[I.id])u.id=String(row[I.id]).trim();if(I.r>=0&&row[I.r]){const r=ROLES.find(x=>norm(x[1])===norm(row[I.r])||x[0]===norm(row[I.r]));if(r)u.role=r[0]}
       if(I.on>=0&&row[I.on]!=="")u.on=!/^(no|n|off|0|false)$/i.test(String(row[I.on]).trim());if(I.u>=0)u.until=toISO(row[I.u])||"";if(I.mc>=0)u.mc=String(row[I.mc]||"").trim().toUpperCase();if(I.t>=0)u.team=String(row[I.t]||"").trim()}
     adUsers();toast("✓ "+add+" added · "+upd+" updated · press Save settings")};
 }
@@ -1341,22 +1361,28 @@ function adLists(){
      <label>Mail text</label><textarea id="a_mailBody" style="min-height:110px;max-width:420px">${esc(AD.mailBody)}</textarea>
      <label>Support mail</label><input id="a_supportMail" value="${esc(AD.supportMail)}">
      <label>Hours per day (first line)</label><input id="a_hours" type="number" step="0.25" value="${esc(AD.hours)}">
-     <label>Downtime typing</label><select id="a_dtUnit"><option value="smart" ${AD.dtUnit==="smart"||!AD.dtUnit?"selected":""}>Smart · up to 8 = hours (1 → 60 min), above 8 = minutes</option><option value="hours" ${AD.dtUnit==="hours"?"selected":""}>Always hours (1 → 60 min)</option><option value="minutes" ${AD.dtUnit==="minutes"?"selected":""}>Always minutes</option></select>
+     <label>Downtime typing</label><select id="a_dtUnit"><option value="clock" ${AD.dtUnit!=="minutes"?"selected":""}>Clock h.mm · 1.45 = 1 hr 45 min (above 8 = minutes)</option><option value="minutes" ${AD.dtUnit==="minutes"?"selected":""}>Always minutes</option></select>
    </div></div>`;
 }
 function adSystem(){
   const sw=(k,t,d)=>`<label>${t}${d?`<br><span class="muted" style="font-weight:400;font-size:11px">${d}</span>`:""}</label><label class="sw"><input type="checkbox" id="a_${k}" ${AD[k]!==false&&AD[k]?"checked":""}><span></span></label>`;
   $("#abody").innerHTML=`<div class="cols2"><div><div class="acard"><h4>🔌 Data folder</h4><div class="frow">
       <label>Folder name</label><input id="a_folder" value="${esc(AD.folder)}">
-      <label>Folder path (shown at login)</label><input id="a_folderPath" value="${esc(AD.folderPath||DEF_PATH)}">
+      <label>SharePoint folder link</label><input id="a_folderLink" value="${esc(AD.folderLink||DEF_LINK)}">
+      <label>Folder path on the PC (Copy button)</label><input id="a_folderPath" value="${esc(AD.folderPath||DEF_PATH)}">
       <label>Keep saved dates (days)</label><input id="a_keep" type="number" min="1" value="${esc(AD.keep)}">
+      <label>Keep history log (days, 0 = forever)</label><input id="a_logKeep" type="number" min="0" value="${esc(AD.logKeep??30)}">
       <label>Status</label><div>${FS.dir?`<span class="tag ok">● Connected · ${esc(FS.dir.name)}</span>`:`<span class="tag bad">Not connected</span>`} · ${savedDates().length} saved dates <button class="cap xs" id="aClean">🗑 Clean old dates now</button></div>
     </div></div>
     <div class="acard"><h4>⏳ Tool expiry</h4><div class="frow"><label>Valid till</label><div><b class="mono">${us(expiry())}</b> <span class="muted">(${daysLeft(expiry())} days left)</span></div>
-      <label>New date</label><input type="date" id="a_exp"><label>Master password</label><input type="password" id="a_expPw" placeholder="needed to change expiry or password"><label>New master password (optional)</label><input type="password" id="a_newPw" placeholder="leave empty to keep">
-      <label></label><button class="cap rose" id="aExpGo" style="width:max-content">Apply</button></div></div></div>
+      <label>New date</label><input type="date" id="a_exp"><label>Admin password</label><input type="password" id="a_expPw" placeholder="needed to change the expiry">
+      <label></label><button class="cap rose" id="aExpGo" style="width:max-content">Apply expiry</button></div></div>
+    <div class="acard"><h4>🔐 Admin password <small>· remembered on this PC after the first sign-in</small></h4><div class="frow">
+      <label>Current password</label><input type="password" id="a_pw0" autocomplete="off"><label>New password</label><input type="password" id="a_pw1" autocomplete="off"><label>Repeat new password</label><input type="password" id="a_pw2" autocomplete="off">
+      <label></label><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="cap rose" id="aPwGo">Change password</button><button class="cap" id="aPwForget">Forget on this PC</button></div></div></div></div>
    <div><div class="acard"><h4>🛡 Login & security</h4><div class="frow">
-      ${sw("needFolder","Users must connect the data folder","Needed so one name works on one PC only")}
+      ${sw("needFolder","Users must connect the data folder","Without it no tool works for users")}
+      ${sw("pcLock","PC lock (one name = one PC)","Master switch · each user also has an on/off in Users & access")}
       ${sw("remember","Remember sign-in on the PC","Until Log out or browser cache clear")}
       ${sw("askDevice","Ask device name on first sign-in","Only for users that have a device name in the list")}
       <label>Wrong tries before 15-min pause</label><input id="a_maxTry" type="number" min="2" value="${esc(AD.maxTry)}">
@@ -1366,7 +1392,10 @@ function adSystem(){
     </div></div>
     <div class="acard"><h4>💾 Backup</h4><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="cap" id="aBak">⬇ Download settings backup</button><button class="cap" id="aRes">⬆ Restore backup</button><input type="file" id="aResF" accept=".json" hidden></div></div></div></div>`;
   $("#aClean").onclick=async()=>{const n=await cleanup(true);toast(n?"🗑 "+n+" removed":"Nothing older than "+S.cfg.keep+" days")};
-  $("#aExpGo").onclick=async()=>{if(!(await isMaster($("#a_expPw").value)))return toast("Master password is wrong");const d=$("#a_exp").value;if(d)AD.exp=d;const np=$("#a_newPw").value;if(np){if(np.length<6)return toast("New password: at least 6 characters");AD.mph=await sha("master|"+np)}toast("✓ Applied · press Save settings");readAdmin();adSystem()};
+  $("#aExpGo").onclick=async()=>{if(!(await isMaster($("#a_expPw").value)))return toast("Admin password is wrong");const d=$("#a_exp").value;if(!d)return toast("Choose the new date");readAdmin();AD.exp=d;toast("✓ Expiry "+us(d)+" · press Save settings");adSystem()};
+  $("#aPwGo").onclick=async()=>{if(!(await isMaster($("#a_pw0").value)))return toast("Current password is wrong");const a=$("#a_pw1").value,b=$("#a_pw2").value;if(a.length<4)return toast("New password: at least 4 characters");if(a!==b)return toast("The two new passwords don't match");
+    readAdmin();AD.mph=await sha("master|"+a);S.cfg.mph=AD.mph;await save(true);await fsWriteConfig();LS.set("admtok",admTok());logAct("password","Admin password changed");toast("✓ Admin password changed");adSystem()};
+  $("#aPwForget").onclick=()=>{LS.set("admtok","");toast("✓ This PC will ask the Admin password next time")};
   $("#aBak").onclick=()=>{readAdmin();saveBlob(new Blob([JSON.stringify({app:APP_NAME,at:new Date().toISOString(),cfg:AD},null,1)],{type:"application/json"}),"UOM_Summary_DBM_settings_"+todayISO()+".json")};
   $("#aRes").onclick=()=>$("#aResF").click();$("#aResF").onchange=async e=>{const f=e.target.files[0];if(!f)return;try{const o=JSON.parse(await f.text());if(o.cfg){AD=o.cfg;adSystem();toast("✓ Restored · press Save settings")}}catch(x){toast("Not a backup file")}};
 }
