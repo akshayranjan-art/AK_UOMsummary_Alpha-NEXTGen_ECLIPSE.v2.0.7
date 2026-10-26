@@ -452,7 +452,7 @@ const APP_NAME   = "UOM Summary Consolidation DBM";
 const APP_VER    = "V2.0.7";
 const BUILD      = "5";
 const APP_EXPIRY = "2027-03-31";
-const ADMIN_KEYS = ["akshayranjan","aranja14","1328467"];      // typing any of these opens the Admin password box
+const ADMIN_KEYS = ["akshayranjan","aranja14","admin"];      // typing any of these opens the Admin password box
 const ADMIN_NAME = "Akshay Ranjan";
 const PW_MASTER  = 2349399753747566;                          // hash of the master password (caps and spaces ignored)
 const FILE_KEY   = "AK-UOM-Eclipse-607-lock";                 // locks the files in the data folder
@@ -513,7 +513,6 @@ RITHESH K B = 1276016
 RUDRESH RAMAPPA = 967088
 SADDA MAMATHA = 1483772
 SHAIK ZABIULLA = 791252
-MMAGENDR = 1267098
 SHASHI S = 1983519
 SIRISATI KARTHIK = 2147032
 SOWMYA B H = 1183787
@@ -823,7 +822,7 @@ function gate(msg){
 <div id="gConnBox">${FS.dir?`<div class="gconn ok">● Data folder connected</div>`:`<button class="gconn" id="gConn">🔌 ${FS.handle?"Connect the data folder (one click)":"Connect the data folder"}</button>${FS.handle?"":connectGuide(true)}`}</div>
     ${lu?`<div class="cont" id="gCont"><div class="av">${esc(initials(lu.name))}</div><div><b>Continue as ${esc(title(lu.name))}</b><small>Signed in on this PC before</small></div><span style="margin-left:auto;font-size:20px">😊</span></div>`:""}
     <p class="ghint" style="margin-top:14px">Type your name (or Employee ID) and press Enter</p>
-    <div class="nbox" id="nbox"><input id="gN" placeholder="Employ ID (Ignore Zero)" autocomplete="off" spellcheck="false"><span class="hrt">🙂</span></div>
+    <div class="nbox" id="nbox"><input id="gN" placeholder="Your name" autocomplete="off" spellcheck="false"><span class="hrt">🙂</span></div>
     <input id="gPw" type="password" placeholder="Admin password" autocomplete="off" hidden style="width:100%;margin-top:10px;padding:13px 18px;border-radius:999px;border:1px solid rgba(255,210,228,.28);background:rgba(10,3,14,.35);color:#fff;text-align:center;outline:none">
     <input id="gD" placeholder="This PC's device name (Settings → System → About)" autocomplete="off" hidden style="width:100%;margin-top:10px;padding:12px 18px;border-radius:999px;border:1px solid rgba(255,210,228,.28);background:rgba(10,3,14,.35);color:#fff;text-align:center;outline:none;text-transform:uppercase">
     <button class="gbtn" id="gGo">Enter &nbsp;⚡</button>
