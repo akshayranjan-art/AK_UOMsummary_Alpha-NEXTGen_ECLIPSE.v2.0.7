@@ -351,10 +351,10 @@ table.g input.dt{padding:2px 4px}
     <svg class="ecl" viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="30" fill="url(#cg)"/><circle cx="32" cy="32" r="19" fill="none" stroke="url(#rg)" stroke-width="2.2"/><circle cx="36" cy="29" r="17" fill="#1a0a20"/></svg>
     <div class="kick">Alpha NextGen</div>
     <div class="gtitle">UOM Summary</div>
-    <div class="gsub">Consolidation · <b>DBM</b> · Eclipse</div><div class="gver" id="verGate2">V2.0.7 · Build 4</div>
+    <div class="gsub">Consolidation · <b>DBM</b> · Eclipse</div><div class="gver" id="verGate2">V2.0.7 · Build 5</div>
     <div class="greet" id="gGreet">Good evening ✨</div>
     <div id="gateBody"></div>
-    <div class="gfoot"><span id="verGate">V2.0.7 · Build 4</span><span id="expGate"></span></div>
+    <div class="gfoot"><span id="verGate">V2.0.7 · Build 5</span><span id="expGate"></span></div>
   </div>
 </div>
 
@@ -376,7 +376,7 @@ table.g input.dt{padding:2px 4px}
     <div class="sscroll">
       <div class="brand" id="brand">
         <svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="30" fill="url(#cg)"/><circle cx="32" cy="32" r="19" fill="none" stroke="url(#rg)" stroke-width="2.4"/><circle cx="36" cy="29" r="17" fill="#1f0b25"/></svg>
-        <div><div class="k">ALPHA NEXTGEN</div><div class="t">UOM Summary</div><div class="s">CONSOLIDATION · DBM</div><div class="v" id="verSide">V2.0.7 · Build 4</div></div>
+        <div><div class="k">ALPHA NEXTGEN</div><div class="t">UOM Summary</div><div class="s">CONSOLIDATION · DBM</div><div class="v" id="verSide">V2.0.7 · Build 5</div></div>
       </div>
 
       <div class="sh">DUMP <i>Result builds itself</i></div>
@@ -435,7 +435,7 @@ table.g input.dt{padding:2px 4px}
         <span class="muted" id="gSrc"></span>
       </div>
     </div>
-    <div class="foot"><span><span id="verTop">V2.0.7 · Build 4</span> · <span id="expTxt"></span></span><span>®® Alpha NextGen · Eclipse · UHG-Optum</span></div>
+    <div class="foot"><span><span id="verTop">V2.0.7 · Build 5</span> · <span id="expTxt"></span></span><span>®® Alpha NextGen · Eclipse · UHG-Optum</span></div>
   </main>
 </div>
 
@@ -450,9 +450,9 @@ table.g input.dt{padding:2px 4px}
 /* ======================= ADMIN SETTINGS (edit here) ======================= */
 const APP_NAME   = "UOM Summary Consolidation DBM";
 const APP_VER    = "V2.0.7";
-const BUILD      = "4";
+const BUILD      = "5";
 const APP_EXPIRY = "2027-03-31";
-const ADMIN_KEYS = ["akshayranjan","aranja14","admin"];      // typing any of these opens the Admin password box
+const ADMIN_KEYS = ["akshayranjan","aranja14","1328467"];      // typing any of these opens the Admin password box
 const ADMIN_NAME = "Akshay Ranjan";
 const PW_MASTER  = 2349399753747566;                          // hash of the master password (caps and spaces ignored)
 const FILE_KEY   = "AK-UOM-Eclipse-607-lock";                 // locks the files in the data folder
@@ -513,6 +513,7 @@ RITHESH K B = 1276016
 RUDRESH RAMAPPA = 967088
 SADDA MAMATHA = 1483772
 SHAIK ZABIULLA = 791252
+MMAGENDR = 1267098
 SHASHI S = 1983519
 SIRISATI KARTHIK = 2147032
 SOWMYA B H = 1183787
@@ -637,36 +638,61 @@ const FS={handle:null,dir:null,index:{},cfgLM:0,err:false};
 const fsSupported=()=>"showDirectoryPicker" in window;
 const monthDir=d=>d.slice(5,7)+"-"+MONS[+d.slice(5,7)-1];
 const folderPath=()=>S.cfg.folderPath||LS.get("fpath","")||DEF_PATH;
+/* the picked folder (FS.handle) can be OneDrive itself: the tool walks inside it and finds UOM_Summary_DBM by itself (FS.path) */
+FS.path=[];
+async function openPath(root,path){let d=root;for(const p of path||[])d=await d.getDirectoryHandle(p);return d}
+async function useRoot(root,path){FS.handle=root;FS.path=path||[];FS.dir=await openPath(root,FS.path);await IDB.put("dirHandle",root);await IDB.put("dirPath",FS.path);await fsReadConfig(true);await fsScan();paintSync()}
 async function fsInit(){
   if(!fsSupported())return;
-  try{FS.handle=await IDB.get("dirHandle")}catch(e){FS.handle=null}
+  try{FS.handle=await IDB.get("dirHandle");FS.path=(await IDB.get("dirPath"))||[]}catch(e){FS.handle=null}
   if(!FS.handle)return;
-  try{if(await FS.handle.queryPermission({mode:"readwrite"})==="granted"){FS.dir=FS.handle;await fsReadConfig(true);await fsScan()}}catch(e){}
+  try{if(await FS.handle.queryPermission({mode:"readwrite"})==="granted")await useRoot(FS.handle,FS.path)}catch(e){FS.dir=null}
+}
+const isUom=async h=>{try{await h.getFileHandle("_uom.eclipse");return true}catch(e){return false}};
+/* look for the data folder inside what was picked (up to 5 levels: OneDrive → Alpha_NextGen_Eclipse_Tools → BLR → DBM → UOM_Summary_DBM) */
+async function findUom(h,adm){
+  const want=String(S.cfg.folder||DEF_FOLDER).trim().toLowerCase();
+  if(await isUom(h))return [];
+  const q=[[h,[]]];let seen=0,named=null;
+  while(q.length&&seen<600){const [d,p]=q.shift();
+    try{for await(const [n,c] of d.entries()){if(c.kind!=="directory"||/^[._]/.test(n)&&n.toLowerCase()!==want)continue;seen++;const np=p.concat(n);
+      if(n.trim().toLowerCase()===want){if(await isUom(c))return np;if(!named)named=np}
+      if(np.length<5&&!/^(appdata|node_modules|\$recycle\.bin)$/i.test(n))q.push([c,np])}}catch(e){}}
+  if(h.name.trim().toLowerCase()===want&&adm)return [];
+  return adm&&named?named:null;
+}
+async function markUom(d){try{const fh=await d.getFileHandle("_uom.eclipse",{create:true});const w=await fh.createWritable();await w.write(await encT(JSON.stringify({t:"uom",at:Date.now()})));await w.close()}catch(e){}}
+/* one call does it all: allow the saved folder, or open the folder window and find the data folder */
+async function connectFolder(adm){
+  if(!fsSupported())return "Use Chrome or Edge to connect the data folder.";
+  if(FS.dir)return "";
+  try{if(FS.handle&&await FS.handle.requestPermission({mode:"readwrite"})==="granted"){await useRoot(FS.handle,FS.path);return ""}}catch(e){}
+  let h;try{h=await window.showDirectoryPicker({id:"uom-data",mode:"readwrite"})}catch(e){return e&&e.name==="AbortError"?"Folder window closed. Press Enter again and choose “OneDrive - UnitedHealth Group”.":"Couldn't open the folder window."}
+  toast("🔎 Looking for "+(S.cfg.folder||DEF_FOLDER)+"…");
+  const p=await findUom(h,adm);
+  if(!p)return "“"+(S.cfg.folder||DEF_FOLDER)+"” is not in the folder you chose. Choose <b>OneDrive - UnitedHealth Group</b> (left side of the window). First time? Open the SharePoint link and press <b>Add shortcut to My files</b>.";
+  await useRoot(h,p);if(adm&&!(await isUom(FS.dir)))await markUom(FS.dir);if(adm&&!FS.cfgLM)await fsWriteConfig();
+  toast("✓ Connected · "+FS.dir.name);return "";
 }
 function connectGuide(dark){return `<div class="cguide" style="color:${dark?"#cdb2c4":"var(--muted)"}">
-  <div class="cpath"><code id="cpTxt">${esc(folderPath())}</code><button class="cap xs" id="cpCopy" type="button">📋 Copy</button></div>
-  <ol><li><b>First time only:</b> <a href="${esc(S.cfg.folderLink||DEF_LINK)}" target="_blank" rel="noopener" style="color:#ffb3c9;font-weight:700">open the SharePoint folder</a> → <b>Add shortcut to My files</b>.</li><li>Click <b>📋 Copy</b>, then <b>Connect</b> → Ctrl+V in the address bar → Enter → <b>Select folder</b>.</li><li>Choose <b>Allow on every visit</b>. Next time it connects by itself.</li></ol></div>`}
-function wireCopy(){const b=$("#cpCopy");if(b)b.onclick=async e=>{e.stopPropagation();try{await navigator.clipboard.writeText(folderPath());toast("📋 Path copied · click Connect and press Ctrl+V")}catch(x){toast("Select the path and press Ctrl+C")}}}
+  <ol><li><b>First time only:</b> <a href="${esc(S.cfg.folderLink||DEF_LINK)}" target="_blank" rel="noopener" style="color:${dark?"#ffb3c9":"var(--rose)"};font-weight:700">open the SharePoint folder</a> → <b>Add shortcut to My files</b>.</li>
+  <li>Press <b>Connect</b> (or just Enter) → in the window click <b>OneDrive - UnitedHealth Group</b> on the left → <b>Select folder</b> → <b>Allow on every visit</b>.</li></ol></div>`}
+function wireCopy(){}
 async function autoAllow(){
   if(FS.dir||!FS.handle||autoAllow.busy)return;autoAllow.busy=true;
-  try{if(await FS.handle.requestPermission({mode:"readwrite"})==="granted"){FS.dir=FS.handle;await fsReadConfig(true);await fsScan();toast("✓ Data folder connected");
-    if(!$("#gate").hidden){const c=$("#gConnBox");if(c){c.innerHTML=`<div class="gconn ok">● Data folder connected</div>`}}else{renderSide();cleanup()}}}catch(e){}
+  try{if(await FS.handle.requestPermission({mode:"readwrite"})==="granted"){await useRoot(FS.handle,FS.path);toast("✓ Data folder connected");
+    if(!$("#gate").hidden){const c=$("#gConnBox");if(c){c.innerHTML=`<div class="gconn ok">● Data folder connected</div>`}}else{applyPerms();renderAll();cleanup();recheckLink()}}}catch(e){}
   autoAllow.busy=false;paintSync();
 }
-document.addEventListener("pointerdown",e=>{if(e.target.closest&&e.target.closest("#gConn,#btnFolder,#cpCopy,#fcGo"))return;autoAllow()},true);
-async function folderOK(h,adm){
-  const want=String(S.cfg.folder||DEF_FOLDER).trim(),nameOk=h.name.trim().toLowerCase()===want.toLowerCase();let has=false;
-  try{await h.getFileHandle("_uom.eclipse");has=true}catch(e){}
-  if(has)return "";
-  if(adm&&nameOk){try{const fh=await h.getFileHandle("_uom.eclipse",{create:true});const w=await fh.createWritable();await w.write(await encT(JSON.stringify({t:"uom",at:Date.now()})));await w.close();return ""}catch(e){return "Couldn't prepare the folder. Allow write access."}}
-  return nameOk?"This folder is not set up yet. Ask Admin to connect it first.":"Wrong folder. Please pick the folder “"+want+"”.";
+document.addEventListener("pointerdown",e=>{if(e.target.closest&&e.target.closest("#gConn,#gGo,#btnFolder,#fcGo,#gLock"))return;autoAllow()},true);
+document.addEventListener("keydown",e=>{if(e.key==="Enter"&&!$("#gate").hidden)return;if(!e.repeat)autoAllow()},true);
+async function recheckLink(){
+  if(!S||isAdmin()||!me.k||!FS.dir||$("#app").hidden)return;const u=userOf(me.k);if(!u||u.pclock===false||S.cfg.pcLock===false)return;
+  const a=await authGet(me.k);
+  if(!a){await authPut(me.k,{did:DID(),at:Date.now(),last:Date.now(),name:u.name});return}
+  if(a.did!==DID()){SESS.set(false);LS.set("who","");gate("<b>This name is linked to another PC.</b> Please contact Administration.")}
 }
-async function fsConnect(){
-  if(!fsSupported()){toast("Use Chrome or Edge to connect a folder.");return false}
-  try{const h=await window.showDirectoryPicker({id:"uom-data",mode:"readwrite",startIn:"documents"});const bad=await folderOK(h,isAdmin());if(bad){toast(bad);return false}
-    FS.handle=h;FS.dir=h;await IDB.put("dirHandle",h);await fsReadConfig(true);await fsScan();if(isAdmin()&&!FS.cfgLM)await fsWriteConfig();toast("Connected to “"+h.name+"”");paintSync();return true}
-  catch(e){if(e&&e.name!=="AbortError")toast("Couldn't connect the folder");return false}
-}
+async function fsConnect(){const m=await connectFolder(isAdmin());if(m){toast(m.replace(/<[^>]+>/g,""));return false}return true}
 async function fsScan(){
   if(!FS.dir)return;const idx={};
   try{let dh;try{dh=await FS.dir.getDirectoryHandle("Days")}catch(e){dh=null}
@@ -794,10 +820,10 @@ function gate(msg){
   $("#verGate").textContent=APP_VER+" · Build "+BUILD;$("#expGate").textContent="Valid till "+us(expiry());$("#gGreet").textContent=greetTxt();
   const lastK=LS.get("lastwho",""),lu=lastK==="admin"?{name:ADMIN_NAME}:userOf(lastK);
   $("#gateBody").innerHTML=`
-<div id="gConnBox">${FS.dir?`<div class="gconn ok">● Data folder connected</div>`:`<button class="gconn" id="gConn">🔌 ${FS.handle?"Connect (one click)":"Step 1 · Connect the data folder"}</button>${FS.handle?"":connectGuide(true)}`}</div>
+<div id="gConnBox">${FS.dir?`<div class="gconn ok">● Data folder connected</div>`:`<button class="gconn" id="gConn">🔌 ${FS.handle?"Connect the data folder (one click)":"Connect the data folder"}</button>${FS.handle?"":connectGuide(true)}`}</div>
     ${lu?`<div class="cont" id="gCont"><div class="av">${esc(initials(lu.name))}</div><div><b>Continue as ${esc(title(lu.name))}</b><small>Signed in on this PC before</small></div><span style="margin-left:auto;font-size:20px">😊</span></div>`:""}
-    <p class="ghint" style="margin-top:14px">${FS.dir||!S.cfg.needFolder?"":"Step 2 · "}Type your name to come in</p>
-    <div class="nbox" id="nbox"><input id="gN" placeholder="Your name" autocomplete="off" spellcheck="false"><span class="hrt">🙂</span></div>
+    <p class="ghint" style="margin-top:14px">Type your name (or Employee ID) and press Enter</p>
+    <div class="nbox" id="nbox"><input id="gN" placeholder="Employ ID (Ignore Zero)" autocomplete="off" spellcheck="false"><span class="hrt">🙂</span></div>
     <input id="gPw" type="password" placeholder="Admin password" autocomplete="off" hidden style="width:100%;margin-top:10px;padding:13px 18px;border-radius:999px;border:1px solid rgba(255,210,228,.28);background:rgba(10,3,14,.35);color:#fff;text-align:center;outline:none">
     <input id="gD" placeholder="This PC's device name (Settings → System → About)" autocomplete="off" hidden style="width:100%;margin-top:10px;padding:12px 18px;border-radius:999px;border:1px solid rgba(255,210,228,.28);background:rgba(10,3,14,.35);color:#fff;text-align:center;outline:none;text-transform:uppercase">
     <button class="gbtn" id="gGo">Enter &nbsp;⚡</button>
@@ -809,12 +835,7 @@ function gate(msg){
   $("#gN").focus();
 }
 let gateMsg="";
-async function gateConnect(){
-  if(!fsSupported()){gateMsg="Use Chrome or Edge to connect the data folder.";return}
-  try{if(FS.handle&&!FS.dir){if(await FS.handle.requestPermission({mode:"readwrite"})==="granted"){FS.dir=FS.handle;await fsReadConfig(true);await fsScan();return}}
-    const h=await window.showDirectoryPicker({id:"uom-data",mode:"readwrite",startIn:"documents"});const bad=await folderOK(h,false);if(bad){gateMsg=bad;return}
-    FS.handle=h;FS.dir=h;await IDB.put("dirHandle",h);await fsReadConfig(true);await fsScan()}catch(e){}
-}
+async function gateConnect(){gateMsg=await connectFolder(false)}
 function nameCheck(){
   const v=$("#gN").value,adm=isAdminName(v),u=findUser(v),ok=adm||(u&&u.on!==false);
   $("#nbox").classList.toggle("ok",!!ok);$("#nbox .hrt").textContent=ok?"😊":"🙂";
@@ -824,6 +845,10 @@ function initials(n){return String(n||"U").split(/\s+/).filter(Boolean).map(w=>w
 async function gateGo(){
   const err=t=>{$("#gErr").innerHTML=t};const v=$("#gN").value.trim();
   if(!v)return err("Please type your name 🙂");
+  if(!FS.dir&&(S.cfg.needFolder!==false||isAdminName(v))&&fsSupported()&&!(isAdminName(v)&&!FS.handle)){
+    err("🔌 Connecting the data folder…");const m=await connectFolder(false);
+    if(FS.dir){const c=$("#gConnBox");if(c)c.innerHTML=`<div class="gconn ok">● Data folder connected</div>`;err("")}
+    else if(!isAdminName(v))return err(m||"Connect the data folder first.")}
   if(FS.dir)await fsReadConfig();
   {const t0=TRY.get();if(t0.until&&S.cfg.unlockAt&&(t0.at||0)<S.cfg.unlockAt)TRY.set(null)}
   const tr=TRY.get();if(tr.until>Date.now()){err("🙂 Paused for a little while. Try again after "+new Date(tr.until).toLocaleTimeString("en-IN",{hour:"2-digit",minute:"2-digit"})+".");return helpPopup(v,"Sign-in paused after several wrong tries")}
@@ -1290,10 +1315,11 @@ $("#btnTheme").onclick=()=>{LS.set("theme",LS.get("theme","light")==="dark"?"lig
 $("#btnOut").onclick=()=>ask("Log out?","You will type your name again next time.","Log out",logout);
 $("#btnFolder").onclick=async()=>{
   if(FS.dir){modal(`<h3>Data folder</h3><p class="muted" style="margin:0">Connected to <b style="color:var(--ink)">${esc(FS.dir.name)}</b> · ${Object.keys(FS.index).length} saved dates.</p><div class="mrow"><button class="cap" data-close>Close</button><button class="cap" id="fRef">↻ Refresh</button><button class="cap" id="fChg">Change folder</button></div>`);
-    $("#fRef").onclick=async()=>{closeModal();await fsScan();renderSide();toast("↻ Updated")};$("#fChg").onclick=async()=>{closeModal();if(await fsConnect())renderSide()};return}
-  if(FS.handle){try{if(await FS.handle.requestPermission({mode:"readwrite"})==="granted"){FS.dir=FS.handle;await fsReadConfig(true);await fsScan();paintSync();renderSide();toast("✓ Connected");return}}catch(e){}}
-  modal(`<h3>Connect the data folder</h3><p class="muted" style="margin:0 0 6px">One time only. After this it stays connected.</p>${connectGuide(false)}<div class="mrow"><button class="cap" data-close>Cancel</button><button class="cap rose" id="fcGo">🔌 Connect</button></div>`);wireCopy();
-  $("#fcGo").onclick=async()=>{closeModal();if(await fsConnect()){renderSide();cleanup()}};
+    $("#fRef").onclick=async()=>{closeModal();await fsScan();renderSide();toast("↻ Updated")};$("#fChg").onclick=async()=>{closeModal();FS.dir=null;FS.handle=null;if(await fsConnect()){applyPerms();renderAll()}};return}
+  const m=await connectFolder(isAdmin());
+  if(!m){applyPerms();renderAll();cleanup();recheckLink();return}
+  modal(`<h3>Connect the data folder</h3><p class="muted" style="margin:0 0 6px">${m}</p>${connectGuide(false)}<div class="mrow"><button class="cap" data-close>Cancel</button><button class="cap rose" id="fcGo">🔌 Connect</button></div>`);
+  $("#fcGo").onclick=async()=>{closeModal();if(await fsConnect()){applyPerms();renderAll();cleanup()}};
 };
 
 /* ================= ADMIN ================= */
