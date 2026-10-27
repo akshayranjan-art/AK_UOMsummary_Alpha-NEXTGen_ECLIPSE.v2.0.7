@@ -339,6 +339,36 @@ table.g input.dt{padding:2px 4px}
 #fpop .fl{max-height:230px;overflow:auto;border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin:4px 0;padding:4px 0}
 #fpop .fb{display:flex;justify-content:flex-end;gap:6px;padding-top:4px}
 @media (max-width:760px){.calwrap{grid-template-columns:1fr}}
+
+/* ---- build 6 · compact ---- */
+.top{padding:5px 12px;gap:7px}
+.fld input{padding:5px 30px 5px 12px;font-size:11.5px}
+button.dpill{padding:4px 11px}
+.kpis{padding:6px 12px 0;gap:6px}
+.kpi{padding:3px 10px;display:flex;align-items:baseline;justify-content:space-between;gap:8px}
+.kpi span{font-size:9px}
+.kpi b{font-size:13.5px;white-space:nowrap}
+.kpi span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.kpis{align-items:start}
+.gridbox{margin:6px 12px 0}
+table.g{font-size:11.5px}
+table.g th{height:26px;font-size:11px;padding:0 6px}
+table.g td{height:22px;padding:0 6px}
+table.g input.dt{padding:1px 4px;font-size:11.5px;width:58px}
+table.g td.ck,table.g th.ck{width:44px;padding:0 4px;text-align:left;white-space:nowrap}
+table.g td.ck input,table.g th.ck input{accent-color:var(--rose);width:14px;height:14px;vertical-align:middle;margin:0 2px}
+table.g .rx{border:0;background:var(--danger);color:#fff;border-radius:6px;width:18px;height:18px;font-size:10px;line-height:18px;cursor:pointer;padding:0;vertical-align:middle;margin-left:3px}
+table.g tr.tk td:not(.rn){background:#ffe4ea!important}
+:root[data-theme="dark"] table.g tr.tk td:not(.rn){background:#4a1f2e!important}
+.gbar{padding:4px 10px}.gbar input{padding:4px 12px}
+.foot{padding:3px 14px 4px}
+.sscroll{padding:12px 12px 8px}
+.sh{margin:9px 4px 5px}
+.sgrid{gap:5px}
+.sb{padding:6px 8px;font-size:11.5px}
+.sb.dump{padding:8px}
+.num{padding:5px 9px}.num b{font-size:13.5px}
+.cal.mini .cd{height:21px}
 </style>
 </head>
 <body>
@@ -351,10 +381,10 @@ table.g input.dt{padding:2px 4px}
     <svg class="ecl" viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="30" fill="url(#cg)"/><circle cx="32" cy="32" r="19" fill="none" stroke="url(#rg)" stroke-width="2.2"/><circle cx="36" cy="29" r="17" fill="#1a0a20"/></svg>
     <div class="kick">Alpha NextGen</div>
     <div class="gtitle">UOM Summary</div>
-    <div class="gsub">Consolidation · <b>DBM</b> · Eclipse</div><div class="gver" id="verGate2">V2.0.7 · Build 5</div>
+    <div class="gsub">Consolidation · <b>DBM</b> · Eclipse</div><div class="gver" id="verGate2">V2.0.7 · Build 6</div>
     <div class="greet" id="gGreet">Good evening ✨</div>
     <div id="gateBody"></div>
-    <div class="gfoot"><span id="verGate">V2.0.7 · Build 5</span><span id="expGate"></span></div>
+    <div class="gfoot"><span id="verGate">V2.0.7 · Build 6</span><span id="expGate"></span></div>
   </div>
 </div>
 
@@ -376,7 +406,7 @@ table.g input.dt{padding:2px 4px}
     <div class="sscroll">
       <div class="brand" id="brand">
         <svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="30" fill="url(#cg)"/><circle cx="32" cy="32" r="19" fill="none" stroke="url(#rg)" stroke-width="2.4"/><circle cx="36" cy="29" r="17" fill="#1f0b25"/></svg>
-        <div><div class="k">ALPHA NEXTGEN</div><div class="t">UOM Summary</div><div class="s">CONSOLIDATION · DBM</div><div class="v" id="verSide">V2.0.7 · Build 5</div></div>
+        <div><div class="k">ALPHA NEXTGEN</div><div class="t">UOM Summary</div><div class="s">CONSOLIDATION · DBM</div><div class="v" id="verSide">V2.0.7 · Build 6</div></div>
       </div>
 
       <div class="sh">DUMP <i>Result builds itself</i></div>
@@ -421,6 +451,7 @@ table.g input.dt{padding:2px 4px}
       <div class="fld cmb"><input id="fEmp" placeholder="Employee name ▾" autocomplete="off" spellcheck="false"><button class="fx" type="button" title="Clear">✕</button><div class="cbox" hidden></div></div>
       <div class="fld p cmb"><input id="fProc" placeholder="Process / Work Queue ▾" autocomplete="off" spellcheck="false"><button class="fx" type="button" title="Clear">✕</button><div class="cbox" hidden></div></div>
       <button class="chip filt" id="fChip" hidden>✕ Clear filters</button>
+      <button class="cap c-clr xs" id="bDelRows" hidden>🗑 Delete ticked (0)</button>
       <div class="spacer"></div>
       <span class="chip unsaved" id="unsaved" hidden>● Not saved</span>
       <div class="tabs"><button class="on" data-tab="res">Result</button><button data-tab="mf">Master File</button></div>
@@ -435,7 +466,7 @@ table.g input.dt{padding:2px 4px}
         <span class="muted" id="gSrc"></span>
       </div>
     </div>
-    <div class="foot"><span><span id="verTop">V2.0.7 · Build 5</span> · <span id="expTxt"></span></span><span>®® Alpha NextGen · Eclipse · UHG-Optum</span></div>
+    <div class="foot"><span><span id="verTop">V2.0.7 · Build 6</span> · <span id="expTxt"></span></span><span>®® Alpha NextGen · Eclipse · UHG-Optum</span></div>
   </main>
 </div>
 
@@ -450,7 +481,7 @@ table.g input.dt{padding:2px 4px}
 /* ======================= ADMIN SETTINGS (edit here) ======================= */
 const APP_NAME   = "UOM Summary Consolidation DBM";
 const APP_VER    = "V2.0.7";
-const BUILD      = "5";
+const BUILD      = "6";
 const APP_EXPIRY = "2027-03-31";
 const ADMIN_KEYS = ["akshayranjan","aranja14","admin"];      // typing any of these opens the Admin password box
 const ADMIN_NAME = "Akshay Ranjan";
@@ -900,7 +931,7 @@ async function start(){
 }
 
 /* ================= APP ================= */
-const view={tab:"res",master:null,mdate:"",rows:[],src:"",dirty:false,emp:"",proc:"",q:"",sort:null,vis:[],hf:{},check:null};
+const view={tab:"res",master:null,mdate:"",rows:[],src:"",dirty:false,emp:"",proc:"",q:"",sort:null,vis:[],hf:{},check:null,sel:new Set(),rep:new Set()};
 async function saveScreen(){await IDB.put("screen_"+me.k,{master:view.master,mdate:view.mdate,rows:view.rows,src:view.src,dirty:view.dirty,check:view.check})}
 async function loadScreen(){const o=await IDB.get("screen_"+me.k);if(o){view.master=o.master||null;view.mdate=o.mdate||"";view.rows=o.rows||[];view.src=o.src||"";view.dirty=!!o.dirty;view.check=o.check||null}else{view.check=null;view.master=null;view.mdate="";view.rows=[];view.src="";view.dirty=false}}
 
@@ -986,7 +1017,7 @@ function renderKpis(){
   const dt=r.reduce((a,x)=>a+(+x.wfi||0)+(+x.so||0)+(+x.tr||0)+(+x.pj||0),0),noid=new Set(r.filter(x=>!x.id).map(x=>x.name)).size;
   const dates=[...new Set(r.map(x=>x.d))].sort(),ck=!isFiltered()&&view.src==="run"&&view.check?view.check:null;
   $("#kpis").innerHTML=[["Date",dates.length>1?dates.length+" dates":us(dates[0]||view.mdate)||"—"],["Employees",nf(emps.size)],["Work queues",nf(wq.size)],
-    ["Total count"+(ck?(ck.ok?" · matches TOTAL":" · check"):""),nf(cnt)+(ck?(ck.ok?' <i class="okk">✔</i>':' <i class="bad">≠ '+(Math.abs(ck.mf-ck.res)>1e-6?nf(ck.mf):ck.bad.length+" emp")+'</i>'):""),ck?(ck.ok?"good ck":"bad ck"):""],
+    ["Total count",nf(cnt)+(ck?(ck.ok?' <i class="okk">✔</i>':' <i class="bad">≠ '+(Math.abs(ck.mf-ck.res)>1e-6?nf(ck.mf):ck.bad.length+" emp")+'</i>'):""),ck?(ck.ok?"good ck":"bad ck"):""],
     ["Total hours",hm(hrs)],[noid?"Missing ID":"Downtime (h.mm)",noid?noid+" name"+(noid>1?"s":""):hm(dt),noid?"bad":""]]
     .map(k=>`<div class="kpi ${k[2]||""}"><span>${k[0]}</span><b>${k[1]}</b></div>`).join("");
   const c=$("#kpis .ck");if(c)c.onclick=()=>{const k=view.check;modal(`<h3>Total count check</h3><p class="muted" style="margin:0 0 10px">Result total vs the Master File TOTAL row${k.ok?" — everything matches ✔":""}.</p>
@@ -1093,7 +1124,7 @@ function takeAOA(a,src){
     const rows=[];let last="";for(let r=rh.r+1;r<a.length;r++){const v=a[r],g=k=>I[k]>=0?String(v[I[k]]??"").trim():"";if(!g("name")&&!g("wq"))continue;
       const o={d:toISO(g("d"))||view.mdate||todayISO(),id:g("id"),name:up(g("name")),wq:g("wq"),cnt:num(g("cnt")),hrs:num(g("hrs")),wfi:g("wfi")===""?"":toMin(g("wfi")),so:g("so")===""?"":toMin(g("so")),tr:g("tr")===""?"":toMin(g("tr")),pj:g("pj")===""?"":toMin(g("pj"))};
       o.first=o.hrs!==""||o.name!==last;last=o.name;if(!o.id)o.id=getEmpID(o.name);rows.push(o)}
-    const go=()=>{view.rows=rows;view.master=null;view.check=null;view.mdate=rows[0]?rows[0].d:"";MINI=ymOf(view.mdate);view.src="import";view.dirty=true;resetFilters(true);saveScreen();renderAll();addProcs(rows);toast("✓ "+nf(rows.length)+" Result rows loaded from "+src);logAct("import",rows.length+" rows")};
+    const go=()=>{view.sel=new Set();view.rep=new Set();view.rows=rows;view.master=null;view.check=null;view.mdate=rows[0]?rows[0].d:"";MINI=ymOf(view.mdate);view.src="import";view.dirty=true;resetFilters(true);saveScreen();renderAll();addProcs(rows);toast("✓ "+nf(rows.length)+" Result rows loaded from "+src);logAct("import",rows.length+" rows")};
     return view.rows.length&&view.dirty?ask("Replace the screen?","The screen has rows that are not saved yet.","Replace",go):go();
   }
   const go=d=>{view.master=a;view.mdate=d;saveScreen();runMaster(true)};
@@ -1132,7 +1163,7 @@ function runMaster(auto){
     const res=out.reduce((x,r)=>x+(+r.cnt||0),0);
     let mf=null;if(tr>=0){const t=tc>=0?num((a[tr]||[])[tc]):"";mf=t!==""?+t:mfSum}
     view.check=mf==null?null:{mf,res,bad,ok:!bad.length&&Math.abs(mf-res)<1e-6};
-    view.rows=out;view.src="run";view.dirty=true;view.tab="res";MINI=ymOf(d);resetFilters(true);saveScreen();renderAll();addProcs(out);
+    view.sel=new Set();view.rep=new Set();view.rows=out;view.src="run";view.dirty=true;view.tab="res";MINI=ymOf(d);resetFilters(true);saveScreen();renderAll();addProcs(out);
     const miss=new Set(out.filter(x=>!x.id).map(x=>x.name)).size;
     toast("⚡ "+nf(out.length)+" rows · "+new Set(out.map(x=>x.name)).size+" employees"+(view.check?(view.check.ok?" · total matches ✔":" · total check ≠"):"")+(miss?" · "+miss+" without ID":""));logAct("run",us(d)+" · "+out.length+" rows");
   };
@@ -1152,11 +1183,11 @@ function toMin(v){const n=+v;if(!isFinite(n)||n<0)return 0;if((S.cfg.dtUnit||"cl
 const hm=m=>{if(m===""||m==null)return "";m=Math.max(0,Math.round(+m||0));return Math.floor(m/60)+"."+String(m%60).padStart(2,"0")};
 const hmMin=v=>{if(v===""||v==null)return 0;const n=+v,h=Math.floor(n+1e-9);return h*60+Math.round((n-h)*100)};
 function dtCalc(r){if([r.wfi,r.so,r.tr,r.pj].some(x=>x!==""&&x!=null)){const m=(+r.wfi||0)+(+r.so||0)+(+r.tr||0)+(+r.pj||0);r.hrs=+hm(Math.max(0,(+S.cfg.hours||8)*60-m))}}
-$("#bClear").onclick=()=>{if(!can("clear"))return;ask("Clear the screen?","Only the screen is cleared. Saved dates in the data folder stay safe.","Clear screen",()=>{view.master=null;view.rows=[];view.check=null;view.mdate="";view.src="";view.dirty=false;resetFilters(true);saveScreen();renderAll();logAct("clear","screen cleared")},true)};
+$("#bClear").onclick=()=>{if(!can("clear"))return;ask("Clear the screen?","Only the screen is cleared. Saved dates in the data folder stay safe.","Clear screen",()=>{view.master=null;view.rows=[];view.sel=new Set();view.rep=new Set();view.check=null;view.mdate="";view.src="";view.dirty=false;resetFilters(true);saveScreen();renderAll();logAct("clear","screen cleared")},true)};
 
 /* ================= GRID (smooth list, any number of rows) ================= */
 const COLS=[["d","Date"],["id","Employee ID"],["name","EMP name"],["wq","Work Queue"],["cnt","Count"],["hrs","Hours"],["wfi","Waiting for inventory"],["so","System Outage"],["tr","Training"],["pj","Project"]];
-const DT=["wfi","so","tr","pj"];const RH=26;
+const DT=["wfi","so","tr","pj"];const RH=22;
 const fmtCell=(k,v)=>k==="d"?us(v):k==="hrs"?f2(v):DT.includes(k)?hm(v):String(v??"");
 function visRows(skip){
   const e=norm(view.emp),p=norm(view.proc),q=norm(view.q),hf=Object.entries(view.hf||{}).filter(([k])=>k!==skip);
@@ -1175,12 +1206,23 @@ function renderGrid(){
     <div class="steps"><div class="st"><b>1 · Dump</b>Drop / paste / upload the NICE ALL-UOM file (or Ctrl+V anywhere)</div><div class="st"><b>2 · Auto Result</b>One line per employee × work queue with Employee ID</div><div class="st"><b>3 · Downtime</b>Clock time: 1.45 = 1 hr 45 min → Hours 6.15</div><div class="st"><b>4 · Save / Mail</b>Date-wise for 30 days · Outlook mail with the Excel attached</div></div></div></div>`;
     $("#gInfo").textContent="";$("#gSrc").textContent="";return}
   const sk=view.sort&&view.sort.k,sd=view.sort&&view.sort.dir;
-  W.innerHTML=`<table class="g"><thead><tr><th style="width:42px">#</th>${COLS.map(c=>`<th data-k="${c[0]}" class="${view.hf[c[0]]?"fon":""}">${c[1]}<span class="ar">${sk===c[0]?(sd>0?" ▲":" ▼"):""} ▾</span></th>`).join("")}</tr></thead><tbody id="gb"></tbody></table>`;
+  W.innerHTML=`<table class="g"><thead><tr><th class="ck" style="width:44px;cursor:default">${can("edit")?`<input type="checkbox" id="ckAll" title="Tick all rows on screen" ${view.vis.length&&view.vis.every(r=>view.sel.has(r))?"checked":""}>`:""}</th><th style="width:38px">#</th>${COLS.map(c=>`<th data-k="${c[0]}" class="${view.hf[c[0]]?"fon":""}">${c[1]}<span class="ar">${sk===c[0]?(sd>0?" ▲":" ▼"):""} ▾</span></th>`).join("")}</tr></thead><tbody id="gb"></tbody></table>`;
   W.querySelectorAll("th[data-k]").forEach(th=>th.onclick=e=>{e.stopPropagation();openHF(th.dataset.k,th)});
   W.onscroll=drawRows;drawRows.k="";drawRows();
+  const ca=$("#ckAll");if(ca)ca.onclick=e=>{e.stopPropagation();if(ca.checked)view.vis.forEach(r=>view.sel.add(r));else view.vis.forEach(r=>view.sel.delete(r));drawRows.k="";drawRows();paintDel()};paintDel();
   $("#gInfo").textContent=isFiltered()?`Showing ${nf(view.vis.length)} of ${nf(view.rows.length)} rows · filtered`:`${nf(view.rows.length)} rows`;
   $("#gSrc").textContent={run:"Built from the Master File",saved:"Loaded from saved dates",import:"Imported Result"}[view.src]||"";
 }
+/* delete ticked lines (screen) · the first line's Hours / downtime move to the employee's next line */
+function paintDel(){const b=$("#bDelRows");if(!b)return;const n=[...view.sel].filter(r=>view.rows.includes(r)).length;b.hidden=!n||!can("edit");b.textContent="🗑 Delete ticked ("+n+")"}
+function delRows(list){
+  if(!can("edit"))return;const kill=new Set(list.filter(Boolean));if(!kill.size)return;
+  const keep=view.rows.filter(r=>!kill.has(r));
+  kill.forEach(r=>{if(!r.first)return;const nx=keep.find(x=>x.d===r.d&&x.name===r.name&&!x.first);if(nx&&!keep.some(x=>x.d===r.d&&x.name===r.name&&x.first)){nx.first=true;["hrs","wfi","so","tr","pj"].forEach(k=>nx[k]=r[k])}});
+  kill.forEach(r=>{view.rep.add(r.d);view.sel.delete(r)});
+  view.rows=keep;view.dirty=true;saveScreen();renderAll();toast("🗑 "+kill.size+" line"+(kill.size>1?"s":"")+" deleted");logAct("delrows",kill.size+" lines");
+}
+$("#bDelRows").onclick=()=>delRows([...view.sel].filter(r=>view.rows.includes(r)));
 /* heading filter (like Excel): sort, search, tick values */
 function closeHF(){const p=$("#fpop");if(p)p.remove()}
 document.addEventListener("mousedown",e=>{const p=$("#fpop");if(p&&!p.contains(e.target))closeHF()});
@@ -1205,12 +1247,15 @@ function drawRows(){
   const s=Math.max(0,Math.floor(top/RH)-20),e=Math.min(rows.length,Math.ceil((top+h)/RH)+20);
   if(drawRows.k===s+"/"+e+"/"+rows.length&&B.childElementCount)return;drawRows.k=s+"/"+e+"/"+rows.length;
   const ed=can("edit");
-  let html=s?`<tr style="height:${s*RH}px"><td colspan="11" style="border:0;padding:0"></td></tr>`:"";
+  let html=s?`<tr style="height:${s*RH}px"><td colspan="12" style="border:0;padding:0"></td></tr>`:"";
   for(let i=s;i<e;i++){const r=rows[i];const alt=r._g%2?"":"alt";
-    html+=`<tr class="${r.first&&i?"f":""} ${alt}"><td class="rn">${i+1}</td><td class="n">${us(r.d)}</td><td class="n ${r.id?"":"noid"}" title="${r.id?"":"No Employee ID · add the name in Admin → Lists"}">${esc(r.id||"—")}</td><td>${esc(r.name)}</td><td>${esc(r.wq)}</td><td class="n">${esc(r.cnt)}</td><td class="n h">${f2(r.hrs)}</td>`+
+    const tk=view.sel.has(r);
+    html+=`<tr class="${r.first&&i?"f":""} ${alt} ${tk?"tk":""}"><td class="ck">${ed?`<input type="checkbox" class="rk" data-i="${r._i}" ${tk?"checked":""}>${tk?`<button class="rx" data-i="${r._i}" title="Delete this line">✕</button>`:""}`:""}</td><td class="rn">${i+1}</td><td class="n">${us(r.d)}</td><td class="n ${r.id?"":"noid"}" title="${r.id?"":"No Employee ID · add the name in Admin → Lists"}">${esc(r.id||"—")}</td><td>${esc(r.name)}</td><td>${esc(r.wq)}</td><td class="n">${esc(r.cnt)}</td><td class="n h">${f2(r.hrs)}</td>`+
       DT.map(k=>`<td class="n">${ed&&r.first?`<input class="dt" data-i="${r._i}" data-k="${k}" value="${hm(r[k])}" inputmode="decimal" title="1.45 = 1 hr 45 min · 0.30 = 30 min · 45 = 45 min">`:hm(r[k])}</td>`).join("")+`</tr>`}
-  html+=rows.length-e>0?`<tr style="height:${(rows.length-e)*RH}px"><td colspan="11" style="border:0;padding:0"></td></tr>`:"";
+  html+=rows.length-e>0?`<tr style="height:${(rows.length-e)*RH}px"><td colspan="12" style="border:0;padding:0"></td></tr>`:"";
   B.innerHTML=html;
+  B.querySelectorAll("input.rk").forEach(c=>c.onclick=()=>{const r=view.rows[+c.dataset.i];c.checked?view.sel.add(r):view.sel.delete(r);drawRows.k="";drawRows();paintDel()});
+  B.querySelectorAll("button.rx").forEach(b=>b.onclick=()=>delRows([view.rows[+b.dataset.i]]));
   B.querySelectorAll("input.dt").forEach(inp=>{inp.onchange=()=>{const r=view.rows[+inp.dataset.i];const v=inp.value.trim();r[inp.dataset.k]=v===""?"":toMin(String(v).replace(":","."));
       dtCalc(r);view.dirty=true;saveScreen();inp.value=hm(r[inp.dataset.k]);inp.closest("tr").querySelector("td.h").textContent=f2(r.hrs);renderKpis();$("#unsaved").hidden=false};
     inp.onfocus=()=>inp.select();
@@ -1243,6 +1288,7 @@ $("#bSave").onclick=async()=>{
     toast((FS.dir?"💾 Saved":"💾 Saved on this PC only")+" · "+dates.map(us).join(", ")+" · "+(add?nf(add)+(mode==="add"?" new":"")+" rows":"nothing new (already saved)"));
     logAct("save",dates.map(us).join(", ")+" · "+mode+" · "+add+" rows")};
   if(!exist.length)return doIt("new");
+  if(exist.every(d=>view.rep.has(d))){view.rep=new Set();return doIt("replace")}
   modal(`<h3>Already saved</h3><p class="muted" style="margin:0;line-height:1.6"><b style="color:var(--ink)">${exist.map(us).join(", ")}</b> is already saved. What should happen?</p>
     <div class="tick" id="mAdd"><span style="font-size:20px">➕</span><div class="grow"><b>Add only new rows</b><br><span class="muted">Same employee + work queue is never doubled</span></div></div>
     ${can("replace")?`<div class="tick" id="mRep"><span style="font-size:20px">♻</span><div class="grow"><b>Replace the date</b><br><span class="muted">The saved rows are overwritten with the screen</span></div></div>`:""}
@@ -1251,7 +1297,7 @@ $("#bSave").onclick=async()=>{
 };
 async function showSaved(ds){
   const go=async()=>{const rows=await rowsOf(ds);
-    view.rows=rows;view.master=null;view.check=null;view.mdate=ds.length===1?ds[0]:"";view.src="saved";view.dirty=false;view.tab="res";MINI=ymOf(ds[0]);resetFilters(true);saveScreen();renderAll();toast("📅 "+ds.map(us).join(", ")+" · "+nf(rows.length)+" rows")};
+    view.sel=new Set();view.rep=new Set();view.rows=rows;view.master=null;view.check=null;view.mdate=ds.length===1?ds[0]:"";view.src="saved";view.dirty=false;view.tab="res";MINI=ymOf(ds[0]);resetFilters(true);saveScreen();renderAll();toast("📅 "+ds.map(us).join(", ")+" · "+nf(rows.length)+" rows")};
   if(view.rows.length&&view.dirty)ask("Open this date?","The screen has rows that are not saved yet. They will be replaced.","Open",go);else go();
 }
 
