@@ -370,6 +370,62 @@ table.g tr.tk td:not(.rn){background:#ffe4ea!important}
 .num{padding:5px 9px}.num b{font-size:13.5px}
 .cal.mini .cd{height:21px}
 </style>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800&family=Orbitron:wght@600;800&display=swap" rel="stylesheet"><style>
+
+.ecl-logo{--g1:linear-gradient(180deg,#fff0a0,#ff8a1f 45%,#e02a00);--g2:linear-gradient(90deg,#fff0a0,#ff8a1f 50%,#e02a00);--g3:linear-gradient(180deg,#fff0a0,#ff8a1f 45%,#c81e00);--ex:#3a0d00;display:inline-block;font-size:20px;line-height:1;white-space:nowrap}
+.ecl-logo *{box-sizing:border-box}
+.ecl-logo .el-b{display:inline-flex;flex-direction:column;align-items:stretch;gap:.4em;animation:el-lv 5.5s ease-in-out infinite alternate}
+.ecl-logo .el-l1{display:flex;align-items:center}
+.ecl-logo .el-l1 .el-t{margin-left:-.42em}
+.ecl-logo .el-l2{display:flex;justify-content:space-between;align-items:baseline;gap:.5em;font-size:.9em}
+.ecl-logo .el-wd{display:inline-flex;align-items:baseline}
+.ecl-logo .el-A{height:1.12em;width:1.2em;margin-right:.02em;margin-bottom:-.06em;flex:none;overflow:visible;filter:drop-shadow(0 0 .1em rgba(255,170,60,.75));animation:el-ag 3.2s ease-in-out infinite alternate}
+@keyframes el-ag{from{filter:drop-shadow(0 0 .06em rgba(255,150,40,.5)) brightness(1)}to{filter:drop-shadow(0 0 .22em rgba(255,200,90,.95)) brightness(1.18)}}
+.ecl-logo svg.el-O{flex:none;filter:drop-shadow(0 .12em .14em rgba(0,0,0,.55))}
+.ecl-logo .el-sw{animation:el-swp 7s ease-in-out infinite}
+.ecl-logo .el-rr{transform-origin:100px 100px;animation:el-sp 70s linear infinite}
+.ecl-logo .el-ff{transform-box:fill-box;transform-origin:center;animation:el-pl 5s ease-in-out infinite}
+.ecl-logo .el-t{position:relative;display:inline-block;isolation:isolate;line-height:1.05}
+.ecl-logo .el-t::before{content:attr(data-t);position:absolute;left:0;top:0;z-index:-1;color:var(--ex);white-space:pre;text-shadow:.02em .02em var(--ex),.04em .04em var(--ex),.06em .06em var(--ex),.08em .08em var(--ex),.1em .1em var(--ex),.2em .26em .3em rgba(0,0,0,.55)}
+.ecl-logo .el-t b{font-weight:inherit;background-image:linear-gradient(105deg,transparent 33%,rgba(255,255,255,.98) 50%,transparent 67%),var(--g);background-size:260% 100%,100% 100%;background-repeat:no-repeat;-webkit-background-clip:text;background-clip:text;color:transparent;animation:el-shn 6.5s linear infinite;animation-delay:var(--d,0s)}
+.ecl-logo .el-pt{font-family:Cinzel,Georgia,serif;font-weight:800;font-size:3.2em;letter-spacing:.05em}
+.ecl-logo .el-pt b{--g:var(--g1)}.ecl-logo .el-nx b,.ecl-logo .el-lp b{--g:var(--g2)}.ecl-logo .el-ec b{--g:var(--g3)}
+.ecl-logo .el-nx,.ecl-logo .el-lp{font-family:Orbitron,system-ui,sans-serif;font-weight:800;letter-spacing:.05em}
+.ecl-logo .el-ec{font-family:Cinzel,Georgia,serif;font-weight:800;letter-spacing:.14em}
+
+.ecl-logo.el-float{animation:el-fl 12s ease-in-out infinite}
+@keyframes el-lv{from{filter:drop-shadow(0 0 .12em rgba(255,110,20,.4)) brightness(.97)}to{filter:drop-shadow(0 0 .3em rgba(255,140,30,.8)) brightness(1.1)}}
+@keyframes el-swp{from{transform:translateX(-70px) skewX(-20deg)}to{transform:translateX(210px) skewX(-20deg)}}
+@keyframes el-sp{to{transform:rotate(360deg)}}
+@keyframes el-pl{50%{transform:scale(1.25);opacity:.75}}
+@keyframes el-shn{from{background-position:140% 0,0 0}to{background-position:-60% 0,0 0}}
+@keyframes el-fl{0%,100%{transform:perspective(700px) rotateY(-5deg) rotateX(1.5deg)}50%{transform:perspective(700px) rotateY(5deg) rotateX(-1.5deg) translateY(-2px)}}
+@media (prefers-reduced-motion: reduce){.ecl-logo,.ecl-logo *{animation:none!important}}
+
+/* OPTUM · Alpha NextGen Eclipse logo (same as Rate Match), no plate behind it */
+.ecl-logo{--ex:#6b1d00}
+.ecl-logo .el-t::before{text-shadow:.03em .04em var(--ex),.06em .08em var(--ex),.14em .2em .2em rgba(0,0,0,.28)}
+.ecl-logo .el-l2{font-size:1em;gap:.7em}
+.ecl-logo .el-lp b{--g:linear-gradient(90deg,#ffd000,#ff7a00 60%,#ff3d00)}
+.ecl-logo .el-nx b{--g:linear-gradient(90deg,#00c2ff,#3b6bff 50%,#9b3dff)}
+.ecl-logo .el-ec b{--g:linear-gradient(90deg,#ff3d6e,#ff7a00 50%,#ffc400)}
+.ecl-logo .el-nx{letter-spacing:.08em}
+.brand.lg{background:none!important;border:0!important;box-shadow:none!important;padding:0;line-height:1;display:flex;justify-content:center}
+.brand.lg span{color:inherit}
+.gate .brand.lg .ecl-logo{font-size:15px;margin:4px auto 6px}
+#lock .brand.lg .ecl-logo{font-size:14px;margin:4px auto 6px}
+#side .sbrand .brand.lg{justify-content:flex-start;padding:2px 0 4px}
+#side .sbrand .brand.lg .ecl-logo{font-size:13px;animation:none}
+</style>
+<style>
+/* UOM: Optum logo placement */
+.gcard .ecl-logo{font-size:15px;margin:2px auto 8px}
+#lock .ecl-logo{font-size:14px;margin:2px auto 8px}
+.brand .ecl-logo{font-size:11.5px;animation:none}
+.brand{flex-direction:column;align-items:flex-start!important;gap:6px!important}
+.ologo{display:flex;justify-content:center;line-height:1}
+.brand .ologo{justify-content:flex-start}
+</style>
 </head>
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><radialGradient id="cg" cx="50%" cy="50%" r="50%"><stop offset="60%" stop-color="#f6a9be" stop-opacity="0"/><stop offset="78%" stop-color="#f6a9be" stop-opacity=".9"/><stop offset="100%" stop-color="#e1a6ff" stop-opacity="0"/></radialGradient><linearGradient id="rg" x1="0" x2="1"><stop offset="0" stop-color="#ffd6c7"/><stop offset="1" stop-color="#e1a6ff"/></linearGradient></defs></svg>
@@ -378,19 +434,18 @@ table.g tr.tk td:not(.rn){background:#ffe4ea!important}
 <div id="gate" hidden>
   <div class="aur a1"></div><div class="aur a2"></div><div class="aur a3"></div>
   <div class="gcard">
-    <svg class="ecl" viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="30" fill="url(#cg)"/><circle cx="32" cy="32" r="19" fill="none" stroke="url(#rg)" stroke-width="2.2"/><circle cx="36" cy="29" r="17" fill="#1a0a20"/></svg>
-    <div class="kick">Alpha NextGen</div>
+    <div class="ologo"><div class="ecl-logo el-float" role="img" aria-label="OPTUM Alpha NEXTgeN Eclipse"><div class="el-b"><div class="el-l1"><svg class="el-O" style="width:4.2em;height:4.2em" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="O"><defs><linearGradient id="ecloaK" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#d63a00"/><stop offset="1" stop-color="#ffc94a"/></linearGradient><linearGradient id="eclolK" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".75"/><stop offset=".55" stop-color="#fff" stop-opacity="0"/></linearGradient><linearGradient id="eclosK" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".5" stop-color="#fff" stop-opacity=".95"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient><mask id="eclokK"><rect width="120" height="120" fill="#000"/><circle cx="60" cy="60" r="50" fill="#fff"/><circle cx="74" cy="52" r="44" fill="#000"/></mask><mask id="eclojK"><rect width="120" height="120" fill="#000"/><circle cx="68" cy="54" r="36" fill="#fff"/><circle cx="58" cy="64" r="33" fill="#000"/></mask></defs><rect class="el-dp" width="120" height="120" fill="#3a0d00" mask="url(#eclokK)" transform="translate(3 4.5)"/><rect class="el-dp" width="120" height="120" fill="#3a0d00" mask="url(#eclokK)" transform="translate(1.5 2.2)"/><rect width="120" height="120" fill="url(#ecloaK)" mask="url(#eclokK)"/><rect width="120" height="120" fill="url(#eclolK)" mask="url(#eclokK)"/><g mask="url(#eclokK)"><rect class="el-sw" x="-40" y="-10" width="26" height="140" fill="url(#eclosK)"/></g><rect width="120" height="120" fill="#3a2218" mask="url(#eclojK)"/><rect width="120" height="120" fill="url(#eclolK)" opacity=".45" mask="url(#eclojK)"/><g transform="translate(66 58) scale(.4) translate(-100 -100)"><defs><linearGradient id="ecloz1K" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff0a0"/><stop offset=".55" stop-color="#ff8a1f"/><stop offset="1" stop-color="#e02a00"/></linearGradient><radialGradient id="eclozmK" cx=".5" cy=".4" r=".7"><stop offset="0" stop-color="#16256a"/><stop offset="1" stop-color="#04071a"/></radialGradient><radialGradient id="eclozoK"><stop offset=".55" stop-color="#ff8a1f" stop-opacity=".6"/><stop offset="1" stop-color="#ff8a1f" stop-opacity="0"/></radialGradient><radialGradient id="eclozxK"><stop offset="0" stop-color="#fff"/><stop offset=".4" stop-color="#fff0a0"/><stop offset="1" stop-color="#fff0a0" stop-opacity="0"/></radialGradient></defs><circle cx="100" cy="100" r="92" fill="url(#eclozoK)"/><g class="el-rr" stroke="url(#ecloz1K)" stroke-width="3" stroke-linecap="round" opacity=".8"><line x1="100" y1="10" x2="100" y2="-4" transform="rotate(0 100 100)"/><line x1="100" y1="10" x2="100" y2="-4" transform="rotate(30 100 100)"/><line x1="100" y1="10" x2="100" y2="-4" transform="rotate(60 100 100)"/><line x1="100" y1="10" x2="100" y2="-4" transform="rotate(90 100 100)"/><line x1="100" y1="10" x2="100" y2="-4" transform="rotate(120 100 100)"/><line x1="100" y1="10" x2="100" y2="-4" transform="rotate(150 100 100)"/><line x1="100" y1="10" x2="100" y2="-4" transform="rotate(180 100 100)"/><line x1="100" y1="10" x2="100" y2="-4" transform="rotate(210 100 100)"/><line x1="100" y1="10" x2="100" y2="-4" transform="rotate(240 100 100)"/><line x1="100" y1="10" x2="100" y2="-4" transform="rotate(270 100 100)"/><line x1="100" y1="10" x2="100" y2="-4" transform="rotate(300 100 100)"/><line x1="100" y1="10" x2="100" y2="-4" transform="rotate(330 100 100)"/></g><circle cx="100" cy="100" r="64" fill="url(#eclozmK)" stroke="url(#ecloz1K)" stroke-width="6"/><ellipse cx="100" cy="66" rx="46" ry="24" fill="#fff" opacity=".13"/><g class="el-ff"><path d="M138 34L143 58L167 64L143 70L138 94L133 70L109 64L133 58Z" fill="url(#eclozxK)"/><circle cx="138" cy="64" r="4" fill="#fff"/></g><circle r="3.5" fill="#fff"><animateMotion dur="16s" repeatCount="indefinite" path="M100 30A70 70 0 1 1 99.9 30"/></circle></g></svg><span class="el-t el-pt" data-t="PTUM" style="--d:0s"><b>PTUM</b></span></div><div class="el-l2"><span class="el-wd"><svg class="el-A" viewBox="0 0 100 100" preserveAspectRatio="xMidYMax meet" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs><linearGradient id="eclaaK" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff0a0"/><stop offset=".55" stop-color="#ff8a1f"/><stop offset="1" stop-color="#e02a00"/></linearGradient><linearGradient id="eclashK" x1="0" y1="0" x2="1" y2="0" gradientUnits="objectBoundingBox"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".45" stop-color="#fff" stop-opacity="0"/><stop offset=".5" stop-color="#fff" stop-opacity=".95"/><stop offset=".55" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#fff" stop-opacity="0"/><animateTransform attributeName="gradientTransform" type="translate" values="-1 0;1 0;1 0" keyTimes="0;.55;1" dur="3.5s" repeatCount="indefinite"/></linearGradient><radialGradient id="eclaxK"><stop offset="0" stop-color="#fff"/><stop offset=".45" stop-color="#fff0a0"/><stop offset="1" stop-color="#fff0a0" stop-opacity="0"/></radialGradient></defs><path d="M10 98L50 8L90 98" fill="none" stroke="#3a0d00" stroke-width="15" stroke-miterlimit="8" transform="translate(3 4)"/><path d="M10 98L50 8L90 98" fill="none" stroke="url(#eclaaK)" stroke-width="15" stroke-miterlimit="8"/><path d="M10 98L50 8L90 98" fill="none" stroke="url(#eclashK)" stroke-width="15" stroke-miterlimit="8"/><polygon points="0,72 104,36 52,68" fill="#fff" opacity=".95"/><g class="el-ff"><path d="M84 8L87 24L103 28L87 32L84 48L81 32L65 28L81 24Z" fill="url(#eclaxK)"/></g></svg><span class="el-t el-lp" data-t="LPHA" style="--d:0s"><b>LPHA</b></span></span><span class="el-t el-nx" data-t="NEXTgeN" style="--d:0s"><b>NEXTgeN</b></span><span class="el-t el-ec" data-t="ECLIPSE" style="--d:0.4s"><b>ECLIPSE</b></span></div></div></div></div>
     <div class="gtitle">UOM Summary</div>
-    <div class="gsub">Consolidation · <b>DBM</b> · Eclipse</div><div class="gver" id="verGate2">V2.0.7 · Build 6</div>
+    <div class="gsub">Consolidation · <b>DBM</b> · Eclipse</div><div class="gver" id="verGate2">V2.0.7 · Build 7</div>
     <div class="greet" id="gGreet">Good evening ✨</div>
     <div id="gateBody"></div>
-    <div class="gfoot"><span id="verGate">V2.0.7 · Build 6</span><span id="expGate"></span></div>
+    <div class="gfoot"><span id="verGate">V2.0.7 · Build 7</span><span id="expGate"></span></div>
   </div>
 </div>
 
 <div id="lock" hidden>
   <div class="gcard">
-    <div class="kick">Alpha NextGen · Eclipse</div>
+    <div class="ologo"></div>
     <div class="gtitle" style="font-size:38px">Tool expired</div>
     <p id="lockMsg" style="color:#d9bccd;font-size:13px"></p>
     <input id="lockPw" type="password" placeholder="Master password">
@@ -405,8 +460,8 @@ table.g tr.tk td:not(.rn){background:#ffe4ea!important}
   <aside class="side">
     <div class="sscroll">
       <div class="brand" id="brand">
-        <svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="30" fill="url(#cg)"/><circle cx="32" cy="32" r="19" fill="none" stroke="url(#rg)" stroke-width="2.4"/><circle cx="36" cy="29" r="17" fill="#1f0b25"/></svg>
-        <div><div class="k">ALPHA NEXTGEN</div><div class="t">UOM Summary</div><div class="s">CONSOLIDATION · DBM</div><div class="v" id="verSide">V2.0.7 · Build 6</div></div>
+        <div class="ologo"><div class="ecl-logo el-float" role="img" aria-label="OPTUM Alpha NEXTgeN Eclipse"><div class="el-b"><div class="el-l1"><svg class="el-O" style="width:4.2em;height:4.2em" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="O"><defs><linearGradient id="ecloaL" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#d63a00"/><stop offset="1" stop-color="#ffc94a"/></linearGradient><linearGradient id="eclolL" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".75"/><stop offset=".55" stop-color="#fff" stop-opacity="0"/></linearGradient><linearGradient id="eclosL" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".5" stop-color="#fff" stop-opacity=".95"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient><mask id="eclokL"><rect width="120" height="120" fill="#000"/><circle cx="60" cy="60" r="50" fill="#fff"/><circle cx="74" cy="52" r="44" fill="#000"/></mask><mask id="eclojL"><rect width="120" height="120" fill="#000"/><circle cx="68" cy="54" r="36" fill="#fff"/><circle cx="58" cy="64" r="33" fill="#000"/></mask></defs><rect class="el-dp" width="120" height="120" fill="#3a0d00" mask="url(#eclokL)" transform="translate(3 4.5)"/><rect class="el-dp" width="120" height="120" fill="#3a0d00" mask="url(#eclokL)" transform="translate(1.5 2.2)"/><rect width="120" height="120" fill="url(#ecloaL)" mask="url(#eclokL)"/><rect width="120" height="120" fill="url(#eclolL)" mask="url(#eclokL)"/><g mask="url(#eclokL)"><rect class="el-sw" x="-40" y="-10" width="26" height="140" fill="url(#eclosL)"/></g><rect width="120" height="120" fill="#3a2218" mask="url(#eclojL)"/><rect width="120" height="120" fill="url(#eclolL)" opacity=".45" mask="url(#eclojL)"/><g transform="translate(66 58) scale(.4) translate(-100 -100)"><defs><linearGradient id="ecloz1L" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff0a0"/><stop offset=".55" stop-color="#ff8a1f"/><stop offset="1" stop-color="#e02a00"/></linearGradient><radialGradient id="eclozmL" cx=".5" cy=".4" r=".7"><stop offset="0" stop-color="#16256a"/><stop offset="1" stop-color="#04071a"/></radialGradient><radialGradient id="eclozoL"><stop offset=".55" stop-color="#ff8a1f" stop-opacity=".6"/><stop offset="1" stop-color="#ff8a1f" stop-opacity="0"/></radialGradient><radialGradient id="eclozxL"><stop offset="0" stop-color="#fff"/><stop offset=".4" stop-color="#fff0a0"/><stop offset="1" stop-color="#fff0a0" stop-opacity="0"/></radialGradient></defs><circle cx="100" cy="100" r="92" fill="url(#eclozoL)"/><g class="el-rr" stroke="url(#ecloz1L)" stroke-width="3" stroke-linecap="round" opacity=".8"><line x1="100" y1="10" x2="100" y2="-4" transform="rotate(0 100 100)"/><line x1="100" y1="10" x2="100" y2="-4" transform="rotate(30 100 100)"/><line x1="100" y1="10" x2="100" y2="-4" transform="rotate(60 100 100)"/><line x1="100" y1="10" x2="100" y2="-4" transform="rotate(90 100 100)"/><line x1="100" y1="10" x2="100" y2="-4" transform="rotate(120 100 100)"/><line x1="100" y1="10" x2="100" y2="-4" transform="rotate(150 100 100)"/><line x1="100" y1="10" x2="100" y2="-4" transform="rotate(180 100 100)"/><line x1="100" y1="10" x2="100" y2="-4" transform="rotate(210 100 100)"/><line x1="100" y1="10" x2="100" y2="-4" transform="rotate(240 100 100)"/><line x1="100" y1="10" x2="100" y2="-4" transform="rotate(270 100 100)"/><line x1="100" y1="10" x2="100" y2="-4" transform="rotate(300 100 100)"/><line x1="100" y1="10" x2="100" y2="-4" transform="rotate(330 100 100)"/></g><circle cx="100" cy="100" r="64" fill="url(#eclozmL)" stroke="url(#ecloz1L)" stroke-width="6"/><ellipse cx="100" cy="66" rx="46" ry="24" fill="#fff" opacity=".13"/><g class="el-ff"><path d="M138 34L143 58L167 64L143 70L138 94L133 70L109 64L133 58Z" fill="url(#eclozxL)"/><circle cx="138" cy="64" r="4" fill="#fff"/></g><circle r="3.5" fill="#fff"><animateMotion dur="16s" repeatCount="indefinite" path="M100 30A70 70 0 1 1 99.9 30"/></circle></g></svg><span class="el-t el-pt" data-t="PTUM" style="--d:0s"><b>PTUM</b></span></div><div class="el-l2"><span class="el-wd"><svg class="el-A" viewBox="0 0 100 100" preserveAspectRatio="xMidYMax meet" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs><linearGradient id="eclaaL" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff0a0"/><stop offset=".55" stop-color="#ff8a1f"/><stop offset="1" stop-color="#e02a00"/></linearGradient><linearGradient id="eclashL" x1="0" y1="0" x2="1" y2="0" gradientUnits="objectBoundingBox"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".45" stop-color="#fff" stop-opacity="0"/><stop offset=".5" stop-color="#fff" stop-opacity=".95"/><stop offset=".55" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#fff" stop-opacity="0"/><animateTransform attributeName="gradientTransform" type="translate" values="-1 0;1 0;1 0" keyTimes="0;.55;1" dur="3.5s" repeatCount="indefinite"/></linearGradient><radialGradient id="eclaxL"><stop offset="0" stop-color="#fff"/><stop offset=".45" stop-color="#fff0a0"/><stop offset="1" stop-color="#fff0a0" stop-opacity="0"/></radialGradient></defs><path d="M10 98L50 8L90 98" fill="none" stroke="#3a0d00" stroke-width="15" stroke-miterlimit="8" transform="translate(3 4)"/><path d="M10 98L50 8L90 98" fill="none" stroke="url(#eclaaL)" stroke-width="15" stroke-miterlimit="8"/><path d="M10 98L50 8L90 98" fill="none" stroke="url(#eclashL)" stroke-width="15" stroke-miterlimit="8"/><polygon points="0,72 104,36 52,68" fill="#fff" opacity=".95"/><g class="el-ff"><path d="M84 8L87 24L103 28L87 32L84 48L81 32L65 28L81 24Z" fill="url(#eclaxL)"/></g></svg><span class="el-t el-lp" data-t="LPHA" style="--d:0s"><b>LPHA</b></span></span><span class="el-t el-nx" data-t="NEXTgeN" style="--d:0s"><b>NEXTgeN</b></span><span class="el-t el-ec" data-t="ECLIPSE" style="--d:0.4s"><b>ECLIPSE</b></span></div></div></div></div>
+        <div><div class="t">UOM Summary</div><div class="s">CONSOLIDATION · DBM</div><div class="v" id="verSide">V2.0.7 · Build 7</div></div>
       </div>
 
       <div class="sh">DUMP <i>Result builds itself</i></div>
@@ -466,7 +521,7 @@ table.g tr.tk td:not(.rn){background:#ffe4ea!important}
         <span class="muted" id="gSrc"></span>
       </div>
     </div>
-    <div class="foot"><span><span id="verTop">V2.0.7 · Build 6</span> · <span id="expTxt"></span></span><span>®® Alpha NextGen · Eclipse · UHG-Optum</span></div>
+    <div class="foot"><span><span id="verTop">V2.0.7 · Build 7</span> · <span id="expTxt"></span></span><span>®® Optum · Alpha NextGen · Eclipse</span></div>
   </main>
 </div>
 
@@ -481,8 +536,8 @@ table.g tr.tk td:not(.rn){background:#ffe4ea!important}
 /* ======================= ADMIN SETTINGS (edit here) ======================= */
 const APP_NAME   = "UOM Summary Consolidation DBM";
 const APP_VER    = "V2.0.7";
-const BUILD      = "6";
-const APP_EXPIRY = "2027-03-31";
+const BUILD      = "7";
+const APP_EXPIRY = "2027-12-31";
 const ADMIN_KEYS = ["akshayranjan","aranja14","admin"];      // typing any of these opens the Admin password box
 const ADMIN_NAME = "Akshay Ranjan";
 const PW_MASTER  = 2349399753747566;                          // hash of the master password (caps and spaces ignored)
@@ -634,11 +689,12 @@ const fresh=()=>({v:1,cfg:{users:seedUsers(),perms:clone(DEFPERM),emp:EMP0,procs
   mailTo:"",mailCc:"",mailSubj:"Bangalore MASTERFILE Team - UOM Volume Summary - {date}",mailBody:"Hi Team,\n\nPlease find attached UOM Volume Summary for your review.\n\nThank you.",
   fileName:"Bangalore DBM team_UOM-Volume Summary_{date}.xlsx",supportMail:"akshay.ranjan@uhc.com",
   maxTry:5,alertMails:["akshay.ranjan@uhc.com","akshay.ranjan@optum.com",""],alertAuto:true,helpPop:true,needFolder:true,askDevice:false,remember:true,dtUnit:"clock",logKeep:30,pcLock:true,folderLink:DEF_LINK},days:{},auth:{},log:[]});
-const SHARED=["users","perms","emp","procs","hours","keep","exp","mph","folder","folderPath","mailTo","mailCc","mailSubj","mailBody","fileName","supportMail","maxTry","alertMails","alertAuto","helpPop","needFolder","askDevice","remember","dtUnit","logKeep","pcLock","folderLink","pw3","calSplit","unlockAt"];
+const SHARED=["users","perms","emp","procs","hours","keep","exp","mph","folder","folderPath","mailTo","mailCc","mailSubj","mailBody","fileName","supportMail","maxTry","alertMails","alertAuto","helpPop","needFolder","askDevice","remember","dtUnit","logKeep","pcLock","folderLink","pw3","calSplit","unlockAt","exp307"];
 let S=null,saveT=null;
 function save(now){clearTimeout(saveT);const go=()=>IDB.put("state",S);if(now)return go();saveT=setTimeout(go,400);return Promise.resolve()}
 function fixCfg(){const f=fresh().cfg;for(const k of Object.keys(f))if(S.cfg[k]===undefined)S.cfg[k]=clone(f[k]);
   if(!S.cfg.pw3){delete S.cfg.mph;S.cfg.pw3=1}
+  if(!S.cfg.exp307){if(S.cfg.exp&&S.cfg.exp<APP_EXPIRY)S.cfg.exp=null;(S.cfg.users||[]).forEach(u=>{if(u.until==="2027-03-31")u.until=APP_EXPIRY});S.cfg.exp307=1}
   if(!S.cfg.calSplit){if(S.cfg.perms.employee)S.cfg.perms.employee.dates=0;S.cfg.calSplit=1}
   if(S.cfg.dtUnit==="smart"||S.cfg.dtUnit==="hours")S.cfg.dtUnit="clock";
   if(/^https?:/i.test(S.cfg.folderPath||"")){S.cfg.folderLink=S.cfg.folderPath;S.cfg.folderPath=""}
